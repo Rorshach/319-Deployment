@@ -1,10 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class Hello extends React.Component {
+export default class Hello extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            'MEEPO' : true
+        }
+    Hello.propTypes = {
+            handleSomeProp : 'red'
+    }
+    }
     render() {
-        return <h1>qwdqwdqwdqwdqdwq</h1>
+        return (<div onChange={this.props.handleSomeProp}> <h1>qwdqwdqwdqwdqdwq</h1> </div>);
     }
 }
-
-ReactDOM.render(<Hello/>, document.getElementById('hello'));

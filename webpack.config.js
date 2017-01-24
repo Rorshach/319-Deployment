@@ -26,6 +26,12 @@ module.exports = {
                     'postcss-loader'
                 ]
             }
-        ]
+
+        ],
+        externals: {
+            'react/addons': true,
+            'react/lib/ExecutionEnvironment': true,
+            'react/lib/ReactContext': true
+        }
     }
 };

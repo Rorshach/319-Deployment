@@ -8,6 +8,7 @@
 
 // JS:
 
+import bindings from './bindings.js';
 import Hello from './hello.jsx';
 
 

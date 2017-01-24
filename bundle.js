@@ -62,6 +62,10 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(2);
@@ -83,19 +87,33 @@
 	var Hello = function (_React$Component) {
 	    _inherits(Hello, _React$Component);
 
-	    function Hello() {
+	    function Hello(props) {
 	        _classCallCheck(this, Hello);
 
-	        return _possibleConstructorReturn(this, (Hello.__proto__ || Object.getPrototypeOf(Hello)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (Hello.__proto__ || Object.getPrototypeOf(Hello)).call(this, props));
+
+	        _this.state = {
+	            'MEEPO': true
+	        };
+	        Hello.propTypes = {
+	            handleSomeProp: 'red'
+	        };
+	        return _this;
 	    }
 
 	    _createClass(Hello, [{
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
-	                'h1',
-	                null,
-	                'qwdqwdqwdqwdqdwq'
+	                'div',
+	                { onChange: this.props.handleSomeProp },
+	                ' ',
+	                _react2.default.createElement(
+	                    'h1',
+	                    null,
+	                    'qwdqwdqwdqwdqdwq'
+	                ),
+	                ' '
 	            );
 	        }
 	    }]);
@@ -103,7 +121,7 @@
 	    return Hello;
 	}(_react2.default.Component);
 
-	_reactDom2.default.render(_react2.default.createElement(Hello, null), document.getElementById('hello'));
+	exports.default = Hello;
 
 /***/ },
 /* 2 */
