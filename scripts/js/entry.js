@@ -9,7 +9,8 @@
 // JS:
 
 import bindings from './bindings.js';
-import Hello from './hello.jsx';
+import Toolbar from './toolbar.jsx';
+import Content from './content.jsx';
 
 
 
