@@ -4,7 +4,7 @@
   "description": "CPSC 319 Project. Team 6. Coast Capital Project.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require ./test/setup.js --recursive ./test --compilers js:babel-core/register",
+    "test": "mocha --require mocha-setup.js --require ./test/setup.js --recursive ./test --compilers js:babel-core/register",
     "dev": "webpack-dev-server"
   },
   "repository": {

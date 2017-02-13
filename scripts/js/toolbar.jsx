@@ -10,16 +10,16 @@ export default class Toolbar extends React.Component {
     }
 
     render() {
-        return (<Navbar fluid bsStyle="default">
+        return (<Navbar fluid bsStyle="default" className="navbar">
                   <Navbar.Header>
                     <Navbar.Text>
                     <img id="logo" src={require('./../../images/coastcapitallogo.png')}/>
                     </Navbar.Text>
                   </Navbar.Header>
-                  <h4><Navbar.Text>
+                  <h4><Navbar.Text className="navbarText">
                     <b>Coast Capital Savings Ordering System</b>
                   </Navbar.Text></h4>
-                  <Nav bsStyle="pills" pullRight>
+                  <Nav bsStyle="pills" pullRight className="navbarLinks">
                     <NavItem eventKey={1} href="#">Link</NavItem>
                     <NavItem eventKey={2} href="#">Link</NavItem>
                     <NavItem eventKey={3} href="#">Link</NavItem>
