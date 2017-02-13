@@ -12,7 +12,6 @@ public class Employee {
     String lName;
 
     @ManyToOne CostCenter costCenter;
-    @OneToMany <Collection>Request;
 }
 
 

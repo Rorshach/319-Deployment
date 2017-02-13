@@ -14,5 +14,5 @@ import javax.validation.constraints.NotNull;
 public class CostCenter {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
-    String desc;
+    String name;
 }

@@ -4,6 +4,9 @@ nightwatch/reports
 nightwatch/bin
 .mvn/wrapper/maven-wrapper.jar
 
+### Not for Distribution ###
+src/main/resources/dbproperties.json
+
 
 ### STS ###
 .apt_generated
