@@ -10,6 +10,7 @@ import {FormControl} from 'react-bootstrap';
 import {Checkbox} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 import {PageHeader} from 'react-bootstrap';
+import Alerts from './alerts.jsx'
 
 export default class Content extends React.Component {
     constructor(props){
@@ -22,6 +23,7 @@ export default class Content extends React.Component {
             <Row className="show-grid">
               <Col><RequestForm/></Col>
             </Row>
+            <Hello/>
           </Grid>
       );
     }
@@ -29,10 +31,27 @@ export default class Content extends React.Component {
 
 class HeaderName extends React.Component {
     render() {
-        return (<p>Create a Request</p>);
+        return (
+            <p>Create a Request</p>
+        );
     }
 }
 
+
+class Hello extends React.Component {
+
+
+
+    render() {
+        return (
+            <div>
+            <Alerts title="success" />
+            <Alerts title="noConnection" />
+            <Alerts title="timeout" />
+            </div>
+        );
+    }
+}
 // TODO: This is basically copied from React Bootstrap, edit this to the form we need
 class RequestForm extends React.Component {
     render() {
