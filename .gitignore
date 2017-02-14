@@ -1,5 +1,28 @@
-node_modules
-logs
-.idea
+### Fluff ###
+/target
+node_modules/
 nightwatch/reports
 nightwatch/bin
+.mvn/wrapper/maven-wrapper.jar
+
+### Not for Distribution ###
+src/main/resources/dbproperties.json
+
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+
+
+
