@@ -1,3 +1,8 @@
-#hello {
-    background-color: orange;
+#logo {
+  height: 40px;
+  width: auto;
+}
+
+.contentGrid {
+  margin: 0px 50px 50px 50px;
 }

@@ -1,7 +1,7 @@
 # team-6
+<h3>Current Version Status:</h3>
 
-<h1> Travis CI Status </h1>
-- Inserted temporary statement to test web-hook.
+[![Build Status](https://travis-ci.org/UBC-CPSC319/team-6.svg?branch=master)](https://travis-ci.org/UBC-CPSC319/team-6)
 
 <h1> Setup </h1>
 

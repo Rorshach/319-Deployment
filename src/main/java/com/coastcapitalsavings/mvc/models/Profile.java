@@ -1,6 +1,7 @@
 package com.coastcapitalsavings.mvc.models;
 
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -9,28 +10,6 @@ import java.util.Collection;
 public class Profile {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
-    String desc;
-
-    @ManyToMany Collection<Product> products;
-
-    public Profile(int id, String desc) {
-        this.id = id;
-        this.desc = desc;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
+    String name;
+    @ManyToMany (cascade = CascadeType.ALL) Collection<Product> products;
 }

@@ -25,8 +25,11 @@ module.exports = {
                     'css-loader?importLoaders=1',
                     'postcss-loader'
                 ]
+            },
+            {
+                test: /\.(png|jpg)$/,
+                loader: 'url?limit=25000'
             }
-
         ],
         externals: {
             'react/addons': true,

@@ -7,34 +7,14 @@ import javax.annotation.sql.DataSourceDefinition;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.Set;
 
 @Data @Entity
 public class CostCenter {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int cid;
-    String desc;
+    String name;
 
-    @OneToMany Collection<Employee> employees;
+    // @OneToMany Set<Employee> employees;
 
-    public CostCenter(int id, String desc) {
-        this.cid = id;
-        this.desc = desc;
-    }
-
-
-    public int getId() {
-        return cid;
-    }
-
-    public void setId(int id) {
-        this.cid = id;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
 }

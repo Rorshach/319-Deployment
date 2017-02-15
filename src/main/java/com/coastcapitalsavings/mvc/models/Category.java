@@ -9,28 +9,7 @@ import java.util.Collection;
 public class Category {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int cid;
-    String desc;
+    String name;
 
-    @OneToMany Collection<Product> products;
-
-    public Category(int id, String desc) {
-        this.cid = id;
-        this.desc = desc;
-    }
-
-    public int getId() {
-        return cid;
-    }
-
-    public void setId(int id) {
-        this.cid = id;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
+    // @OneToMany Collection<Product> products;
 }

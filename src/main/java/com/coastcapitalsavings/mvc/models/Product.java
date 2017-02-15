@@ -3,37 +3,20 @@ package com.coastcapitalsavings.mvc.models;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.StringJoiner;
+import java.util.Set;
 
 @Data @Entity
 public class Product {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy=GenerationType.AUTO)
     int id;
-    String desc;
+    String name;
 
-    @ManyToMany Collection<Request> requests;
-    @ManyToOne Category category;
-    @ManyToMany Collection<Profile> profiles;
+    @ManyToMany (cascade=CascadeType.ALL)
+    Set<Request> requests;
 
-    public Product(int id, String desc) {
-        this.id = id;
-        this.desc = desc;
-    }
+    //@ManyToOne Category category;
 
-    public int getId() {
-        return id;
-    }
+    @ManyToMany (mappedBy="products")
+    Set<Profile> profiles;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
 }

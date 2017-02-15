@@ -4,24 +4,13 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Set;
 
 @Data @Entity
 public class RequestedItem {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
-
-    @ManyToOne Collection<Request> requests;
+    //@ManyToOne Set<Request> requests;
     @OneToOne ItemStatus itemStatus;
-
-    public RequestedItem(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    //@ManyToOne Product product;
 }

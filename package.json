@@ -4,7 +4,7 @@
   "description": "CPSC 319 Project. Team 6. Coast Capital Project.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require ./test/setup.js --recursive ./test --compilers js:babel-core/register",
+    "test": "mocha --require mocha-setup.js --require ./test/setup.js --recursive ./test --compilers js:babel-core/register",
     "dev": "webpack-dev-server"
   },
   "repository": {
@@ -26,6 +26,7 @@
     "chai": "^3.5.0",
     "jsdom": "^9.9.1",
     "react": "^15.4.2",
+    "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.14.0",
@@ -45,6 +46,7 @@
     "precss": "^1.4.0",
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",
+    "url-loader": "^0.5.7",
     "webpack": "^1.14.0"
   }
 }

@@ -10,28 +10,7 @@ import java.util.Collection;
 public class Role {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
-    String desc;
-
-    @ManyToMany Collection<Employee> employees;
-
-    public Role(int id, String desc) {
-        this.id = id;
-        this.desc = desc;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
+    String name;
+    @ManyToMany
+    Collection<Employee> employees;
 }
