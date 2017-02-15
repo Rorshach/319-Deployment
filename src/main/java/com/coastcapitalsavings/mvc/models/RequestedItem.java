@@ -3,8 +3,6 @@ package com.coastcapitalsavings.mvc.models;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Set;
 
 @Data @Entity
 public class RequestedItem {
@@ -12,5 +10,5 @@ public class RequestedItem {
     int id;
     @ManyToOne Request request;
     @OneToOne ItemStatus itemStatus;
-    //@ManyToOne Product product;
+    @ManyToOne Product product;
 }

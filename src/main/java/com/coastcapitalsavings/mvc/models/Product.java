@@ -11,12 +11,8 @@ public class Product {
     int id;
     String name;
 
-    @ManyToMany (cascade=CascadeType.ALL)
-    Set<Request> requests;
-
-    //@ManyToOne Category category;
-
-    @ManyToMany (mappedBy="products")
-    Set<Profile> profiles;
+    @ManyToMany (cascade=CascadeType.ALL) Set<Request> requests;
+    @ManyToOne Category category;
+    @ManyToMany (mappedBy="products") Set<Profile> profiles;
 
 }
