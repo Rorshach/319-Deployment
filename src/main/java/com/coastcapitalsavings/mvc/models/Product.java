@@ -1,18 +1,17 @@
 package com.coastcapitalsavings.mvc.models;
 
-
 import lombok.Data;
 
-import javax.annotation.sql.DataSourceDefinition;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
 @Data @Entity
-public class CostCenter {
+public class Product {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
     String desc;
 
-    @OneToMany Collection<Employee> employees;
+    @ManyToMany Collection<Request> requests;
+    @ManyToOne Category category;
+    @ManyToMany Collection<Profile> profiles;
 }

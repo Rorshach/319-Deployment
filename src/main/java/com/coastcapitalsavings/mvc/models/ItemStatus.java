@@ -1,16 +1,14 @@
 package com.coastcapitalsavings.mvc.models;
 
-
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Data @Entity
-public class RequestStatus {
+public class ItemStatus {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
-    String status;
+    String desc;
 
-    @OneToMany Collection<Request> requests;
+    @OneToOne RequestedItem requestedItem;
 }
