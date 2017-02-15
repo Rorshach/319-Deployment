@@ -10,7 +10,7 @@ import java.util.Set;
 public class RequestedItem {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int id;
-    //@ManyToOne Set<Request> requests;
+    @ManyToOne Request request;
     @OneToOne ItemStatus itemStatus;
     //@ManyToOne Product product;
 }

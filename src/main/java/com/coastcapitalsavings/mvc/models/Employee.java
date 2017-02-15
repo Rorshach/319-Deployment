@@ -16,6 +16,6 @@ public class Employee {
     @OneToOne Employee reportsTo;
 
     //@ManyToOne CostCenter costCenter;
-    //@OneToMany Set<Request> collection;
+    @OneToMany (mappedBy="submittedBy")Set<Request> requests;
     @ManyToMany (mappedBy="employees") Set<Role> roles;
 }
