@@ -1,13 +1,7 @@
 package com.coastcapitalsavings.mvc.controllers;
 
-import com.coastcapitalsavings.mvc.models.Category;
-import com.coastcapitalsavings.mvc.models.Employee;
-import com.coastcapitalsavings.mvc.models.Product;
-import com.coastcapitalsavings.mvc.models.Request;
-import com.coastcapitalsavings.mvc.repositories.CategoriesRepository;
-import com.coastcapitalsavings.mvc.repositories.ProductsRepository;
-import com.coastcapitalsavings.mvc.repositories.RequestsRepository;
-import com.coastcapitalsavings.mvc.repositories.EmployeesRepository;
+import com.coastcapitalsavings.mvc.models.*;
+import com.coastcapitalsavings.mvc.repositories.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +22,8 @@ public class RequestsController {
     private EmployeesRepository employeesRepository;
     @Autowired
     private ProductsRepository productsRepository;
+    @Autowired
+    private RequestStatusRepository requestStatusRepository;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Request> getRequests() {
@@ -39,7 +35,9 @@ public class RequestsController {
         Category cat = categoriesRepository.findOne(postReq.getCategory_id());
         Employee emp = employeesRepository.findOne(11);                            // TODO: hardcoded user.  Will need to be parameterized
         Product prod = productsRepository.findOne(postReq.getCategory_id());
-        Request req = new Request(emp, prod);
+        RequestStatus status = requestStatusRepository.findOne(21);
+        Request req = new Request(emp, prod, status);
+        req = requestsRepository.save(req);
         //TODO: Create the productsRepository
 //        String[] productIds = json.get(firstElement + 1).toString());
 //        Product p1 = productsRepository(Integer.valueOf(products[0]));
