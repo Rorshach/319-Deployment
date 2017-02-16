@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Data @Entity
 public class ItemStatus {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    Integer id;
     String name;
 
     @OneToOne RequestedItem requestedItem;

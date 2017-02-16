@@ -1,5 +1,6 @@
 package com.coastcapitalsavings.mvc.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -8,9 +9,9 @@ import java.util.Set;
 @Data @Entity
 public class Category {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    int cid;
+    Integer cid;
 
     String name;
 
-    @OneToMany (mappedBy="category") Set<Product> products;
+    @OneToMany (mappedBy="category") @JsonManagedReference Set<Product> products;
 }
