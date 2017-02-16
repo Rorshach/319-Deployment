@@ -1,7 +1,6 @@
 package com.coastcapitalsavings.mvc.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,15 +8,14 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
-import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
 @Entity
 public class Request {
-    @JsonIgnoreProperties
     @Id @GeneratedValue(strategy=GenerationType.AUTO) Integer id;
     @NotNull Date dateCreated;
     Date dateModified;
@@ -27,6 +25,16 @@ public class Request {
     @OneToMany (mappedBy="request") @JsonManagedReference Set<RequestedItem> requestedItems;
     @ManyToMany @JsonManagedReference Set<Product> products;
 
+    public Request(Employee emp, Product prod) {
+        this.dateCreated = new Date(Calendar.getInstance().getTimeInMillis());
+        this.dateModified = new Date(Calendar.getInstance().getTimeInMillis());
+        this.lastModifiedBy = emp;
+        this.submittedBy = emp;
+        this.products = new HashSet<>();
+        products.add(prod);                 // TODO: Hardcoded
+    }
+
+    /*
     public Request() {
         //TODO: needs changing
         //HARD CODED!
@@ -52,4 +60,5 @@ public class Request {
         this.submittedBy = e;
         requestStatus = rs;
     }
+    */
 }
