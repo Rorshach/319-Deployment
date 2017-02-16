@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import request from 'superagent';
 import {Grid} from 'react-bootstrap';
 import {Row} from 'react-bootstrap';
 import {Col} from 'react-bootstrap';
@@ -33,43 +34,41 @@ class HeaderName extends React.Component {
     }
 }
 
-// TODO: This is basically copied from React Bootstrap, edit this to the form we need
 class RequestForm extends React.Component {
+
+    constructor(props){
+        super(props);
+    }
+
+    callRequest(e){
+        e.preventDefault();
+        request
+            .post("/requests")
+            .send({ categoryid: '1' })
+            .end(function(err, res) {
+                console.log(recs);
+            });
+
+    }
+
     render() {
         return (
-          <Form horizontal>
-            <FormGroup controlId="formHorizontalEmail">
-              <Col componentClass={ControlLabel} sm={2}>
-                Email
-              </Col>
-              <Col sm={8}>
-                <FormControl type="email" placeholder="Email" />
-              </Col>
-            </FormGroup>
-
-            <FormGroup controlId="formHorizontalPassword">
-              <Col componentClass={ControlLabel} sm={2}>
-                Password
-              </Col>
-              <Col sm={8}>
-                <FormControl type="password" placeholder="Password" />
-              </Col>
-            </FormGroup>
-
-            <FormGroup>
-              <Col smOffset={2} sm={8}>
-                <Checkbox>Remember me</Checkbox>
-              </Col>
-            </FormGroup>
-
-            <FormGroup>
-              <Col smOffset={2} sm={8}>
-                <Button type="submit">
-                  Sign in
-                </Button>
-              </Col>
-            </FormGroup>
-          </Form>
+              <Form horizontal>
+                  <FormGroup controlId="formControlsSelect">
+                      <ControlLabel>Select a product type</ControlLabel>
+                      <FormControl componentClass="select" placeholder="select">
+                          <option value="select">Pencil</option>
+                          <option value="other">Laptop</option>
+                      </FormControl>
+                  </FormGroup>
+                <FormGroup>
+                  <Col smOffset={2} sm={8}>
+                    <Button onClick = {this.callRequest}  type="click">
+                      Submit Request
+                    </Button>
+                  </Col>
+                </FormGroup>
+              </Form>
         );
     }
 }
