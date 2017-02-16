@@ -17,4 +17,5 @@ public interface BaseCategoriesRepository<T, ID extends Serializable> extends Re
      * itself.
      */
     Set<Category> findAll();
+    Category findOne(Integer primaryKey);
 }
