@@ -11,7 +11,7 @@
 import bindings from './bindings.js';
 import Toolbar from './toolbar.jsx';
 import Content from './content.jsx';
-
+import Alerts from './alerts.jsx';
 
 
 // CSS:
