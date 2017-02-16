@@ -1,18 +1,14 @@
 package com.coastcapitalsavings.mvc.models;
 
-
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Data @Entity
-public class CostCenter {
+public class ItemStatus {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    int cid;
-
+    int id;
     String name;
 
-    @OneToMany(mappedBy="costCenter") Set<Employee> employees;
-
+    @OneToOne RequestedItem requestedItem;
 }
