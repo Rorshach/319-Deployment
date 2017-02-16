@@ -22,6 +22,6 @@ public class Employee {
     @OneToOne Employee reportsTo;
 
     @ManyToOne @JsonBackReference CostCenter costCenter;
-    @OneToMany (mappedBy="submittedBy") @JsonManagedReference Set<Request> requests;
+    @OneToMany (mappedBy="submittedBy") @JsonBackReference Set<Request> requests;
     @ManyToMany (mappedBy="employees") @JsonManagedReference Set<Role> roles;
 }
