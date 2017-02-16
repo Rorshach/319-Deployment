@@ -1,20 +1,27 @@
 package com.coastcapitalsavings.mvc.models;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.Set;
 
-@Data @Entity
+@Getter
+@Setter
+@Entity
 public class Request {
-    @Id @GeneratedValue(strategy=GenerationType.AUTO) int id;
+    @JsonIgnoreProperties
+    @Id @GeneratedValue(strategy=GenerationType.AUTO) Integer id;
     @NotNull Date dateCreated;
     Date dateModified;
-    @ManyToOne Employee lastModifiedBy;
-    @ManyToOne Employee submittedBy;
-    @ManyToOne RequestStatus requestStatus;
-    @OneToMany (mappedBy="request") Set<RequestedItem> requestedItems;
-    @ManyToMany Set<Product> products;
+    @ManyToOne @JsonManagedReference Employee lastModifiedBy;
+    @ManyToOne @JsonManagedReference Employee submittedBy;
+    @ManyToOne @JsonBackReference RequestStatus requestStatus;
+    @OneToMany (mappedBy="request") @JsonManagedReference Set<RequestedItem> requestedItems;
+    @ManyToMany @JsonManagedReference Set<Product> products;
 }

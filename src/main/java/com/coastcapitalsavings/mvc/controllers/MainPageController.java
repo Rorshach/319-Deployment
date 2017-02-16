@@ -11,6 +11,6 @@ public class MainPageController {
 
     @RequestMapping(value = "/")
     public String mainPage() {
-            return "main";
+            return "index";
         }
 }

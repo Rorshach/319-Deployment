@@ -1,18 +1,23 @@
 package com.coastcapitalsavings.mvc.models;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Data @Entity
+@Getter
+@Setter
+@Entity
 public class CostCenter {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    int cid;
+    Integer cid;
 
     String name;
 
-    @OneToMany(mappedBy="costCenter") Set<Employee> employees;
+    @OneToMany(mappedBy="costCenter") @JsonManagedReference Set<Employee> employees;
 
 }

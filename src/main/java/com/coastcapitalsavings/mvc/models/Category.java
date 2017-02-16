@@ -8,14 +8,14 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity
 @Getter
 @Setter
+@Entity
 public class Category {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     Integer cid;
 
     String name;
 
-    @OneToMany(mappedBy="category", fetch=FetchType.EAGER) @JsonManagedReference Set<Product> products;
+    @OneToMany (mappedBy="category") @JsonManagedReference Set<Product> products;
 }

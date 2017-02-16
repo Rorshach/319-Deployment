@@ -1,6 +1,7 @@
 package com.coastcapitalsavings.mvc.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,8 +16,8 @@ public class Product {
     Integer id;
     String name;
 
-    @ManyToMany (cascade=CascadeType.ALL) Set<Request> requests;
+    @ManyToMany (cascade=CascadeType.ALL) @JsonBackReference Set<Request> requests;
     @ManyToOne @JsonBackReference Category category;
-    @ManyToMany (mappedBy="products") Set<Profile> profiles;
+    @ManyToMany (mappedBy="products") @JsonManagedReference Set<Profile> profiles;
 
 }

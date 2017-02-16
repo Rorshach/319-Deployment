@@ -1,15 +1,20 @@
 package com.coastcapitalsavings.mvc.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Data @Entity
+@Getter
+@Setter
+@Entity
 public class Role {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    int id;
+    Integer id;
     String name;
-    @ManyToMany Set<Employee> employees;
+    @ManyToMany @JsonBackReference Set<Employee> employees;
 }
