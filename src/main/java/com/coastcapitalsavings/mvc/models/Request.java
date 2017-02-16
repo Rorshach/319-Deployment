@@ -21,15 +21,16 @@ public class Request {
     Date dateModified;
     @ManyToOne @JsonManagedReference Employee lastModifiedBy;
     @ManyToOne @JsonManagedReference Employee submittedBy;
-    @ManyToOne @JsonBackReference RequestStatus requestStatus;
+    @ManyToOne @JsonManagedReference RequestStatus requestStatus;
     @OneToMany (mappedBy="request") @JsonManagedReference Set<RequestedItem> requestedItems;
     @ManyToMany @JsonManagedReference Set<Product> products;
 
-    public Request(Employee emp, Product prod) {
+    public Request(Employee emp, Product prod, RequestStatus status) {
         this.dateCreated = new Date(Calendar.getInstance().getTimeInMillis());
         this.dateModified = new Date(Calendar.getInstance().getTimeInMillis());
         this.lastModifiedBy = emp;
         this.submittedBy = emp;
+        this.requestStatus = status;
         this.products = new HashSet<>();
         products.add(prod);                 // TODO: Hardcoded
     }

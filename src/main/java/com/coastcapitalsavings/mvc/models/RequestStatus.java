@@ -17,5 +17,5 @@ public class RequestStatus {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     Integer id;
     String status;
-    @OneToMany @JsonManagedReference Set<Request> requests;
+    @OneToMany @JsonBackReference Set<Request> requests;
 }
