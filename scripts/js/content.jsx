@@ -59,7 +59,7 @@ class RequestForm extends React.Component {
         e.preventDefault();
         request
             .post("/requests")
-            .send({ categoryid: '1' })
+            .send({ "category_id": 11})
             .end((err, res) => {
                 console.log(res);
                 if (err){

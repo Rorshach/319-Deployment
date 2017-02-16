@@ -21669,7 +21669,7 @@
 	            var _this4 = this;
 
 	            e.preventDefault();
-	            _superagent2.default.post("/requests").send({ categoryid: '1' }).end(function (err, res) {
+	            _superagent2.default.post("/requests").send({ "category_id": 11 }).end(function (err, res) {
 	                console.log(res);
 	                if (err) {
 	                    _this4.setState({
