@@ -8,8 +8,8 @@ import com.coastcapitalsavings.mvc.repositories.CategoriesRepository;
 import com.coastcapitalsavings.mvc.repositories.ProductsRepository;
 import com.coastcapitalsavings.mvc.repositories.RequestsRepository;
 import com.coastcapitalsavings.mvc.repositories.EmployeesRepository;
-import jdk.nashorn.internal.objects.annotations.Setter;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,8 +59,10 @@ public class RequestsController {
     }
 
     @Getter
-    public class ProductsPost {
+    @Setter
+    public static class ProductsPost {
         private Integer category_id;
+        ProductsPost(){}
     }
 
 }
