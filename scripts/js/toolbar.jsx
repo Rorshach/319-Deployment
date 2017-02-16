@@ -20,10 +20,8 @@ export default class Toolbar extends React.Component {
                     <b>Coast Capital Savings Ordering System</b>
                   </Navbar.Text></h4>
                   <Nav bsStyle="pills" pullRight className="navbarLinks">
-                    <NavItem eventKey={1} href="#">Link</NavItem>
-                    <NavItem eventKey={2} href="#">Link</NavItem>
-                    <NavItem eventKey={3} href="#">Link</NavItem>
-                    <NavItem eventKey={4} href="#">Link</NavItem>
+                    <NavItem eventKey={1} href="/history">History</NavItem>
+                    <NavItem eventKey={3} href="/logout">Logout</NavItem>
                   </Nav>
                 </Navbar>);
     }
