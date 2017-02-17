@@ -14,7 +14,7 @@ import {Checkbox} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 import {PageHeader} from 'react-bootstrap';
 
-
+/*
 // TODO: need to move all of these components into separate classes.
 export default class Content extends React.Component {
     constructor(props){
@@ -43,8 +43,8 @@ class HeaderName extends React.Component {
         return (<p>Create a Request</p>);
     }
 }
-
-class RequestForm extends React.Component {
+*/
+export default class RequestForm extends React.Component {
 
     constructor(props){
         super(props);
