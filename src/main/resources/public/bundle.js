@@ -62,7 +62,15 @@
 
 	var _alerts2 = _interopRequireDefault(_alerts);
 
-	var _main = __webpack_require__(473);
+	var _tabs = __webpack_require__(473);
+
+	var _tabs2 = _interopRequireDefault(_tabs);
+
+	var _login = __webpack_require__(474);
+
+	var _login2 = _interopRequireDefault(_login);
+
+	var _main = __webpack_require__(475);
 
 	var _main2 = _interopRequireDefault(_main);
 
@@ -90,6 +98,14 @@
 
 	var _toolbar2 = _interopRequireDefault(_toolbar);
 
+	var _tabs = __webpack_require__(473);
+
+	var _tabs2 = _interopRequireDefault(_tabs);
+
+	var _login = __webpack_require__(474);
+
+	var _login2 = _interopRequireDefault(_login);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
@@ -97,8 +113,17 @@
 	 */
 	module.exports.bindings;
 	{
-	  _reactDom2.default.render(_react2.default.createElement(_content2.default, null), document.getElementById('content'));
-	  _reactDom2.default.render(_react2.default.createElement(_toolbar2.default, null), document.getElementById('toolbar'));
+	    _reactDom2.default.render(_react2.default.createElement(_toolbar2.default, null), document.getElementById('toolbar'));
+
+	    if (document.getElementById("content")) {
+	        _reactDom2.default.render(_react2.default.createElement(_content2.default, null), document.getElementById('content'));
+	    }
+	    if (document.getElementById("tabs")) {
+	        _reactDom2.default.render(_react2.default.createElement(_tabs2.default, null), document.getElementById('tabs'));
+	    }
+	    if (document.getElementById("login")) {
+	        _reactDom2.default.render(_react2.default.createElement(_login2.default, null), document.getElementById("login"));
+	    }
 	} /**
 	  * Created by alekhrycaiko on 2017-01-24.
 	  */
@@ -46822,13 +46847,190 @@
 /* 473 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(33);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _reactBootstrap = __webpack_require__(204);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TabsComponent = function (_React$Component) {
+	    _inherits(TabsComponent, _React$Component);
+
+	    function TabsComponent(props) {
+	        _classCallCheck(this, TabsComponent);
+
+	        return _possibleConstructorReturn(this, (TabsComponent.__proto__ || Object.getPrototypeOf(TabsComponent)).call(this, props));
+	    }
+
+	    _createClass(TabsComponent, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                _reactBootstrap.Tabs,
+	                { defaultActiveKey: 2, id: 'cc-tabs' },
+	                _react2.default.createElement(
+	                    _reactBootstrap.Tab,
+	                    { eventKey: 1, title: 'Needs Approval' },
+	                    ' List of  requests needing approval (approvers only) '
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Tab,
+	                    { eventKey: 2, title: 'In Processing' },
+	                    ' List of active requests (ownership) '
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Tab,
+	                    { eventKey: 3, title: 'Approved' },
+	                    'list of approved requests (approver)'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return TabsComponent;
+	}(_react2.default.Component);
+
+	exports.default = TabsComponent;
+
+/***/ },
+/* 474 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(33);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _reactBootstrap = __webpack_require__(204);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LoginComponent = function (_React$Component) {
+	    _inherits(LoginComponent, _React$Component);
+
+	    function LoginComponent(props) {
+	        _classCallCheck(this, LoginComponent);
+
+	        return _possibleConstructorReturn(this, (LoginComponent.__proto__ || Object.getPrototypeOf(LoginComponent)).call(this, props));
+	    }
+
+	    _createClass(LoginComponent, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                _reactBootstrap.Form,
+	                { horizontal: true },
+	                _react2.default.createElement(
+	                    _reactBootstrap.FormGroup,
+	                    { controlId: 'formHorizontalEmail' },
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Col,
+	                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+	                        'Email'
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Col,
+	                        { sm: 10 },
+	                        _react2.default.createElement(_reactBootstrap.FormControl, { type: 'email', placeholder: 'Email' })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.FormGroup,
+	                    { controlId: 'formHorizontalPassword' },
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Col,
+	                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
+	                        'Password'
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Col,
+	                        { sm: 10 },
+	                        _react2.default.createElement(_reactBootstrap.FormControl, { type: 'password', placeholder: 'Password' })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.FormGroup,
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Col,
+	                        { smOffset: 2, sm: 10 },
+	                        _react2.default.createElement(
+	                            _reactBootstrap.Checkbox,
+	                            null,
+	                            'Remember me'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.FormGroup,
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Col,
+	                        { smOffset: 2, sm: 10 },
+	                        _react2.default.createElement(
+	                            _reactBootstrap.Button,
+	                            { type: 'submit' },
+	                            'Sign in'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return LoginComponent;
+	}(_react2.default.Component);
+
+	exports.default = LoginComponent;
+
+/***/ },
+/* 475 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(474);
+	var content = __webpack_require__(476);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(476)(content, {});
+	var update = __webpack_require__(478)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -46845,10 +47047,10 @@
 	}
 
 /***/ },
-/* 474 */
+/* 476 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(475)();
+	exports = module.exports = __webpack_require__(477)();
 	// imports
 
 
@@ -46859,7 +47061,7 @@
 
 
 /***/ },
-/* 475 */
+/* 477 */
 /***/ function(module, exports) {
 
 	/*
@@ -46915,7 +47117,7 @@
 
 
 /***/ },
-/* 476 */
+/* 478 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
