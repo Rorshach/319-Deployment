@@ -1,21 +1,15 @@
 package com.coastcapitalsavings.mvc.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
-@Getter
-@Setter
-@Entity
+/**
+ * A profile is a set of products which are linked to an employee job description.
+ */
+@Data
 public class Profile {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer id;
-
-    String name;
-
-    @ManyToMany (cascade = CascadeType.ALL) @JsonManagedReference Set<Product> products;
+    private int id;
+    private String name;
+    private List<Product> products;
 }

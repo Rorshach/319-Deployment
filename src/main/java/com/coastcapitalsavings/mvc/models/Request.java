@@ -1,65 +1,21 @@
 package com.coastcapitalsavings.mvc.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.sql.Date;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
-@Getter
-@Setter
-@Entity
+/**
+ * Represents a request for a set 1-3 products that is submitted by an employee.
+ */
+@Data
 public class Request {
-    @Id @GeneratedValue(strategy=GenerationType.AUTO) Integer id;
-    @NotNull Date dateCreated;
-    Date dateModified;
-    @ManyToOne @JsonManagedReference Employee lastModifiedBy;
-    @ManyToOne @JsonManagedReference Employee submittedBy;
-    @ManyToOne @JsonManagedReference RequestStatus requestStatus;
-    @OneToMany (mappedBy="request") @JsonManagedReference Set<RequestedItem> requestedItems;
-    @ManyToMany @JsonManagedReference Set<Product> products;
-
-    public Request(Employee emp, Product prod, RequestStatus status) {
-        this.dateCreated = new Date(Calendar.getInstance().getTimeInMillis());
-        this.dateModified = new Date(Calendar.getInstance().getTimeInMillis());
-        this.lastModifiedBy = emp;
-        this.submittedBy = emp;
-        this.requestStatus = status;
-        this.products = new HashSet<>();
-        products.add(prod);                 // TODO: Hardcoded
-    }
-
-    /*
-    public Request() {
-        //TODO: needs changing
-        //HARD CODED!
-        CostCenter cc = new CostCenter();
-        cc.cid = 11;
-        cc.name = "Commerce";
-
-        Employee e = new Employee();
-        e.costCenter = cc;
-        e.eid = 11;
-        e.email = "test@gmail.com";
-        e.fName = "test";
-        e.lName = "test";
-
-        RequestStatus rs = new RequestStatus();
-        rs.id = 21;
-        rs.status = "Pending";
-
-        Date date = new Date(Calendar.getInstance().getTimeInMillis());
-        this.dateCreated = date;
-        this.dateModified = date;
-        this.lastModifiedBy = e;
-        this.submittedBy = e;
-        requestStatus = rs;
-    }
-    */
+    private int id;
+    private String notes;
+    private Date dateCreated;
+    private Employee submittedBy;
+    private Date dateModified;
+    private Employee lastModifiedBy;
+    private RequestStatus requestStatus;
+    private Map<Product, ProductStatus> products;
 }

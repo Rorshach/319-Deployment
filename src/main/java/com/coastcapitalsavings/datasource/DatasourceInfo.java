@@ -1,6 +1,6 @@
-package com.coastcapitalsavings.database;
+package com.coastcapitalsavings.datasource;
 
-public class DatabaseInfo {
+public class DatasourceInfo {
     private String address;
     private String userName;
     private String password;
