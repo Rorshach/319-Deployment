@@ -1,27 +1,20 @@
 package com.coastcapitalsavings.mvc.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.List;
 
-
-@Getter
-@Setter
-@Entity
+/**
+ * An employee
+ */
+@Data
 public class Employee {
-    @Id Integer eid;
-    @NotNull String fName;
-    @NotNull String lName;
-    @NotNull String email;
-    @OneToOne Employee reportsTo;
-
-    @ManyToOne @JsonBackReference CostCenter costCenter;
-    @OneToMany (mappedBy="submittedBy") @JsonBackReference Set<Request> requests;
-    @ManyToMany (mappedBy="employees") @JsonManagedReference Set<Role> roles;
+    private int id;
+    private String fName;
+    private String lName;
+    private String email;
+    private Employee reportsTo;
+    private CostCenter costCenter;
+    private List<Request> requests;
+    private List<Role> roles;
 }

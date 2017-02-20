@@ -1,23 +1,12 @@
 package com.coastcapitalsavings.mvc.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import javax.persistence.*;
-import java.util.Set;
-
-@Getter
-@Setter
-@Entity
+/**
+ * A product that can be requested by an employee
+ */
+@Data
 public class Product {
-    @Id @GeneratedValue(strategy=GenerationType.AUTO)
-    Integer id;
-    String name;
-
-    @ManyToMany (cascade=CascadeType.ALL) @JsonBackReference Set<Request> requests;
-    @ManyToOne @JsonBackReference Category category;
-    @ManyToMany (mappedBy="products") @JsonManagedReference Set<Profile> profiles;
-
+    private int id;
+    private String name;
 }

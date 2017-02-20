@@ -1,8 +1,7 @@
-package com.coastcapitalsavings.database;
+package com.coastcapitalsavings.datasource;
 
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.fail;
@@ -10,10 +9,14 @@ import static junit.framework.TestCase.fail;
 public class Test_JSONDatabaseInfoParser {
 
     @Test
+    /**
+     * Tests the JSON parser against a sample JSON file and confirms that the DataSourceInfo
+     * object fields are as expected.
+     */
     public void testDatabaseInfoCreation() {
         try {
-            IDatabaseInfoParser parser = new JSONDatabaseInfoParser();
-            DatabaseInfo dbInfo = parser.createDatabaseInfo("./src/test/resources/test_dbproperties.json");
+            IDataSourceInfoParser parser = new JSONDataSourceInfoParser();
+            DatasourceInfo dbInfo = parser.createDatabaseInfo("./src/test/resources/test_dbproperties.json");
             assertEquals("db.testAddress", dbInfo.getAddress());
             assertEquals("db.testUser", dbInfo.getUserName());
             assertEquals("db.testPassword", dbInfo.getPassword());
