@@ -13,44 +13,19 @@ import {FormControl} from 'react-bootstrap';
 import {Checkbox} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 import {PageHeader} from 'react-bootstrap';
+import {Radio} from 'react-bootstrap';
+import {HelpBlock} from 'react-bootstrap';
+import ProfileRequestForm from "./profilerequestform.jsx";
+import CategoriesRequestForm from "./categoriesrequestform.jsx";
 
-/*
-// TODO: need to move all of these components into separate classes.
-export default class Content extends React.Component {
-    constructor(props){
-        super(props);
-        autobind(this);
-    }
-
-    render() {
-        return (
-          <Grid fluid  className="contentGrid">
-            <PageHeader><HeaderName/></PageHeader>
-            <Row className="show-grid">
-              <Col><RequestForm/></Col>
-            </Row>
-          </Grid>
-      );
-    }
-}
-
-class HeaderName extends React.Component {
-    constructor (props){
-        super(props);
-        autobind(this);
-    }
-    render() {
-        return (<p>Create a Request</p>);
-    }
-}
-*/
 export default class RequestForm extends React.Component {
 
     constructor(props){
         super(props);
         this.state = {
             statusDisplay : false,
-            statusMessage : null
+            statusMessage : null,
+            selectedOption : null
         }
         autobind(this);
     }
@@ -78,53 +53,68 @@ export default class RequestForm extends React.Component {
             });
     }
 
-    // TODO:  I think we just want to set the prop based on theState, then
-    // TODO:    feed it into a component that optionally renders.
+    handleOptionChange(e) {
+        this.setState({selectedOption: e});
+    }
+
     render() {
-        if (this.state.statusDisplay === true){
+            var form;
+            var alert;
+            var description;
+            var submit;
+
+            if (this.state.selectedOption !== null) {
+              description = <Col>
+                <ControlLabel><b>Description</b></ControlLabel>
+                <HelpBlock>Enter an optional short description about your request (max 250 characters).</HelpBlock>
+                <FormControl componentClass="textarea" placeholder="Description" maxLength='250'/></Col>;
+              submit = <Button onSubmit = {this.callRequest}  type="submit" disabled={true}>
+                    Submit Request
+                </Button>;
+            }
+
+            if (this.state.selectedOption === 'categories') {
+              form = <CategoriesRequestForm/>
+            } else if (this.state.selectedOption === 'profiles') {
+              form = <ProfileRequestForm/>
+            }
+
+            if (this.state.statusDisplay === true) {
+                alert = <Alerts title={this.state.statusMessage}/>
+            }
+
             return (
-                <div class ="has-status">
-                <Alerts title={this.state.statusMessage}/>
+                <div>
+                  <PageHeader>Create a Request</PageHeader>
+                {alert}
                 <Form horizontal>
                     <FormGroup controlId="formControlsSelect">
-                        <ControlLabel>Select a product type</ControlLabel>
-                        <FormControl componentClass="select" placeholder="select">
-                            <option value="select">Pencil</option>
-                                <option value="other">Laptop</option>
-                        </FormControl>
-                    </FormGroup>
-                    <FormGroup>
-                        <Col smOffset={2} sm={8}>
-                            <Button onSubmit = {this.callRequest}  type="submit">
-                                Submit Request
-                            </Button>
-                        </Col>
+                        <Col smOffset={1}><ControlLabel><b>Select a Product Type</b></ControlLabel></Col>
+                          <FormGroup>
+                            <Row>
+                            <Col smOffset={4} sm={3}>
+                                <Radio inline name="groupOptions" onChange={ () => this.handleOptionChange('categories')}>
+                                Categories
+                                </Radio>
+                            </Col>
+                            <Col sm={3}>
+                                <Radio inline name="groupOptions" onChange={() => this.handleOptionChange('profiles')}>
+                                  Profiles
+                                </Radio>
+                            </Col>
+                            </Row>
+                          </FormGroup>
+
+                          <Col smOffset={1} sm={10}>
+                          {form}
+                          <p/>
+                          {description}
+                          <p/>
+                          {submit}
+                          </Col>
                     </FormGroup>
                 </Form>
                 </div>
             );
-        }else {
-            return (
-                <div class ="no-status">
-                <Form horizontal>
-                    <FormGroup controlId="formControlsSelect">
-                        <ControlLabel>Select a product type</ControlLabel>
-                        <FormControl componentClass="select" placeholder="select">
-                            <option value ="null" disabled> None </option>
-                            <option value="select">Pencil</option>
-                            <option value="other">Laptop</option>
-                        </FormControl>
-                    </FormGroup>
-                    <FormGroup>
-                        <Col smOffset={2} sm={8}>
-                            <Button onClick={this.callRequest} type="button">
-                                Submit Request
-                            </Button>
-                        </Col>
-                    </FormGroup>
-                </Form>
-                </div>
-            );
-        }
     }
 }
