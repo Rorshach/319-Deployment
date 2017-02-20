@@ -9,6 +9,10 @@ import static junit.framework.TestCase.fail;
 public class Test_JSONDatabaseInfoParser {
 
     @Test
+    /**
+     * Tests the JSON parser against a sample JSON file and confirms that the DataSourceInfo
+     * object fields are as expected.
+     */
     public void testDatabaseInfoCreation() {
         try {
             IDataSourceInfoParser parser = new JSONDataSourceInfoParser();
