@@ -5,6 +5,12 @@ public class DatasourceInfo {
     private String userName;
     private String password;
 
+    public DatasourceInfo (String address, String userName, String password) {
+        this.address = address;
+        this.userName = userName;
+        this.password = password;
+    }
+
     public String getAddress() {
         return address;
     }
