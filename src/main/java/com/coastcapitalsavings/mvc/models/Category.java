@@ -1,6 +1,9 @@
 package com.coastcapitalsavings.mvc.models;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
+
+import com.coastcapitalsavings.mvc.models.modelviews.ModelViews;
 
 import java.util.List;
 
@@ -9,7 +12,7 @@ import java.util.List;
  */
 @Data
 public class Category {
-    private Integer cid;
-    private String name;
+    @JsonView(ModelViews.Summary.class) private Integer cid;
+    @JsonView(ModelViews.Summary.class) private String name;
     private List<Product> products;
 }

@@ -119,4 +119,30 @@ product_status_id INT UNSIGNED,
 PRIMARY KEY (id, request_id),
 FOREIGN KEY (product_id) REFERENCES products(id),
 FOREIGN KEY (product_status_id) REFERENCES product_statuses(id)
-)
+);
+
+/*
+Schema Section
+ */
+
+
+/*------------------------------------------------------------------------------------------
+Description:  Generates listing of all product categories
+
+Called By:    Coast Capital Requisitioning Application
+Parameters: 	none
+Returns:    	recordset
+
+Created By:  	Chris Semiao, Felix Tso
+Created On:  	2017-2-20
+---------------------------------------------------------------------------------------------*/
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS req_categories_getAll $$
+CREATE PROCEDURE req_categories_getAll
+	()
+	BEGIN
+		select id, name from categories;
+	END $$
+
+DELIMITER ;
