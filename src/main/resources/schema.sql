@@ -111,7 +111,7 @@ FOREIGN KEY (status_id) REFERENCES request_statuses(id)
 );
 
 CREATE TABLE IF NOT EXISTS products_requests (
-id INT UNSIGNED,
+id INT UNSIGNED AUTO_INCREMENT,
 request_id INT UNSIGNED,
 product_id INT UNSIGNED,
 product_status_id INT UNSIGNED,
@@ -143,6 +143,75 @@ CREATE PROCEDURE req_categories_getAll
 	()
 	BEGIN
 		select id, name from categories;
+	END $$
+
+DELIMITER ;
+
+/*------------------------------------------------------------------------------------------
+Description: 	Insert a request and returns it with autoincremented id set.
+
+Called By:  	Coast Capital Requisitioning Application
+
+Parameters: 	inout_notes 				VARCHAR(255),
+							inout_dateCreated			DATETIME,
+							inout_submittedBy_id 		INT,
+							inout_lastModified 		DATETIME,
+							inout_lastModifiedBy_id 	INT,
+							inout_status_id			INT,
+
+Returns:    	request record
+
+Created By:  	Chris Semiao
+Created On:  	2017-2-20
+---------------------------------------------------------------------------------------------*/
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS req_requests_insert $$
+CREATE PROCEDURE req_requests_insert
+	(
+		INOUT inout_notes VARCHAR(250),
+		INOUT inout_dateCreated DATETIME,
+		INOUT inout_submittedBy_id INT,
+		INOUT inout_lastModified DATETIME,
+		INOUT inout_lastModifiedBy_id INT,
+		INOUT inout_status_id INT UNSIGNED,
+		OUT out_id INT UNSIGNED
+	)
+	BEGIN
+		INSERT INTO requests VALUES (null, inout_notes, inout_dateCreated, inout_submittedBy_id, inout_lastModified, inout_lastModifiedBy_id, inout_status_id);
+		SELECT LAST_INSERT_ID() INTO out_id;
+	END $$
+
+DELIMITER ;
+
+/*------------------------------------------------------------------------------------------
+Description: 	Insert a product into a request and return the product and its status
+
+Called By:  	Coast Capital Requisitioning Application
+
+Parameters: 	in_request_id 				INT UNSIGNED,
+				inout_product_id 			INT UNSIGNED,
+				inout_product_status_id 	INT UNSIGNED,
+
+Returns:    	product record
+				product_status record for product
+
+Created By:  	Chris Semiao
+Created On:  	2017-2-21
+---------------------------------------------------------------------------------------------*/
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS req_productInRequest_insert $$
+CREATE PROCEDURE req_productInRequest_insert
+	(
+		IN in_request_id INT UNSIGNED,
+		INOUT inout_product_id INT UNSIGNED,
+		INOUT inout_product_status_id INT UNSIGNED,
+		OUT out_product_name VARCHAR(255)
+	)
+	BEGIN
+		INSERT INTO products_requests VALUES (null, in_request_id, inout_product_id, inout_product_status_id);
+		SELECT name INTO out_product_name FROM products WHERE id = inout_product_id;
 	END $$
 
 DELIMITER ;
