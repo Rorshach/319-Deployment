@@ -1,29 +1,28 @@
 package com.coastcapitalsavings.mvc.controllers;
 
 import com.coastcapitalsavings.mvc.models.Category;
-
-import com.coastcapitalsavings.mvc.repositories.CategoriesRepository;
+import com.coastcapitalsavings.mvc.models.Responses.CategoriesAllResponse;
+import com.coastcapitalsavings.mvc.repositories.ControllerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Categories controller handles all REST actions related to the /categories resource.
  */
 @RestController
 @RequestMapping("/categories")
+
 public class CategoriesController {
 
     @Autowired
-    private CategoriesRepository repo;
+    ControllerRepository controllerRepo;
 
-    /**
-     * Get all categories on a GET request to the root resources
-     * @return JSON representation of all categories in the database
-     */
     @RequestMapping(method= RequestMethod.GET)
-    public Iterable<Category> getAllCategories() {
-        return repo.findAll();
+    public List<CategoriesAllResponse> getAllCategories() {
+        return controllerRepo.getAllCategories();
     }
 }
