@@ -1,12 +1,16 @@
 package com.coastcapitalsavings.mvc.repositories;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.coastcapitalsavings.mvc.models.Category;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
+
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,10 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Chris on 2017-02-20.
+ * Data access object for categories endpoint
  */
 @Repository
-public class ControllerRepository {
+public class CategoryRepository {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -43,7 +47,7 @@ public class ControllerRepository {
         });
     }
 
-    class CategoriesRowMapper implements RowMapper<Category> {
+    private static class CategoriesRowMapper implements RowMapper<Category> {
 
         @Override
         public Category mapRow(ResultSet rs, int rowNum) throws SQLException {
