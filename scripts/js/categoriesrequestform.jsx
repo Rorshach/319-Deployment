@@ -177,7 +177,7 @@ export default class CategoriesRequestForm extends React.Component {
                     </FormControl>
                   </Col>
                   <Col sm={8}>
-                  <FormControl className="categoryResponse" componentClass="select" multiple style={{ height : 200 }} onClick={this.createCheckboxes} disabled={this.state.hasOverThreeItems}>
+                    <FormControl className="categoryResponse" componentClass="select" multiple style={{ height : 200 }} onClick={this.createCheckboxes} disabled={this.state.hasOverThreeItems}>
                       {this.state.categoryResponse}
                   </FormControl>
                   </Col>

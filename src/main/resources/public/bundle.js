@@ -47394,11 +47394,19 @@
 	var _Overlay2 = _interopRequireDefault(_Overlay);
 
 	var _elementType = __webpack_require__(598);
+<<<<<<< HEAD
 
 	var _elementType2 = _interopRequireDefault(_elementType);
 
 	var _Fade = __webpack_require__(655);
 
+=======
+
+	var _elementType2 = _interopRequireDefault(_elementType);
+
+	var _Fade = __webpack_require__(655);
+
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	var _Fade2 = _interopRequireDefault(_Fade);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -47549,6 +47557,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+<<<<<<< HEAD
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -47958,6 +47967,417 @@
 	  shouldUpdatePosition: false
 	};
 
+=======
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	 * Built on top of `<Position/>` and `<Portal/>`, the overlay component is great for custom tooltip overlays.
+	 */
+	var Overlay = function (_React$Component) {
+	  _inherits(Overlay, _React$Component);
+
+	  function Overlay(props, context) {
+	    _classCallCheck(this, Overlay);
+
+	    var _this = _possibleConstructorReturn(this, (Overlay.__proto__ || Object.getPrototypeOf(Overlay)).call(this, props, context));
+
+	    _this.state = { exited: !props.show };
+	    _this.onHiddenListener = _this.handleHidden.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(Overlay, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (nextProps.show) {
+	        this.setState({ exited: false });
+	      } else if (!nextProps.transition) {
+	        // Otherwise let handleHidden take care of marking exited.
+	        this.setState({ exited: true });
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var container = _props.container;
+	      var containerPadding = _props.containerPadding;
+	      var target = _props.target;
+	      var placement = _props.placement;
+	      var shouldUpdatePosition = _props.shouldUpdatePosition;
+	      var rootClose = _props.rootClose;
+	      var children = _props.children;
+	      var Transition = _props.transition;
+
+	      var props = _objectWithoutProperties(_props, ['container', 'containerPadding', 'target', 'placement', 'shouldUpdatePosition', 'rootClose', 'children', 'transition']);
+
+	      // Don't un-render the overlay while it's transitioning out.
+
+
+	      var mountOverlay = props.show || Transition && !this.state.exited;
+	      if (!mountOverlay) {
+	        // Don't bother showing anything if we don't have to.
+	        return null;
+	      }
+
+	      var child = children;
+
+	      // Position is be inner-most because it adds inline styles into the child,
+	      // which the other wrappers don't forward correctly.
+	      child = _react2.default.createElement(
+	        _Position2.default,
+	        { container: container, containerPadding: containerPadding, target: target, placement: placement, shouldUpdatePosition: shouldUpdatePosition },
+	        child
+	      );
+
+	      if (Transition) {
+	        var onExit = props.onExit;
+	        var onExiting = props.onExiting;
+	        var onEnter = props.onEnter;
+	        var onEntering = props.onEntering;
+	        var onEntered = props.onEntered;
+
+	        // This animates the child node by injecting props, so it must precede
+	        // anything that adds a wrapping div.
+
+	        child = _react2.default.createElement(
+	          Transition,
+	          {
+	            'in': props.show,
+	            transitionAppear: true,
+	            onExit: onExit,
+	            onExiting: onExiting,
+	            onExited: this.onHiddenListener,
+	            onEnter: onEnter,
+	            onEntering: onEntering,
+	            onEntered: onEntered
+	          },
+	          child
+	        );
+	      }
+
+	      // This goes after everything else because it adds a wrapping div.
+	      if (rootClose) {
+	        child = _react2.default.createElement(
+	          _RootCloseWrapper2.default,
+	          { onRootClose: props.onHide },
+	          child
+	        );
+	      }
+
+	      return _react2.default.createElement(
+	        _Portal2.default,
+	        { container: container },
+	        child
+	      );
+	    }
+	  }, {
+	    key: 'handleHidden',
+	    value: function handleHidden() {
+	      this.setState({ exited: true });
+
+	      if (this.props.onExited) {
+	        var _props2;
+
+	        (_props2 = this.props).onExited.apply(_props2, arguments);
+	      }
+	    }
+	  }]);
+
+	  return Overlay;
+	}(_react2.default.Component);
+
+	Overlay.propTypes = _extends({}, _Portal2.default.propTypes, _Position2.default.propTypes, {
+
+	  /**
+	   * Set the visibility of the Overlay
+	   */
+	  show: _react2.default.PropTypes.bool,
+
+	  /**
+	   * Specify whether the overlay should trigger `onHide` when the user clicks outside the overlay
+	   */
+	  rootClose: _react2.default.PropTypes.bool,
+
+	  /**
+	   * A Callback fired by the Overlay when it wishes to be hidden.
+	   *
+	   * __required__ when `rootClose` is `true`.
+	   *
+	   * @type func
+	   */
+	  onHide: function onHide(props) {
+	    var propType = _react2.default.PropTypes.func;
+	    if (props.rootClose) {
+	      propType = propType.isRequired;
+	    }
+
+	    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	      args[_key - 1] = arguments[_key];
+	    }
+
+	    return propType.apply(undefined, [props].concat(args));
+	  },
+
+
+	  /**
+	   * A `<Transition/>` component used to animate the overlay changes visibility.
+	   */
+	  transition: _elementType2.default,
+
+	  /**
+	   * Callback fired before the Overlay transitions in
+	   */
+	  onEnter: _react2.default.PropTypes.func,
+
+	  /**
+	   * Callback fired as the Overlay begins to transition in
+	   */
+	  onEntering: _react2.default.PropTypes.func,
+
+	  /**
+	   * Callback fired after the Overlay finishes transitioning in
+	   */
+	  onEntered: _react2.default.PropTypes.func,
+
+	  /**
+	   * Callback fired right before the Overlay transitions out
+	   */
+	  onExit: _react2.default.PropTypes.func,
+
+	  /**
+	   * Callback fired as the Overlay begins to transition out
+	   */
+	  onExiting: _react2.default.PropTypes.func,
+
+	  /**
+	   * Callback fired after the Overlay finishes transitioning out
+	   */
+	  onExited: _react2.default.PropTypes.func
+	});
+
+	exports.default = Overlay;
+	module.exports = exports['default'];
+
+/***/ },
+/* 712 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _classnames = __webpack_require__(580);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _react = __webpack_require__(300);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(330);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _componentOrElement = __webpack_require__(685);
+
+	var _componentOrElement2 = _interopRequireDefault(_componentOrElement);
+
+	var _calculatePosition = __webpack_require__(713);
+
+	var _calculatePosition2 = _interopRequireDefault(_calculatePosition);
+
+	var _getContainer = __webpack_require__(687);
+
+	var _getContainer2 = _interopRequireDefault(_getContainer);
+
+	var _ownerDocument = __webpack_require__(650);
+
+	var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	/**
+	 * The Position component calculates the coordinates for its child, to position
+	 * it relative to a `target` component or node. Useful for creating callouts
+	 * and tooltips, the Position component injects a `style` props with `left` and
+	 * `top` values for positioning your component.
+	 *
+	 * It also injects "arrow" `left`, and `top` values for styling callout arrows
+	 * for giving your components a sense of directionality.
+	 */
+	var Position = function (_React$Component) {
+	  _inherits(Position, _React$Component);
+
+	  function Position(props, context) {
+	    _classCallCheck(this, Position);
+
+	    var _this = _possibleConstructorReturn(this, (Position.__proto__ || Object.getPrototypeOf(Position)).call(this, props, context));
+
+	    _this.state = {
+	      positionLeft: 0,
+	      positionTop: 0,
+	      arrowOffsetLeft: null,
+	      arrowOffsetTop: null
+	    };
+
+	    _this._needsFlush = false;
+	    _this._lastTarget = null;
+	    return _this;
+	  }
+
+	  _createClass(Position, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.updatePosition(this.getTarget());
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps() {
+	      this._needsFlush = true;
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate(prevProps) {
+	      if (this._needsFlush) {
+	        this._needsFlush = false;
+	        this.maybeUpdatePosition(this.props.placement !== prevProps.placement);
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var children = _props.children;
+	      var className = _props.className;
+
+	      var props = _objectWithoutProperties(_props, ['children', 'className']);
+
+	      var _state = this.state;
+	      var positionLeft = _state.positionLeft;
+	      var positionTop = _state.positionTop;
+
+	      var arrowPosition = _objectWithoutProperties(_state, ['positionLeft', 'positionTop']);
+
+	      // These should not be forwarded to the child.
+
+
+	      delete props.target;
+	      delete props.container;
+	      delete props.containerPadding;
+	      delete props.shouldUpdatePosition;
+
+	      var child = _react2.default.Children.only(children);
+	      return (0, _react.cloneElement)(child, _extends({}, props, arrowPosition, {
+	        // FIXME: Don't forward `positionLeft` and `positionTop` via both props
+	        // and `props.style`.
+	        positionLeft: positionLeft,
+	        positionTop: positionTop,
+	        className: (0, _classnames2.default)(className, child.props.className),
+	        style: _extends({}, child.props.style, {
+	          left: positionLeft,
+	          top: positionTop
+	        })
+	      }));
+	    }
+	  }, {
+	    key: 'getTarget',
+	    value: function getTarget() {
+	      var target = this.props.target;
+
+	      var targetElement = typeof target === 'function' ? target() : target;
+	      return targetElement && _reactDom2.default.findDOMNode(targetElement) || null;
+	    }
+	  }, {
+	    key: 'maybeUpdatePosition',
+	    value: function maybeUpdatePosition(placementChanged) {
+	      var target = this.getTarget();
+
+	      if (!this.props.shouldUpdatePosition && target === this._lastTarget && !placementChanged) {
+	        return;
+	      }
+
+	      this.updatePosition(target);
+	    }
+	  }, {
+	    key: 'updatePosition',
+	    value: function updatePosition(target) {
+	      this._lastTarget = target;
+
+	      if (!target) {
+	        this.setState({
+	          positionLeft: 0,
+	          positionTop: 0,
+	          arrowOffsetLeft: null,
+	          arrowOffsetTop: null
+	        });
+
+	        return;
+	      }
+
+	      var overlay = _reactDom2.default.findDOMNode(this);
+	      var container = (0, _getContainer2.default)(this.props.container, (0, _ownerDocument2.default)(this).body);
+
+	      this.setState((0, _calculatePosition2.default)(this.props.placement, overlay, target, container, this.props.containerPadding));
+	    }
+	  }]);
+
+	  return Position;
+	}(_react2.default.Component);
+
+	Position.propTypes = {
+	  /**
+	   * A node, element, or function that returns either. The child will be
+	   * be positioned next to the `target` specified.
+	   */
+	  target: _react2.default.PropTypes.oneOfType([_componentOrElement2.default, _react2.default.PropTypes.func]),
+
+	  /**
+	   * "offsetParent" of the component
+	   */
+	  container: _react2.default.PropTypes.oneOfType([_componentOrElement2.default, _react2.default.PropTypes.func]),
+	  /**
+	   * Minimum spacing in pixels between container border and component border
+	   */
+	  containerPadding: _react2.default.PropTypes.number,
+	  /**
+	   * How to position the component relative to the target
+	   */
+	  placement: _react2.default.PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
+	  /**
+	   * Whether the position should be changed on each update
+	   */
+	  shouldUpdatePosition: _react2.default.PropTypes.bool
+	};
+
+	Position.displayName = 'Position';
+
+	Position.defaultProps = {
+	  containerPadding: 0,
+	  placement: 'right',
+	  shouldUpdatePosition: false
+	};
+
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	exports.default = Position;
 	module.exports = exports['default'];
 
@@ -48938,9 +49358,15 @@
 	'use strict';
 
 	exports.__esModule = true;
+<<<<<<< HEAD
 
 	var _extends2 = __webpack_require__(495);
 
+=======
+
+	var _extends2 = __webpack_require__(495);
+
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	var _extends3 = _interopRequireDefault(_extends2);
 
 	var _objectWithoutProperties2 = __webpack_require__(579);
@@ -49584,6 +50010,7 @@
 
 	  Panel.prototype.renderHeader = function renderHeader(collapsible, header, id, role, expanded, bsProps) {
 	    var titleClassName = (0, _bootstrapUtils.prefix)(bsProps, 'title');
+<<<<<<< HEAD
 
 	    if (!collapsible) {
 	      if (!_react2['default'].isValidElement(header)) {
@@ -49595,6 +50022,19 @@
 	      });
 	    }
 
+=======
+
+	    if (!collapsible) {
+	      if (!_react2['default'].isValidElement(header)) {
+	        return header;
+	      }
+
+	      return (0, _react.cloneElement)(header, {
+	        className: (0, _classnames2['default'])(header.props.className, titleClassName)
+	      });
+	    }
+
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	    if (!_react2['default'].isValidElement(header)) {
 	      return _react2['default'].createElement(
 	        'h4',
@@ -49771,11 +50211,19 @@
 	var _classnames2 = _interopRequireDefault(_classnames);
 
 	var _react = __webpack_require__(300);
+<<<<<<< HEAD
 
 	var _react2 = _interopRequireDefault(_react);
 
 	var _isRequiredForA11y = __webpack_require__(633);
 
+=======
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _isRequiredForA11y = __webpack_require__(633);
+
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	var _isRequiredForA11y2 = _interopRequireDefault(_isRequiredForA11y);
 
 	var _bootstrapUtils = __webpack_require__(581);
@@ -49904,11 +50352,19 @@
 	var _values = __webpack_require__(591);
 
 	var _values2 = _interopRequireDefault(_values);
+<<<<<<< HEAD
 
 	var _extends3 = __webpack_require__(495);
 
 	var _extends4 = _interopRequireDefault(_extends3);
 
+=======
+
+	var _extends3 = __webpack_require__(495);
+
+	var _extends4 = _interopRequireDefault(_extends3);
+
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	var _objectWithoutProperties2 = __webpack_require__(579);
 
 	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
@@ -52067,6 +52523,7 @@
 	var _superagent2 = _interopRequireDefault(_superagent);
 
 	var _classAutobind = __webpack_require__(477);
+<<<<<<< HEAD
 
 	var _classAutobind2 = _interopRequireDefault(_classAutobind);
 
@@ -52165,6 +52622,106 @@
 	    return ProfileRequestForm;
 	}(_react2.default.Component);
 
+=======
+
+	var _classAutobind2 = _interopRequireDefault(_classAutobind);
+
+	var _reactBootstrap = __webpack_require__(493);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ProfileRequestForm = function (_React$Component) {
+	    _inherits(ProfileRequestForm, _React$Component);
+
+	    function ProfileRequestForm(props) {
+	        _classCallCheck(this, ProfileRequestForm);
+
+	        var _this = _possibleConstructorReturn(this, (ProfileRequestForm.__proto__ || Object.getPrototypeOf(ProfileRequestForm)).call(this, props));
+
+	        (0, _classAutobind2.default)(_this);
+	        return _this;
+	    }
+
+	    _createClass(ProfileRequestForm, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                _reactBootstrap.FormGroup,
+	                null,
+	                _react2.default.createElement(
+	                    _reactBootstrap.ControlLabel,
+	                    null,
+	                    _react2.default.createElement(
+	                        'b',
+	                        null,
+	                        'Select a Profile'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Row,
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Col,
+	                        { sm: 4 },
+	                        _react2.default.createElement(
+	                            _reactBootstrap.FormControl,
+	                            { componentClass: 'select', multiple: true, style: { height: 200 } },
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'profile1' },
+	                                'Profile 1'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'profile2' },
+	                                'Profile 2'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'profile3' },
+	                                'Profile 3'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'profile4' },
+	                                'Profile 4'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'profile5' },
+	                                'Profile 5'
+	                            ),
+	                            _react2.default.createElement(
+	                                'option',
+	                                { value: 'profile6' },
+	                                'Profile 6'
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Col,
+	                        { sm: 8 },
+	                        _react2.default.createElement(
+	                            _reactBootstrap.FormControl,
+	                            { componentClass: 'textarea', readOnly: true, style: { height: 200 } },
+	                            'Test test test'
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return ProfileRequestForm;
+	}(_react2.default.Component);
+
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	exports.default = ProfileRequestForm;
 
 /***/ },
@@ -52512,10 +53069,17 @@
 	  var parse = request.parse[this.type];
 	  if(this.req._parser) {
 	    return this.req._parser(this, str);
+<<<<<<< HEAD
 	  }
 	  if (!parse && isJSON(this.type)) {
 	    parse = request.parse['application/json'];
 	  }
+=======
+	  }
+	  if (!parse && isJSON(this.type)) {
+	    parse = request.parse['application/json'];
+	  }
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	  return parse && str && (str.length || str instanceof Object)
 	    ? parse(str)
 	    : null;
@@ -52957,6 +53521,7 @@
 	  if (this._responseType) {
 	    xhr.responseType = this._responseType;
 	  }
+<<<<<<< HEAD
 
 	  // send stuff
 	  this.emit('request', this);
@@ -53101,6 +53666,152 @@
 /* 747 */
 /***/ function(module, exports, __webpack_require__) {
 
+=======
+
+	  // send stuff
+	  this.emit('request', this);
+
+	  // IE11 xhr.send(undefined) sends 'undefined' string as POST payload (instead of nothing)
+	  // We need null here if data is undefined
+	  xhr.send(typeof data !== 'undefined' ? data : null);
+	  return this;
+	};
+
+	/**
+	 * GET `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} [data] or fn
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.get = function(url, data, fn){
+	  var req = request('GET', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.query(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * HEAD `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} [data] or fn
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.head = function(url, data, fn){
+	  var req = request('HEAD', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * OPTIONS query to `url` with optional callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} [data] or fn
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.options = function(url, data, fn){
+	  var req = request('OPTIONS', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * DELETE `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed} [data]
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+
+	function del(url, data, fn){
+	  var req = request('DELETE', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	request['del'] = del;
+	request['delete'] = del;
+
+	/**
+	 * PATCH `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed} [data]
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.patch = function(url, data, fn){
+	  var req = request('PATCH', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * POST `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed} [data]
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.post = function(url, data, fn){
+	  var req = request('POST', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+	/**
+	 * PUT `url` with optional `data` and callback `fn(res)`.
+	 *
+	 * @param {String} url
+	 * @param {Mixed|Function} [data] or fn
+	 * @param {Function} [fn]
+	 * @return {Request}
+	 * @api public
+	 */
+
+	request.put = function(url, data, fn){
+	  var req = request('PUT', url);
+	  if ('function' == typeof data) fn = data, data = null;
+	  if (data) req.send(data);
+	  if (fn) req.end(fn);
+	  return req;
+	};
+
+
+/***/ },
+/* 747 */
+/***/ function(module, exports, __webpack_require__) {
+
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	
 	/**
 	 * Expose `Emitter`.
@@ -54198,7 +54909,11 @@
 	            statusMessage: null,
 	            categoriesResponse: null,
 	            categoryResponse: null,
+<<<<<<< HEAD
 	            description: ""
+=======
+	            description: null
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	        };
 	        return _this;
 	    }
@@ -54231,6 +54946,7 @@
 	            });
 	        }
 	    }, {
+<<<<<<< HEAD
 	        key: 'submitRequest',
 	        value: function submitRequest(e) {
 	            var _this3 = this;
@@ -54241,6 +54957,19 @@
 	            });
 	            var payload = { "products": selectedItemsKeys, "notes": this.state.description };
 	            _superagent2.default.post("/requests").send(payload).end(function (err, res) {
+=======
+	        key: 'callRequest',
+	        value: function callRequest(e) {
+	            var _this3 = this;
+
+	            e.preventDefault();
+	            console.log(this.selectedItemsList);
+	            console.log(this.state.description);
+	            _superagent2.default.get("/categories")
+	            //.send({ "category_id": 11})
+	            .end(function (err, res) {
+	                console.log(JSON.parse(res.text));
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	                if (err) {
 	                    _this3.setState({
 	                        statusMessage: "noConnection",
@@ -54251,7 +54980,10 @@
 	                        statusMessage: "Success",
 	                        statusDisplay: true
 	                    });
+<<<<<<< HEAD
 	                    window.location.reload();
+=======
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	                }
 	            });
 	        }
@@ -54362,7 +55094,11 @@
 
 	            return _react2.default.createElement(
 	                _reactBootstrap.Form,
+<<<<<<< HEAD
 	                { onSubmit: this.submitRequest },
+=======
+	                { onSubmit: this.callRequest },
+>>>>>>> 318d4356738801b332364e42e30f20e227226fee
 	                alert,
 	                _react2.default.createElement(
 	                    _reactBootstrap.FormGroup,
