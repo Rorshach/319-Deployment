@@ -31,7 +31,7 @@ export default class CategoriesRequestForm extends React.Component {
           statusMessage : null,
           categoriesResponse : null,
           categoryResponse : null,
-          description : null
+          description : ""
         }
     }
 
@@ -57,15 +57,14 @@ export default class CategoriesRequestForm extends React.Component {
       });
     }
 
-    callRequest(e) {
+    submitRequest(e) {
         e.preventDefault();
-        console.log(this.selectedItemsList);
-        console.log(this.state.description);
+        var selectedItemsKeys = this.selectedItemsList.map(function(e) {return e.key});
+        var payload = {"products": selectedItemsKeys, "notes": this.state.description};
         request
-            .get("/categories")
-            //.send({ "category_id": 11})
+            .post("/requests")
+            .send(payload)
             .end((err, res) => {
-                console.log(JSON.parse(res.text));
                 if (err){
                     this.setState({
                         statusMessage: "noConnection",
@@ -77,6 +76,7 @@ export default class CategoriesRequestForm extends React.Component {
                           statusMessage: "Success",
                           statusDisplay: true
                     });
+                    window.location.reload();
                 }
             });
     }
@@ -165,36 +165,36 @@ export default class CategoriesRequestForm extends React.Component {
           }
 
           return (
-              <Form onSubmit={this.callRequest}>
+              <Form onSubmit={this.submitRequest}>
               {alert}
               <FormGroup>
                 <ControlLabel><b>Select a Category</b></ControlLabel>
                   <HelpBlock>Select up to 3 items.</HelpBlock>
                   <Row>
                     <Col sm={4}>
-                    <FormControl componentClass="select" multiple style={{ height : 200 }} onChange={this.getProductsInCategories} disabled={this.state.hasOverThreeItems}>
+                    <FormControl className="categoriesResponse" componentClass="select" multiple style={{ height : 200 }} onChange={this.getProductsInCategories} disabled={this.state.hasOverThreeItems}>
                       {this.state.categoriesResponse}
                     </FormControl>
                   </Col>
                   <Col sm={8}>
-                  <FormControl componentClass="select" multiple style={{ height : 200 }} onClick={this.createCheckboxes} disabled={this.state.hasOverThreeItems}>
+                    <FormControl className="categoryResponse" componentClass="select" multiple style={{ height : 200 }} onClick={this.createCheckboxes} disabled={this.state.hasOverThreeItems}>
                       {this.state.categoryResponse}
                   </FormControl>
                   </Col>
                 </Row>
                 <p/>
                 <ControlLabel><b>Selected Items</b></ControlLabel>
-                  <Well style={{height : 135}}>
+                  <Well style={{height : 135}} className="selectedItems">
                     {this.selectedItemsCheckboxes}
                   </Well>
 
                   <Col>
                       <ControlLabel><b>Description</b></ControlLabel>
                       <HelpBlock>Enter an optional short description about your request (max 250 characters).</HelpBlock>
-                      <FormControl componentClass="textarea" placeholder="Description" maxLength='250' onChange={this.handleDescription}/>
+                      <FormControl className="description" componentClass="textarea" placeholder="Description" maxLength='250' onChange={this.handleDescription}/>
                   </Col>
                   <p/>
-                  <Button type="submit" disabled={!this.state.canSubmit}>
+                  <Button type="submit" className="submitBtn" disabled={!this.state.canSubmit}>
                         Submit Request
                   </Button>
               </FormGroup>
