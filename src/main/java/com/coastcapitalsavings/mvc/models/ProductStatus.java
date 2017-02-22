@@ -7,6 +7,6 @@ import lombok.Data;
  */
 @Data
 public class ProductStatus {
-    private int id;
+    private Long id;
     private String status;
 }
