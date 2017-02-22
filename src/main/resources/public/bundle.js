@@ -54198,7 +54198,7 @@
 	            statusMessage: null,
 	            categoriesResponse: null,
 	            categoryResponse: null,
-	            description: null
+	            description: ""
 	        };
 	        return _this;
 	    }
@@ -54231,17 +54231,16 @@
 	            });
 	        }
 	    }, {
-	        key: 'callRequest',
-	        value: function callRequest(e) {
+	        key: 'submitRequest',
+	        value: function submitRequest(e) {
 	            var _this3 = this;
 
 	            e.preventDefault();
-	            console.log(this.selectedItemsList);
-	            console.log(this.state.description);
-	            _superagent2.default.get("/categories")
-	            //.send({ "category_id": 11})
-	            .end(function (err, res) {
-	                console.log(JSON.parse(res.text));
+	            var selectedItemsKeys = this.selectedItemsList.map(function (e) {
+	                return e.key;
+	            });
+	            var payload = { "products": selectedItemsKeys, "notes": this.state.description };
+	            _superagent2.default.post("/requests").send(payload).end(function (err, res) {
 	                if (err) {
 	                    _this3.setState({
 	                        statusMessage: "noConnection",
@@ -54252,6 +54251,7 @@
 	                        statusMessage: "Success",
 	                        statusDisplay: true
 	                    });
+	                    window.location.reload();
 	                }
 	            });
 	        }
@@ -54362,7 +54362,7 @@
 
 	            return _react2.default.createElement(
 	                _reactBootstrap.Form,
-	                { onSubmit: this.callRequest },
+	                { onSubmit: this.submitRequest },
 	                alert,
 	                _react2.default.createElement(
 	                    _reactBootstrap.FormGroup,
