@@ -19,9 +19,8 @@ export default class CategoriesRequestForm extends React.Component {
     constructor(props){
         super(props);
         autobind(this);
-        var selectedCheckboxesSet = null;
-        var categories = null;
-        var selectedProducts = null;
+        var selectedItemsList = null;
+        var selectedItemsCheckboxes = null;
 
         this.state = {
           isCheckboxSelected : false,
@@ -29,17 +28,44 @@ export default class CategoriesRequestForm extends React.Component {
           hasOverThreeItems : false,
           canSubmit : false,
           statusDisplay : false,
-          statusMessage : null
+          statusMessage : null,
+          categoriesResponse : null,
+          categoryResponse : null,
+          description : null
         }
+    }
+
+    getCategories() {
+        request
+           .get("/categories")
+           .end((err, res) => {
+                if (err) {
+                    this.setState({
+                        statusMessage: err,
+                        statusDisplay: true
+                    });
+                } else {
+                    var categoryOptions = [];
+                    var jsonResponse = JSON.parse(res.text);
+                    for (var i = 0; i < jsonResponse.length; i++) {
+                        categoryOptions.push(<option value={jsonResponse[i].cid} key={jsonResponse[i].cid}>{jsonResponse[i].name}</option>);
+                    }
+                    this.setState({
+                        categoryResponse : categoryOptions
+                    });
+                }
+      });
     }
 
     callRequest(e) {
         e.preventDefault();
+        console.log(this.selectedItemsList);
+        console.log(this.state.description);
         request
-            .post("/requests")
-            .send({ "category_id": 11})
+            .get("/categories")
+            //.send({ "category_id": 11})
             .end((err, res) => {
-                console.log(res);
+                console.log(JSON.parse(res.text));
                 if (err){
                     this.setState({
                         statusMessage: "noConnection",
@@ -48,66 +74,88 @@ export default class CategoriesRequestForm extends React.Component {
                 }
                 else{
                     this.setState({
-                        statusMessage: 'success',
-                        statusDisplay: true
+                          statusMessage: "Success",
+                          statusDisplay: true
                     });
                 }
             });
     }
 
     getProductsInCategories(e) {
-      var checkboxes = new Array();
-      for (var i = 0; i < 6; i++) {
+      for (var i = 0; i < this.state.categoriesResponse.length; i++) {
         if (e.target.options[i].selected) {
-          var label = "Category" + i;
-          checkboxes.push(<option value={label} key={label}>{label}</option>);
+          this.getCategories();
           this.setState({categoryOption: e.target.options[i].value});
         }
       }
-      this.categories = checkboxes;
     }
 
     componentWillMount() {
-      this.selectedCheckboxesSet = new Set();
+      this.selectedItemsList = [];
+      request
+         .get("/categories")
+         .end((err, res) => {
+              if (err) {
+                  this.setState({
+                      statusMessage: err,
+                      statusDisplay: true
+                  });
+              } else {
+                  var categoriesOptions = [];
+                  var jsonResponse = JSON.parse(res.text);
+                  for (var i = 0; i < jsonResponse.length; i++) {
+                      categoriesOptions.push(<option value={jsonResponse[i].cid} key={jsonResponse[i].cid}>{jsonResponse[i].name}</option>);
+                  }
+                  this.setState({
+                      categoriesResponse : categoriesOptions
+                  });
+              }
+          });
     }
 
-    createCheckbox(label) {
-      return <Checkbox onChange={() => this.toggleCheckbox(label)} checked={true} key={label}>{label}</Checkbox>
+    createCheckbox(label, key) {
+      return <Checkbox onChange={() => this.toggleCheckbox(label, key)} checked={true} key={key}>{label}</Checkbox>
     }
 
     createCheckboxes(e) {
         if (e.target.value !== null && e.target.value !== "") {
-          this.toggleCheckbox(e.target.value);
+          this.toggleCheckbox(e.target.text, e.target.value);
         }
     }
 
-    toggleCheckbox(label) {
-      if (this.selectedCheckboxesSet.has(label)) {
-        this.selectedCheckboxesSet.delete(label);
-        this.setState({isCheckboxSelected: false});
-      } else {
-        this.selectedCheckboxesSet.add(label);
+    toggleCheckbox(label, key) {
+      var isInSelectionList = false;
+      for (var i = 0; i < this.selectedItemsList.length; i++) {
+        if (this.selectedItemsList[i].key === key) {
+          isInSelectionList = true;
+          this.selectedItemsList.splice(i, 1);
+          this.setState({isCheckboxSelected: false});
+        }
+      }
+      if (!isInSelectionList) {
+        this.selectedItemsList.push({key: key, value: label});
         this.setState({isCheckboxSelected: true});
       }
 
-      if (this.selectedCheckboxesSet.size > 0) {
+      if (this.selectedItemsList.length > 0) {
         this.setState({canSubmit: true});
       } else {
         this.setState({canSubmit: false});
       }
 
-      if (this.selectedCheckboxesSet.size > 2) {
+      if (this.selectedItemsList.length > 2) {
         this.setState({hasOverThreeItems: true});
       } else {
         this.setState({hasOverThreeItems: false});
       }
 
-      var array = [];
       var data = this;
-      this.selectedCheckboxesSet.forEach(function(i) {array.push(i);});
-      this.selectedProducts = array.map(function(a) {return data.createCheckbox(a, true)});
+      this.selectedItemsCheckboxes = this.selectedItemsList.map(function(a) {return data.createCheckbox(a.value, a.key)});
     }
 
+    handleDescription(e) {
+        this.setState({description : e.target.value});
+    }
 
     render() {
           var alert;
@@ -116,7 +164,7 @@ export default class CategoriesRequestForm extends React.Component {
               alert = <Alerts title={this.state.statusMessage}/>
           }
 
-            return (
+          return (
               <Form onSubmit={this.callRequest}>
               {alert}
               <FormGroup>
@@ -125,30 +173,25 @@ export default class CategoriesRequestForm extends React.Component {
                   <Row>
                     <Col sm={4}>
                     <FormControl componentClass="select" multiple style={{ height : 200 }} onChange={this.getProductsInCategories} disabled={this.state.hasOverThreeItems}>
-                       <option value="category1">Category 1</option>
-                       <option value="category2">Category 2</option>
-                       <option value="category3">Category 3</option>
-                       <option value="category4">Category 4</option>
-                       <option value="category5">Category 5</option>
-                       <option value="category6">Category 6</option>
+                      {this.state.categoriesResponse}
                     </FormControl>
                   </Col>
                   <Col sm={8}>
                   <FormControl componentClass="select" multiple style={{ height : 200 }} onClick={this.createCheckboxes} disabled={this.state.hasOverThreeItems}>
-                      {this.categories}
+                      {this.state.categoryResponse}
                   </FormControl>
                   </Col>
                 </Row>
                 <p/>
                 <ControlLabel><b>Selected Items</b></ControlLabel>
                   <Well style={{height : 135}}>
-                    {this.selectedProducts}
+                    {this.selectedItemsCheckboxes}
                   </Well>
 
                   <Col>
                       <ControlLabel><b>Description</b></ControlLabel>
                       <HelpBlock>Enter an optional short description about your request (max 250 characters).</HelpBlock>
-                      <FormControl componentClass="textarea" placeholder="Description" maxLength='250'/>
+                      <FormControl componentClass="textarea" placeholder="Description" maxLength='250' onChange={this.handleDescription}/>
                   </Col>
                   <p/>
                   <Button type="submit" disabled={!this.state.canSubmit}>
@@ -156,6 +199,6 @@ export default class CategoriesRequestForm extends React.Component {
                   </Button>
               </FormGroup>
             </Form>
-            );
+          );
     }
 }
