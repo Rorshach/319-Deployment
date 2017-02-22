@@ -38,7 +38,7 @@ public class CategoriesController {
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (DataAccessException e) {
             System.err.println(new Date() + " " +  e.getMessage());     // TODO:  Can be logged by a logger
-            return new ResponseEntity(Responses.INTERNAL_SERVER_ERROR.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(Responses.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -106,7 +106,7 @@ public class RequestRepository {
 
             Map<String, Object> outputs= execute(inputs);
 
-            return makeRequestFromResponse(outputs);
+            return mapResponseToRequest(outputs);
         }
 
         /**
@@ -114,7 +114,7 @@ public class RequestRepository {
          * @param responseMap Keys and values from the stored procedure response
          * @return new Request object with id set
          */
-        private Request makeRequestFromResponse(Map<String, Object> responseMap) {
+        private Request mapResponseToRequest(Map<String, Object> responseMap) {
             try {
                 Request req = new Request();
                 req.setId((long)responseMap.get("out_id"));
@@ -126,7 +126,7 @@ public class RequestRepository {
                 req.setRequestStatus_id((long)responseMap.get("inout_status_id"));
                 return req;
             } catch (ClassCastException e) {
-                System.err.println("Class cast exception in addProductToRequest.makeRequestFromResponse, check DB");
+                System.err.println("Class cast exception in addProductToRequest.mapResponseToRequest, check DB");
                 throw new TypeMismatchDataAccessException(e.getMessage());
             }
         }
@@ -163,17 +163,17 @@ public class RequestRepository {
 
             Map<String, Object> outputs = execute(inputs);
 
-            return addRequestProductToRequest(outputs, req);
+            return addRequestProductToUpdatedRequest(outputs, req);
         }
 
         /**
-         * Given a hashmap containing a product and product status info, make these into a RequestProduct
-         * and add it to the request.  The requested products are all set to pending.
-         * @param responseMap HashMap contaning response information.
+         * Given a map containing a product and product status info, make each pair into a RequestProduct
+         * and add it to the Request.  The requested products are all set to pending.
+         * @param responseMap HashMap containing response information.
          * @param req Request object to have products added to.
          * @return updated Request object
          */
-        private Request addRequestProductToRequest(Map<String, Object> responseMap, Request req) {
+        private Request addRequestProductToUpdatedRequest(Map<String, Object> responseMap, Request req) {
             try {
                 Product p = new Product();
                 p.setId((long) responseMap.get("inout_product_id"));
@@ -185,7 +185,7 @@ public class RequestRepository {
                 rp.setProduct(p);
                 rp.setProductStatus_id(pStatusId);
 
-                if (req.getProducts() == null) {
+                if (req.getProducts() == null) {        // If Request.products has not been initialized yet, do it now
                     List<RequestProduct> prodList = new ArrayList<>();
                     prodList.add(rp);
                     req.setProducts(prodList);
@@ -195,7 +195,7 @@ public class RequestRepository {
                 return req;
 
             } catch (ClassCastException e) {
-                System.err.println("Class cast exception in AddProductToRequestStoredProc.addRequestProductToRequest, check DB");
+                System.err.println("Class cast exception in AddProductToRequestStoredProc.addRequestProductToUpdatedRequest, check DB");
                 throw new TypeMismatchDataAccessException(e.getMessage());
             }
         }
