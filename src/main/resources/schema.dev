@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS employees (
  lName VARCHAR(255) NOT NULL,
  email VARCHAR(255) NOT NULL,
  reportsTo_id INT,
- costCenter_id INT UNSIGNED,
+ costCenter_id INT UNSIGNED NOT NULL,
 
  PRIMARY KEY (id),
  FOREIGN KEY (reportsTo_id) REFERENCES employees(id),
