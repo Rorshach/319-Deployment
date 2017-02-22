@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -21,6 +18,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/requests")
 public class RequestsController {
+
     @Autowired
     RequestService requestService;
 
@@ -43,9 +41,27 @@ public class RequestsController {
         }
     }
 
+    @RequestMapping(value="/{requestId}", method=RequestMethod.PUT)
+    public ResponseEntity<Request> putNewRequestStatus(@PathVariable long requestId, @RequestBody PutIdBodyInput input) {
+        Request req = requestService.putNewRequestStatus(requestId, input.getRequestStatus_id());
+        return new ResponseEntity(req, HttpStatus.I_AM_A_TEAPOT);
+    }
+
+
+    /**
+     *  Payload template for POST /requests
+     */
     @Data
     private static class PostBodyInput {        // static class required to work properly for jackson
         String notes;
-        int[] products;
+        long[] products;
+    }
+
+    /**
+     * Payload template for PUT /requests/{id}
+     */
+    @Data
+    private static class PutIdBodyInput {
+        int requestStatus_id;
     }
 }

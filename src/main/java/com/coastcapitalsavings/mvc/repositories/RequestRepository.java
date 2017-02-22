@@ -31,9 +31,9 @@ public class RequestRepository {
 
     JdbcTemplate jdbcTemplate;
 
-    // Store procedures so that they don't have to be recompiled for every use;
+    // Store stored procedures so that they don't have to be recompiled for every use;
     PostNewRequestStoredProc postNewRequestStoredProc;
-    AddProductToRequestStoredProc addProductToRequestStoredProc;
+    PutRequestNewStatusId putRequestNewStatusIdStoredProc;
 
     @Autowired
     /*
@@ -42,8 +42,9 @@ public class RequestRepository {
      */
     public void setDataSource(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
+
         postNewRequestStoredProc = new PostNewRequestStoredProc();
-        addProductToRequestStoredProc = new AddProductToRequestStoredProc();
+        putRequestNewStatusIdStoredProc = new PutRequestNewStatusId();
     }
 
 
@@ -54,19 +55,55 @@ public class RequestRepository {
      */
     public Request postNewRequest(Request reqToPost) {
         return postNewRequestStoredProc.execute(reqToPost);
-
     }
 
-    /**
-     * After the request has been made, populates the products_requests many to many join table
-     * and adds these products with pending status to the request.
-     *
-     * @param id A valid product id
-     * @param postedReq A request object, with id set
-     * @return Updated request object containing that product with a product status of pending.
-     */
-    public Request addProductToRequest(int id, Request postedReq) {
-        return addProductToRequestStoredProc.execute(id, postedReq);
+    public Request putRequestNewStatusId(long reqId, int statusId) {
+        return putRequestNewStatusIdStoredProc.execute(reqId, statusId);
+    }
+
+
+    private class PutRequestNewStatusId extends StoredProcedure {
+
+        private static final String procName = "req_request_updateStatus";
+
+        private PutRequestNewStatusId() {
+            super(jdbcTemplate, procName);
+            declareParameter(new SqlInOutParameter("inout_id", Types.INTEGER));
+            declareParameter(new SqlInOutParameter("inout_status_id", Types.INTEGER));
+            declareParameter(new SqlOutParameter("out_notes", Types.VARCHAR));
+            declareParameter(new SqlOutParameter("out_dateCreated", Types.TIMESTAMP));
+            declareParameter(new SqlOutParameter("out_submittedBy_id", Types.INTEGER));
+            declareParameter(new SqlOutParameter("out_lastModified", Types.TIMESTAMP));
+            declareParameter(new SqlOutParameter("out_lastModifiedBy_id", Types.INTEGER));
+            compile();
+        }
+
+        private Request execute(long reqId, int statusId) {
+            Map<String, Object> inputs = new HashMap<>();
+            inputs.put("inout_id", reqId);
+            inputs.put("inout_status_id", statusId);
+            Map<String, Object> outputs= execute(inputs);
+            return mapResponseToRequest(outputs);
+        }
+
+        private Request mapResponseToRequest(Map<String, Object> responseMap) {
+            try {
+                Request req = new Request();
+                req.setId((long) responseMap.get("inout_id"));
+                req.setRequestStatus_id((long) responseMap.get("inout_status_id"));
+                req.setNotes((String) responseMap.get("out_notes"));
+                req.setDateCreated((Timestamp) responseMap.get("out_dateCreated"));
+                req.setSubmittedBy_employeeId((int) responseMap.get("out_submittedBy_id"));
+                req.setDateModified((Timestamp) responseMap.get("out_lastModified"));
+                req.setLastModifiedBy_employeeId((int) responseMap.get("out_lastModifiedBy_id"));
+
+                return req;
+
+            } catch (ClassCastException e) {
+                System.err.println("Class cast exception in PutRequestNewStatusId.mapResponseToRequest, check DB");
+                throw new TypeMismatchDataAccessException(e.getMessage());
+            }
+        }
     }
 
     /**
@@ -127,75 +164,6 @@ public class RequestRepository {
                 return req;
             } catch (ClassCastException e) {
                 System.err.println("Class cast exception in addProductToRequest.mapResponseToRequest, check DB");
-                throw new TypeMismatchDataAccessException(e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * Responsible for calling the stored procedure to update the products_requests table and populating
-     * Requests with RequestProducts;
-     */
-    private class AddProductToRequestStoredProc extends StoredProcedure {
-        private static final String procName = "req_productInRequest_insert";
-
-        private AddProductToRequestStoredProc() {
-            super(jdbcTemplate, procName);
-            declareParameter(new SqlParameter("in_request_id", Types.INTEGER));
-            declareParameter(new SqlInOutParameter("inout_product_id", Types.INTEGER));
-            declareParameter(new SqlInOutParameter("inout_product_status_id", Types.INTEGER));
-            declareParameter(new SqlOutParameter("out_product_name", Types.VARCHAR));
-            compile();
-        }
-
-        /**
-         * Perform the stored procedure to add a list of RequestProducts to a request.  At this point
-         * request should have an id set, but not a list of requested products
-         * @param prodId Id number of product to add.
-         * @param req Request object to put requested products in
-         * @return Request with RequestedProduct in it.
-         */
-        private Request execute(int prodId, Request req) {
-            Map<String, Object> inputs = new HashMap<>();
-            inputs.put("in_request_id", req.getId());
-            inputs.put("inout_product_id", prodId);
-            inputs.put("inout_product_status_id", 1);       // TODO Hardcoded product status value until enum set
-
-            Map<String, Object> outputs = execute(inputs);
-
-            return addRequestProductToUpdatedRequest(outputs, req);
-        }
-
-        /**
-         * Given a map containing a product and product status info, make each pair into a RequestProduct
-         * and add it to the Request.  The requested products are all set to pending.
-         * @param responseMap HashMap containing response information.
-         * @param req Request object to have products added to.
-         * @return updated Request object
-         */
-        private Request addRequestProductToUpdatedRequest(Map<String, Object> responseMap, Request req) {
-            try {
-                Product p = new Product();
-                p.setId((long) responseMap.get("inout_product_id"));
-                p.setName((String) responseMap.get("out_product_name"));
-
-                long pStatusId = (long) responseMap.get("inout_product_status_id");
-
-                RequestProduct rp = new RequestProduct();
-                rp.setProduct(p);
-                rp.setProductStatus_id(pStatusId);
-
-                if (req.getProducts() == null) {        // If Request.products has not been initialized yet, do it now
-                    List<RequestProduct> prodList = new ArrayList<>();
-                    prodList.add(rp);
-                    req.setProducts(prodList);
-                } else {
-                    req.getProducts().add(rp);
-                }
-                return req;
-
-            } catch (ClassCastException e) {
-                System.err.println("Class cast exception in AddProductToRequestStoredProc.addRequestProductToUpdatedRequest, check DB");
                 throw new TypeMismatchDataAccessException(e.getMessage());
             }
         }
