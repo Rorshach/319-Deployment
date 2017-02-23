@@ -33,7 +33,7 @@ public class LoginService {
         this.employeeRepository = employeeRepository;
     }
 
-    // TODO: figure out hashing mechanism
+    // TODO: figure out hashing mechanism to avoid comparing raw strings
 
     /**
      * Matches user email and password and return an Employee object from EmployeeRepository if succeeds

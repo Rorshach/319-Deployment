@@ -126,9 +126,54 @@ FOREIGN KEY (product_status_id) REFERENCES product_statuses(id)
 );
 
 #--------------------------------------------------------------------------------------------
+#  Stub User
+#--------------------------------------------------------------------------------------------
+
+INSERT INTO cost_centers (id, name) VALUES(1, 'a');
+
+INSERT INTO employees_roles (employee_id, role_id) VALUES (1, 1);
+
+INSERT INTO employees (id,fName,lName, email, pwd, reportsTo_id, costCenter_id) VALUES(1, 'nancy', 'chen', 'a', 'b', 1, 1);
+
+#--------------------------------------------------------------------------------------------
 #  Stored Procedures
 #--------------------------------------------------------------------------------------------
 
+#--------------------------------------------------------------------------------------------
+# Description:  Retrieves an employee profile with matching email
+#               attribute 
+#
+# Called By:    Coast Capital Requisitioning Application
+# Parameters: 	inout_employee_email VARCHAR(255)
+# Returns:    	employee record
+#               employee_role record for granting access to pages
+#
+# Created By:  	Nancy Chen
+# Created On:  	2017-2-23
+#---------------------------------------------------------------------------------------------
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS req_employees_lookupEmployeeByEmail $$
+
+CREATE PROCEDURE req_employees_lookupEmployeeByEmail
+	(
+        OUT out_employee_id INT,
+        OUT out_employee_fName VARCHAR(255),
+        OUT out_employee_lName VARCHAR(255),
+        INOUT inout_employee_email VARCHAR(255),
+        OUT out_employee_pwd VARCHAR(255),
+		OUT out_employee_role INT UNSIGNED
+    )
+	BEGIN
+		SELECT employees.id, fName, lName, pwd, role_id
+        INTO out_employee_id, out_employee_fName,  out_employee_lName, out_employee_pwd, out_employee_role
+        FROM employees
+        INNER JOIN employees_roles
+        ON employees.id = employees_roles.employee_id
+        WHERE employees.id = inout_employee_email;
+	END $$
+
+DELIMITER ;
 
 #--------------------------------------------------------------------------------------------
 # Description:  Generates listing of all product categories

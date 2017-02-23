@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS employees (
 	fName VARCHAR(255) NOT NULL,
 	lName VARCHAR(255) NOT NULL,
 	email VARCHAR(255) NOT NULL,
+    pwd VARCHAR(255) NOT NULL,
 	reportsTo_id INT,
 	costCenter_id INT UNSIGNED NOT NULL,
 
@@ -121,9 +122,53 @@ CREATE TABLE IF NOT EXISTS products_requests (
 )^;
 
 #--------------------------------------------------------------------------------------------
+#  Stub User
+#--------------------------------------------------------------------------------------------
+^;
+
+INSERT INTO cost_centers (id, name) VALUES(1, 'a')^;
+
+INSERT INTO employees_roles (employee_id, role_id) VALUES (1, 1)^;
+
+INSERT INTO employees (id,fName,lName, email, pwd, reportsTo_id, costCenter_id) VALUES(1, 'nancy', 'chen', 'a', 'b', 1, 1)^;
+
+#--------------------------------------------------------------------------------------------
 #  Stored Procedures
 #--------------------------------------------------------------------------------------------
 ^;
+
+#--------------------------------------------------------------------------------------------
+# Description:  Retrieves an employee profile with matching email
+#               attribute 
+#
+# Called By:    Coast Capital Requisitioning Application
+# Parameters: 	inout_employee_email VARCHAR(255)
+# Returns:    	employee record
+#               employee_role record for granting access to pages
+#
+# Created By:  	Nancy Chen
+# Created On:  	2017-2-23
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_employees_lookupEmployeeByEmail^;
+
+CREATE PROCEDURE req_employees_lookupEmployeeByEmail
+	(
+        OUT out_employee_id INT,
+        OUT out_employee_fName VARCHAR(255),
+        OUT out_employee_lName VARCHAR(255),
+        INOUT inout_employee_email VARCHAR(255),
+        OUT out_employee_pwd VARCHAR(255),
+		OUT out_employee_role INT UNSIGNED
+    )
+	BEGIN
+		SELECT employees.id, fName, lName, pwd, role_id
+        INTO out_employee_id, out_employee_fName,  out_employee_lName, out_employee_pwd, out_employee_role
+        FROM employees
+        INNER JOIN employees_roles
+        ON employees.id = employees_roles.employee_id
+        WHERE employees.id = inout_employee_email;
+	END ^;
 
 #--------------------------------------------------------------------------------------------
 # Description:  Generates listing of all product categories
@@ -150,11 +195,11 @@ CREATE PROCEDURE req_categories_getAll
 # Called By:  	Coast Capital Requisitioning Application
 #
 # Parameters: 	inout_notes 				VARCHAR(255),
-#							inout_dateCreated			DATETIME,
-#							inout_submittedBy_id 		INT,
-#							inout_lastModified 		DATETIME,
-#							inout_lastModifiedBy_id 	INT,
-#							inout_status_id			INT,
+#				inout_dateCreated			DATETIME,
+#				inout_submittedBy_id 		INT,
+#				inout_lastModified 		    DATETIME,
+#				inout_lastModifiedBy_id 	INT,
+#				inout_status_id			    INT
 #
 # Returns:    	request record
 #
@@ -186,7 +231,7 @@ CREATE PROCEDURE req_requests_insert
 #
 # Parameters: 	in_request_id 				INT UNSIGNED,
 #				inout_product_id 			INT UNSIGNED,
-#				inout_product_status_id 	INT UNSIGNED,
+#				inout_product_status_id 	INT UNSIGNED
 #
 # Returns:    	product record
 #				product_status record for product
