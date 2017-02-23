@@ -6,6 +6,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
@@ -13,16 +14,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+@Repository
 public class EmployeeRepository {
-    private Employee e;
-
-    @Autowired
-    DataSource datasource;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    protected Optional<Employee> getUser(String userEmail) throws DataAccessException{
+    public Optional<Employee> getUser(String userEmail) throws DataAccessException{
         //TODO: hardcoded with * to test, need to change to stored procedure and align with cc standards
         String query = "SELECT fName, lName FROM cpsc319.employees WHERE email = " + userEmail;
         return jdbcTemplate.execute(query, new PreparedStatementCallback<Optional<Employee>>() {
