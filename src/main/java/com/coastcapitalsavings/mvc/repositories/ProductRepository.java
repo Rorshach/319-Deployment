@@ -1,6 +1,8 @@
 package com.coastcapitalsavings.mvc.repositories;
 
 
+import com.coastcapitalsavings.mvc.models.Profile;
+import com.coastcapitalsavings.mvc.repositories.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +28,7 @@ public class ProductRepository {
 
     GetRequestProductsInRequestStoredProc getRequestProductsInRequestStoredProc;
     AddProductToRequestStoredProc addProductToRequestStoredProc;
+    GetProductInProfileStoredProc getProductInProfileStoredProc;
 
     /*
     Tricky:  Need to do this instead of autowiring the Jdbc template so that we can ensure that the
@@ -36,6 +39,7 @@ public class ProductRepository {
         jdbcTemplate = new JdbcTemplate(dataSource);
         getRequestProductsInRequestStoredProc = new GetRequestProductsInRequestStoredProc();
         addProductToRequestStoredProc = new AddProductToRequestStoredProc();
+        getProductInProfileStoredProc = new GetProductInProfileStoredProc();
     }
 
     public List<RequestProduct> getRequestProductsinRequestByRequestId(long reqId) {
@@ -44,6 +48,30 @@ public class ProductRepository {
 
     public RequestProduct addProductToRequest(long prodId, long reqId) {
         return addProductToRequestStoredProc.execute(prodId, reqId);
+    }
+
+    public List<Product> getProductsInProfileByProfileId(long profileId) {
+        return getProductInProfileStoredProc.execute(profileId);
+    }
+
+    private class GetProductInProfileStoredProc extends StoredProcedure {
+
+        private static final String PROC_NAME = "req_productInProfile_lookupByProductId";
+
+        private GetProductInProfileStoredProc() {
+            super(jdbcTemplate, PROC_NAME);
+            declareParameter(new SqlParameter("in_profile_id", Types.INTEGER));
+            declareParameter(new SqlReturnResultSet("products", new ProductMapper()));
+            compile();
+        }
+
+        private List<Product> execute(long profileId) {
+            Map<String, Object> inputs = new HashMap<>();
+            inputs.put("in_profile_id", profileId);
+
+            Map<String, Object> outputs = execute(inputs);
+            return (List<Product>) outputs.get("products");
+        }
     }
 
 

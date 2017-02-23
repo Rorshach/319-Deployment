@@ -271,7 +271,7 @@ CREATE PROCEDURE req_productInRequest_lookupByRequestId
 DELIMITER ;
 
 #--------------------------------------------------------------------------------------------
-# Description: 	Verifies if a request row exists
+# Description: 	Verifies if a request record exists, given its id
 #
 # Called By:  	Coast Capital Requisitioning Application
 #
@@ -292,4 +292,95 @@ CREATE PROCEDURE req_request_lookupExists
 	BEGIN
 		SELECT EXISTS(SELECT id FROM requests WHERE id = in_id) INTO out_exists;
 	END $$
+DELIMITER ;
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve id and name information for all profiles
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	none
+#
+# Returns:    	resultset
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-22
+#---------------------------------------------------------------------------------------------
+DELIMITER $$
+DROP PROCEDURE IF EXISTS req_profile_lookupAll $$
+CREATE PROCEDURE req_profile_lookupAll
+  ()
+  BEGIN
+    select id, name from profiles;
+  END $$
+DELIMITER ;
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve a profile given its id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	in_id   INT UNSIGNED
+#
+# Returns:    	profile record
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-22
+#---------------------------------------------------------------------------------------------
+DELIMITER $$
+DROP PROCEDURE IF EXISTS req_profile_lookupById $$
+CREATE PROCEDURE req_profile_lookupById
+  (
+    INOUT inout_id INT UNSIGNED,
+    OUT out_name VARCHAR(255)
+  )
+  BEGIN
+    SELECT name INTO out_name FROM profiles WHERE id = inout_id;
+  END $$
+DELIMITER ;
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve a list of products associated with a profile, given a profile id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	in_profile_id   INT UNSIGNED
+#
+# Returns:    	products recordset
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-23
+#---------------------------------------------------------------------------------------------
+DELIMITER $$
+DROP PROCEDURE IF EXISTS req_productInProfile_lookupByProductId $$
+CREATE PROCEDURE req_productInProfile_lookupByProductId
+  (INOUT in_profile_id INT UNSIGNED)
+  BEGIN
+    SELECT p.id, p.name FROM products p JOIN products_profiles pp ON p.id = pp.product_id WHERE pp.profile_id = in_profile_id;
+  END $$
+DELIMITER ;
+
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Verifies if a profile record exists, given its id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	inout_id 				INT UNSIGNED
+#
+# Returns:    	out_exists      BOOLEAN
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-23
+#---------------------------------------------------------------------------------------------
+DELIMITER $$
+DROP PROCEDURE IF EXISTS req_profile_lookupExists $$
+CREATE PROCEDURE req_profile_lookupExists
+  (
+    IN in_id INT UNSIGNED,
+    OUT out_exists BOOLEAN
+  )
+  BEGIN
+    SELECT EXISTS(SELECT id FROM profiles WHERE id = in_id) INTO out_exists;
+  END $$
 DELIMITER ;
