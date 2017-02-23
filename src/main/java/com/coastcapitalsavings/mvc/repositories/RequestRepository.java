@@ -1,7 +1,10 @@
 package com.coastcapitalsavings.mvc.repositories;
 
 
+import com.coastcapitalsavings.mvc.models.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.*;
 import org.springframework.stereotype.Repository;
 
 import com.coastcapitalsavings.mvc.models.Product;
@@ -10,14 +13,9 @@ import com.coastcapitalsavings.mvc.models.RequestProduct;
 import org.apache.tomcat.jdbc.pool.DataSource;
 
 import org.springframework.dao.TypeMismatchDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.SqlInOutParameter;
-import org.springframework.jdbc.core.SqlOutParameter;
-import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.StoredProcedure;
 
-import java.sql.Timestamp;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +42,26 @@ public class RequestRepository {
         jdbcTemplate = new JdbcTemplate(dataSource);
         postNewRequestStoredProc = new PostNewRequestStoredProc();
         addProductToRequestStoredProc = new AddProductToRequestStoredProc();
+    }
+
+    public List<Request> getAllRequests() throws DataAccessException {
+        String query = "call req_requests_getAll";
+        return jdbcTemplate.execute(query, new PreparedStatementCallback<List<Request>>() {
+
+            @Override
+            public List<Request> doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                ResultSet rs = ps.executeQuery();
+                RowMapper<Request> rsm = new RequestRowMapper();
+
+                List<Request> reqList = new ArrayList<>();
+                while (rs.next()) {
+                    Request r = rsm.mapRow(rs, rs.getRow());
+                    reqList.add(r);
+                }
+                return reqList;
+
+            }
+        });
     }
 
 
@@ -199,5 +217,21 @@ public class RequestRepository {
                 throw new TypeMismatchDataAccessException(e.getMessage());
             }
         }
+    }
+
+    private static class RequestRowMapper implements RowMapper<Request> {
+        @Override
+        public Request mapRow(ResultSet rs, int rowNumber) throws SQLException {
+            Request r = new Request();
+            r.setId(rs.getInt("id"));
+            r.setNotes(rs.getString("notes"));
+            r.setDateCreated(rs.getTimestamp("dateCreated"));
+            r.setSubmittedBy_employeeId(rs.getInt("submittedBy_id"));
+            r.setDateModified(rs.getTimestamp("lastModified"));
+            r.setLastModifiedBy_employeeId(rs.getInt("lastModifiedBy_id"));
+            r.setRequestStatus_id(rs.getInt("status_id"));
+            return r;
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 package com.coastcapitalsavings.mvc.controllers;
 
 import com.coastcapitalsavings.mvc.models.Request;
+import com.coastcapitalsavings.mvc.repositories.RequestRepository;
 import com.coastcapitalsavings.mvc.services.RequestService;
 import com.coastcapitalsavings.util.Responses;
 import lombok.Data;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Handles all requests to the requests resource
@@ -23,6 +25,20 @@ import java.util.Date;
 public class RequestsController {
     @Autowired
     RequestService requestService;
+
+    @Autowired
+    RequestRepository requestRepository;
+
+    @RequestMapping(method=RequestMethod.GET)
+    public ResponseEntity<List<Request>> getAllRequest() {
+        try {
+            List<Request> response = requestRepository.getAllRequests();
+            return new ResponseEntity(response, HttpStatus.OK);
+        } catch (DataAccessException e) {
+            System.err.println(new Date() + " " +  e.getMessage());     // TODO:  Can be logged by a logger
+            return new ResponseEntity(Responses.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity<Request> postNewRequest(@RequestBody PostBodyInput input) {

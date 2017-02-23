@@ -208,3 +208,22 @@ CREATE PROCEDURE req_productInRequest_insert
 		INSERT INTO products_requests VALUES (null, in_request_id, inout_product_id, inout_product_status_id);
 		SELECT name INTO out_product_name FROM products WHERE id = inout_product_id;
 	END ^;
+#--------------------------------------------------------------------------------------------
+# Description:  Generates listing of all requests
+#
+# Called By:    Coast Capital Requisitioning Application
+# Parameters: 	none
+# Returns:    	recordset
+#
+# Created By:  	Felix Tso
+# Created On:  	2017-2-23
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_requests_getAll^;
+
+CREATE PROCEDURE req_requests_getAll
+	()
+	BEGIN
+		select id, notes, dateCreated, submittedBy_id, lastModified, lastModifiedBy_id, status_id  from requests;
+	END ^;
+
