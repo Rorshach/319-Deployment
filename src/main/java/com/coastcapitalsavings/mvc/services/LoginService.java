@@ -6,6 +6,7 @@ import com.coastcapitalsavings.mvc.models.Employee;
 import com.coastcapitalsavings.auth.LoginCredentials;
 
 
+import com.coastcapitalsavings.mvc.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,18 +25,23 @@ import java.util.Optional;
 
 public class LoginService {
 
-    private EmployeeService employeeService;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
-    public LoginService(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public LoginService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
     // TODO: figure out hashing mechanism
+
+    /**
+     * Matches user email and password and return an Employee object from EmployeeRepository if succeeds
+     * @param credentials this is a bundled-up userEmail + password
+     * @return Employee if credentials match that in the db, otherwise empty
+     */
     public Optional<Employee> login(LoginCredentials credentials) {
-        return employeeService.get(credentials.getUsername())
-                .filter(profile -> profile.getLogin().getPassword().equals(credentials.getPassword()))
-                .map(profile -> new MinimalProfile(profile));
+        return employeeRepository.getUser(credentials.getUserEmail())
+                .filter(user -> user.getPassword().equals(credentials.getPassword()));
     }
 
 }

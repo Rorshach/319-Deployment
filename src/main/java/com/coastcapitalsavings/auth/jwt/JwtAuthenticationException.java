@@ -1,7 +1,11 @@
 package com.coastcapitalsavings.auth.jwt;
 
-/**
- * Created by Nancy on 2017-02-22.
- */
-public class JwtAuthenticationException {
+import org.springframework.security.core.AuthenticationException;
+
+
+public class JwtAuthenticationException extends AuthenticationException {
+
+    public JwtAuthenticationException(String event, Throwable t){
+        super(event, t);
+    }
 }

@@ -7,6 +7,7 @@ nightwatch/bin
 
 ### Not for Distribution ###
 src/main/resources/dbproperties.json
+src/main/resources/jwt.key
 
 
 ### STS ###

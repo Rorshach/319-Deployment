@@ -1,11 +1,10 @@
-package com.coastcapitalsavings.auth;
+package com.coastcapitalsavings.auth.jwt;
 
 import com.coastcapitalsavings.mvc.models.Employee;
 import com.coastcapitalsavings.mvc.services.JwtService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
@@ -27,12 +26,12 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             Optional<Employee> possibleEmployee = jwtService.verify((String) authentication.getCredentials());
             return new JwtAuthenticatedEmployee(possibleEmployee.get());
         } catch (Exception e) {
-            throw new ;
+            throw new JwtAuthenticationException("Failed to verify token", e);
         }
     }
 
     @Override
-    public boolean supports(Class<?> aClass) {
-        return JwtAuthToken.class.equals(authentication);;
+    public boolean supports(Class<?> authentication) {
+        return JwtAuthToken.class.equals(authentication);
     }
 }

@@ -1,24 +1,26 @@
-package com.coastcapitalsavings.auth;
+package com.coastcapitalsavings.auth.jwt;
 
 import com.coastcapitalsavings.mvc.models.Employee;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by Nancy on 2017-02-22.
  */
 public class JwtAuthenticatedEmployee implements Authentication {
 
-    private final Employee minimalProfile;
+    private final Employee e;
 
-    public JwtAuthenticatedEmployee(Employee minimalProfile) {
-        this.minimalProfile = minimalProfile;
+    public JwtAuthenticatedEmployee(Employee employee) {
+        this.e = employee;
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
@@ -38,7 +40,7 @@ public class JwtAuthenticatedEmployee implements Authentication {
 
     @Override
     public boolean isAuthenticated() {
-        return false;
+        return true;
     }
 
     @Override
@@ -48,6 +50,6 @@ public class JwtAuthenticatedEmployee implements Authentication {
 
     @Override
     public String getName() {
-        return null;
+        return e.getFName();
     }
 }

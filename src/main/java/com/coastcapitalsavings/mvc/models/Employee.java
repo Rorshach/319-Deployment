@@ -17,4 +17,5 @@ public class Employee {
     private CostCenter costCenter;
     private List<Request> requests;
     private List<Role> roles;
+    private String password;
 }

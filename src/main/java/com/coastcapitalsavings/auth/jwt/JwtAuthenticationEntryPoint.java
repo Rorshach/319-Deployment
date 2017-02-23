@@ -1,4 +1,4 @@
-package com.coastcapitalsavings.auth;
+package com.coastcapitalsavings.auth.jwt;
 
 import org.springframework.stereotype.Component;
 
