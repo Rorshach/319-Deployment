@@ -162,9 +162,9 @@ CREATE PROCEDURE req_categories_getAll
 # Created On:  	2017-2-20
 #---------------------------------------------------------------------------------------------
 ^;
-DROP PROCEDURE IF EXISTS req_requests_insert^;
+DROP PROCEDURE IF EXISTS req_request_insert^;
 
-CREATE PROCEDURE req_requests_insert
+CREATE PROCEDURE req_request_insert
 	(
 		INOUT inout_notes VARCHAR(250),
 		INOUT inout_dateCreated DATETIME,
@@ -208,3 +208,169 @@ CREATE PROCEDURE req_productInRequest_insert
 		INSERT INTO products_requests VALUES (null, in_request_id, inout_product_id, inout_product_status_id);
 		SELECT name INTO out_product_name FROM products WHERE id = inout_product_id;
 	END ^;
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Update a requests status field and returns that request
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	inout_id 				INT UNSIGNED
+#								inout_status_id INT UNSIGNED
+#
+# Returns:    	request record
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-22
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_request_updateStatus^;
+
+CREATE PROCEDURE req_request_updateStatus
+	(
+		INOUT inout_id INT UNSIGNED,
+		INOUT inout_status_id INT UNSIGNED,
+		OUT out_notes VARCHAR(255),
+		OUT out_dateCreated DATETIME,
+		OUT out_submittedBy_id INT,
+		OUT out_lastModified DATETIME,
+		OUT out_lastModifiedBy_id INT
+	)
+	BEGIN
+		UPDATE requests SET status_id = inout_status_id WHERE id = inout_id;
+		SELECT notes, dateCreated, submittedBy_id, lastModified, lastModifiedBy_id INTO out_notes, out_dateCreated, out_submittedBy_id, out_lastModified, out_lastModifiedBy_Id FROM requests WHERE id = inout_id;
+	END ^;
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve products their product statuses by request id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	inout_id 				INT UNSIGNED
+#
+# Returns:    	product and status recordset
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-22
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_productInRequest_lookupByRequestId^;
+
+CREATE PROCEDURE req_productInRequest_lookupByRequestId
+	(
+		IN in_request_id INT UNSIGNED
+	)
+	BEGIN
+		SELECT p.id, p.name, pr.product_status_id FROM products p JOIN products_requests pr on p.id = pr.product_id where pr.request_id = in_request_id;
+	END ^;
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Verifies if a request record exists, given an id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	inout_id 				INT UNSIGNED
+#
+# Returns:    	out_exists      BOOLEAN
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-22
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_request_lookupExists^;
+
+CREATE PROCEDURE req_request_lookupExists
+	(
+		IN in_id INT UNSIGNED,
+		OUT out_exists BOOLEAN
+	)
+	BEGIN
+		SELECT EXISTS(SELECT id FROM requests WHERE id = in_id) INTO out_exists;
+	END ^;
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve id and name information for all profiles
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	none
+#
+# Returns:    	resultset
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-22
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_profile_lookupAll^;
+CREATE PROCEDURE req_profile_lookupAll
+  ()
+  BEGIN
+    select id, name from profiles;
+  END ^;
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve a profile given its id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	in_id   INT UNSIGNED
+#
+# Returns:    	profile record
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-22
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_profile_lookupById^;
+CREATE PROCEDURE req_profile_lookupById
+  (
+    INOUT inout_id INT UNSIGNED,
+    OUT out_name VARCHAR(255)
+  )
+  BEGIN
+    SELECT name INTO out_name FROM profiles WHERE id = inout_id;
+  END ^;
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve a list of products associated with a profile, given a profile id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	in_profile_id   INT UNSIGNED
+#
+# Returns:    	products recordset
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-23
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_productInProfile_lookupByProductId^;
+CREATE PROCEDURE req_productInProfile_lookupByProductId
+  (INOUT in_profile_id INT UNSIGNED)
+  BEGIN
+    SELECT p.id, p.name FROM products p JOIN products_profiles pp ON p.id = pp.product_id WHERE pp.profile_id = in_profile_id;
+  END ^;
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Verifies if a profile record exists, given an id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	inout_id 				INT UNSIGNED
+#
+# Returns:    	out_exists      BOOLEAN
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-23
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_profile_lookupExists^;
+CREATE PROCEDURE req_profile_lookupExists
+  (
+    IN in_id INT UNSIGNED,
+    OUT out_exists BOOLEAN
+  )
+  BEGIN
+    SELECT EXISTS(SELECT id FROM profiles WHERE id = in_id) INTO out_exists;
+  END ^;
+
+^;
