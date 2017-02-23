@@ -5,6 +5,7 @@ import com.coastcapitalsavings.mvc.models.RequestProduct;
 import com.coastcapitalsavings.mvc.repositories.ProductRepository;
 import com.coastcapitalsavings.mvc.repositories.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -57,9 +58,13 @@ public class RequestService {
      * @return
      */
     public Request putNewRequestStatus(long reqId, int newStatusid) {
-        Request updatedRequest = requestRepo.putRequestNewStatusId(reqId, newStatusid);
-        List<RequestProduct> reqProds = productRepo.getRequestProductsinRequestByRequestId(updatedRequest.getId());
-        updatedRequest.setProducts(reqProds);
-        return updatedRequest;
+        if (requestRepo.checkRequestExists(reqId)) {
+            Request updatedRequest = requestRepo.putRequestNewStatusId(reqId, newStatusid);
+            List<RequestProduct> reqProds = productRepo.getRequestProductsinRequestByRequestId(updatedRequest.getId());
+            updatedRequest.setProducts(reqProds);
+            return updatedRequest;
+        } else {
+            throw new DataRetrievalFailureException("Cannot find resource in database: Request: id " +reqId);
+        }
     }
 }

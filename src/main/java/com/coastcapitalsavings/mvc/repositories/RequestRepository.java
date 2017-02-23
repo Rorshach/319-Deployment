@@ -2,25 +2,21 @@ package com.coastcapitalsavings.mvc.repositories;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.stereotype.Repository;
 
-import com.coastcapitalsavings.mvc.models.Product;
 import com.coastcapitalsavings.mvc.models.Request;
-import com.coastcapitalsavings.mvc.models.RequestProduct;
 import org.apache.tomcat.jdbc.pool.DataSource;
 
 import org.springframework.dao.TypeMismatchDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlInOutParameter;
 import org.springframework.jdbc.core.SqlOutParameter;
-import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.object.StoredProcedure;
 
 import java.sql.Timestamp;
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,7 +29,8 @@ public class RequestRepository {
 
     // Store stored procedures so that they don't have to be recompiled for every use;
     PostNewRequestStoredProc postNewRequestStoredProc;
-    PutRequestNewStatusId putRequestNewStatusIdStoredProc;
+    PutRequestNewStatusIdStoredProc putRequestNewStatusIdStoredProc;
+    CheckRequestExistsStoredProc checkRequestExistsStoredProc;
 
     @Autowired
     /*
@@ -44,9 +41,18 @@ public class RequestRepository {
         jdbcTemplate = new JdbcTemplate(dataSource);
 
         postNewRequestStoredProc = new PostNewRequestStoredProc();
-        putRequestNewStatusIdStoredProc = new PutRequestNewStatusId();
+        putRequestNewStatusIdStoredProc = new PutRequestNewStatusIdStoredProc();
+        checkRequestExistsStoredProc = new CheckRequestExistsStoredProc();
     }
 
+    /**
+     * Verifies if there is a request record with a particular id in the database
+     * @param reqId id of Request to verify
+     * @return true if exists, false otherwise
+     */
+    public Boolean checkRequestExists(long reqId) {
+        return checkRequestExistsStoredProc.execute(reqId);
+    }
 
     /**
      * Handles request posts by invoking a stored procedure
@@ -61,12 +67,32 @@ public class RequestRepository {
         return putRequestNewStatusIdStoredProc.execute(reqId, statusId);
     }
 
+    private class CheckRequestExistsStoredProc extends StoredProcedure {
 
-    private class PutRequestNewStatusId extends StoredProcedure {
+        private static final String procName = "req_request_lookupExists";
+
+        private CheckRequestExistsStoredProc() {
+            super(jdbcTemplate, procName);
+            declareParameter(new SqlParameter("in_id", Types.INTEGER));
+            declareParameter(new SqlOutParameter("out_exists", Types.BOOLEAN));
+            compile();
+        }
+
+        private boolean execute(long reqId) {
+            HashMap<String, Object> inputs = new HashMap<>();
+            inputs.put("in_id",reqId);
+
+            Map<String, Object> outputs = execute(inputs);
+            return (boolean) outputs.get("out_exists");
+        }
+    }
+
+
+    private class PutRequestNewStatusIdStoredProc extends StoredProcedure {
 
         private static final String procName = "req_request_updateStatus";
 
-        private PutRequestNewStatusId() {
+        private PutRequestNewStatusIdStoredProc() {
             super(jdbcTemplate, procName);
             declareParameter(new SqlInOutParameter("inout_id", Types.INTEGER));
             declareParameter(new SqlInOutParameter("inout_status_id", Types.INTEGER));
@@ -82,7 +108,7 @@ public class RequestRepository {
             Map<String, Object> inputs = new HashMap<>();
             inputs.put("inout_id", reqId);
             inputs.put("inout_status_id", statusId);
-            Map<String, Object> outputs= execute(inputs);
+            Map<String, Object> outputs = execute(inputs);
             return mapResponseToRequest(outputs);
         }
 
@@ -112,7 +138,7 @@ public class RequestRepository {
      * database using autoincrement.
      */
     private class PostNewRequestStoredProc extends StoredProcedure {
-        private static final String procName = "req_requests_insert";
+        private static final String procName = "req_request_insert";
 
         private PostNewRequestStoredProc() {
             super(jdbcTemplate, procName);

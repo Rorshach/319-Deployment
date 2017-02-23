@@ -5,7 +5,9 @@ import com.coastcapitalsavings.mvc.services.RequestService;
 import com.coastcapitalsavings.util.Responses;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,8 +45,19 @@ public class RequestsController {
 
     @RequestMapping(value="/{requestId}", method=RequestMethod.PUT)
     public ResponseEntity<Request> putNewRequestStatus(@PathVariable long requestId, @RequestBody PutIdBodyInput input) {
-        Request req = requestService.putNewRequestStatus(requestId, input.getRequestStatus_id());
-        return new ResponseEntity(req, HttpStatus.I_AM_A_TEAPOT);
+        if (input.getRequestStatus_id() == null) {
+            return new ResponseEntity(Responses.MISSING_REQUIRED_PARAMETER, HttpStatus.BAD_REQUEST);
+        } else {
+            try {
+                Request req = requestService.putNewRequestStatus(requestId, input.getRequestStatus_id());
+                return new ResponseEntity(req, HttpStatus.OK);
+            } catch (DataRetrievalFailureException e) {
+                return new ResponseEntity(Responses.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND);
+            } catch (DataAccessException e) {
+                System.err.println(new Date() + " " + e.getMessage());
+                return new ResponseEntity(Responses.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
     }
 
 
@@ -62,6 +75,6 @@ public class RequestsController {
      */
     @Data
     private static class PutIdBodyInput {
-        int requestStatus_id;
+        Integer requestStatus_id;
     }
 }

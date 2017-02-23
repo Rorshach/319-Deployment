@@ -166,8 +166,8 @@ DELIMITER ;
 #---------------------------------------------------------------------------------------------
 
 DELIMITER $$
-DROP PROCEDURE IF EXISTS req_requests_insert $$
-CREATE PROCEDURE req_requests_insert
+DROP PROCEDURE IF EXISTS req_request_insert $$
+CREATE PROCEDURE req_request_insert
 	(
 		INOUT inout_notes VARCHAR(255),
 		INOUT inout_dateCreated DATETIME,
@@ -247,3 +247,49 @@ CREATE PROCEDURE req_request_updateStatus
 	END $$
 DELIMITER ;
 
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve products their product statuses by request id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	inout_id 				INT UNSIGNED
+#
+# Returns:    	product and status recordset
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-22
+#---------------------------------------------------------------------------------------------
+DELIMITER $$
+DROP PROCEDURE IF EXISTS req_productInRequest_lookupByRequestId $$
+CREATE PROCEDURE req_productInRequest_lookupByRequestId
+	(
+		IN in_request_id INT UNSIGNED
+	)
+	BEGIN
+		SELECT p.id, p.name, pr.product_status_id FROM products p JOIN products_requests pr on p.id = pr.product_id where pr.request_id = in_request_id;
+	END $$
+DELIMITER ;
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Verifies if a request row exists
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	inout_id 				INT UNSIGNED
+#
+# Returns:    	out_exists      BOOLEAN
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-22
+#---------------------------------------------------------------------------------------------
+DELIMITER $$
+DROP PROCEDURE IF EXISTS req_request_lookupExists $$
+CREATE PROCEDURE req_request_lookupExists
+	(
+		IN in_id INT UNSIGNED,
+		OUT out_exists BOOLEAN
+	)
+	BEGIN
+		SELECT EXISTS(SELECT id FROM requests WHERE id = in_id) INTO out_exists;
+	END $$
+DELIMITER ;
