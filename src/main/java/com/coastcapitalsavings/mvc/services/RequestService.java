@@ -1,12 +1,15 @@
 package com.coastcapitalsavings.mvc.services;
 
+
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.dao.DataRetrievalFailureException;
+
 import com.coastcapitalsavings.mvc.models.Request;
 import com.coastcapitalsavings.mvc.models.RequestProduct;
 import com.coastcapitalsavings.mvc.repositories.ProductRepository;
 import com.coastcapitalsavings.mvc.repositories.RequestRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataRetrievalFailureException;
-import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
