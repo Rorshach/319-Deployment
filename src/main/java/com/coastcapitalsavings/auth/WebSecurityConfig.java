@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.sql.DataSource;
 
@@ -20,9 +21,6 @@ import javax.sql.DataSource;
 @EnableAutoConfiguration
 @ComponentScan
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
-
-    @Autowired
-    DataSource dataSource;
 
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
@@ -36,27 +34,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
     public void configAuthentication(HttpSecurity http) throws Exception {
         http.csrf().ignoringAntMatchers("/authenticate");
-
+        String[] patterns = new String[] {
+          "/authenticate",
+                "/"
+        };
         http.authorizeRequests()
-                .antMatchers("/authenticate")
+                .antMatchers(patterns)
                 .permitAll()
                 .antMatchers("/**/*")
-                .denyAll();
-    }
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/hello").access("hasRole('ROLE_ADMIN')")
-                .anyRequest().permitAll()
+                .hasAuthority("ROLE_USER")
                 .and()
-                    .formLogin().loginPage("/authenticate")
-                    .usernameParameter("username").passwordParameter("password")
-                .and()
-                    .logout().logoutSuccessUrl("/authenticate?logout")
-                .and()
-                .exceptionHandling().accessDeniedPage("/403")
-                .and()
-                    .csrf();
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthEndPoint);
     }
 
     @Override
