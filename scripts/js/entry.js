@@ -20,3 +20,4 @@ import HistoryTable from "./history_table.jsx";
 // CSS:
 
 import css from './../css/main.css';
+import history  from "./../css/history.css";

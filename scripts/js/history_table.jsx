@@ -20,44 +20,45 @@ export default class HistoryTable extends React.Component {
 
     getTableData(){
         return [
-            { Name: 'Griffin Smith', Age: 18 },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 28, Position: 'Developer' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
-            { Age: 23,  Name: 'Lee Salminen' },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 33,  Name: 'bob', Status: "fail" },
+            { Age: 53,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 1,  Name: 'Lee Salminen', Status: "Pending" },
+            { Age: 23,  Name: 'Lee Salminen', Status: "Pending" },
 
         ];
     }
-    Modal(){
+    Modal(e){
         console.log("Hello i am le modal");
+        console.log(e);
     }
+
+
     // TODO: Need to have real data to work with in order to finalie how the column/rows will appear.
     // TODO: Need to do styling.
     // TODO: Need to handle opening the modal or the page on click.
     // TODO: Need to handle having an appropriate cursor for clicking a link versus sorting. Might be better to have
     // its own column with a button
+    // TODO: ... need to inject HTML into the input field for the placeholder..the stupid open source plugin doesnt have a config for that.
+
+
     render() {
         return (
-            <Table className="table hover" data={this.getTableData()}
-                   sortable={true} itemsPerPage={10} pageButtonLimit={5} >
+            <Table  className="table hover" data={this.getTableData()}
+                  itemsPerPage={10} pageButtonLimit={5} filterable={['Status', 'Age', "Name"]}>
                 <Tr onClick={this.Modal} className="hover"
                     data={{ name: 'Other Row' , content: 'This is a different row' }} />
             </Table>

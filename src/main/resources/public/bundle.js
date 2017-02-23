@@ -8220,17 +8220,17 @@
 
 	__webpack_require__(1);
 
-	var _history_container = __webpack_require__(774);
-
-	var _history_container2 = _interopRequireDefault(_history_container);
-
-	var _history_table = __webpack_require__(775);
+	var _history_table = __webpack_require__(774);
 
 	var _history_table2 = _interopRequireDefault(_history_table);
 
-	var _main = __webpack_require__(792);
+	var _main = __webpack_require__(791);
 
 	var _main2 = _interopRequireDefault(_main);
+
+	var _history = __webpack_require__(795);
+
+	var _history2 = _interopRequireDefault(_history);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -8264,9 +8264,9 @@
 
 	var _login2 = _interopRequireDefault(_login);
 
-	var _history_container = __webpack_require__(774);
+	var _history_table = __webpack_require__(774);
 
-	var _history_container2 = _interopRequireDefault(_history_container);
+	var _history_table2 = _interopRequireDefault(_history_table);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -8287,7 +8287,7 @@
 	        _reactDom2.default.render(_react2.default.createElement(_login2.default, null), document.getElementById("login"));
 	    }
 	    if (document.getElementById("history")) {
-	        _reactDom2.default.render(_react2.default.createElement(_history_container2.default, null), document.getElementById("history"));
+	        _reactDom2.default.render(_react2.default.createElement(_history_table2.default, null), document.getElementById("history"));
 	    }
 	} /**
 	  * Created by alekhrycaiko on 2017-01-24.
@@ -55182,53 +55182,6 @@
 /* 774 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(300);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _history_table = __webpack_require__(775);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var HistoryContainer = function (_React$Component) {
-	    _inherits(HistoryContainer, _React$Component);
-
-	    function HistoryContainer(props) {
-	        _classCallCheck(this, HistoryContainer);
-
-	        return _possibleConstructorReturn(this, (HistoryContainer.__proto__ || Object.getPrototypeOf(HistoryContainer)).call(this, props));
-	    }
-
-	    _createClass(HistoryContainer, [{
-	        key: "render",
-	        value: function render() {
-	            return _react2.default.createElement(_history_table.HistoryTable, null);
-	        }
-	    }]);
-
-	    return HistoryContainer;
-	}(_react2.default.Component);
-
-	exports.default = HistoryContainer;
-
-/***/ },
-/* 775 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -55241,9 +55194,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactable = __webpack_require__(776);
+	var _reactable = __webpack_require__(775);
 
-	var _reactable2 = _interopRequireDefault(_reactable);
+	var _superagent = __webpack_require__(477);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -55259,13 +55212,52 @@
 	    function HistoryTable(props) {
 	        _classCallCheck(this, HistoryTable);
 
-	        return _possibleConstructorReturn(this, (HistoryTable.__proto__ || Object.getPrototypeOf(HistoryTable)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (HistoryTable.__proto__ || Object.getPrototypeOf(HistoryTable)).call(this, props));
+
+	        _this.state = { data: null };
+	        return _this;
 	    }
+	    /*
+	    componentWillMount(){
+	        request
+	            .get("/requests")
+	            .end(function(err, res){
+	                // process the data.
+	                this.setState({data : res});
+	                // set the data into state.
+	            });
+	    }
+	    */
 
 	    _createClass(HistoryTable, [{
+	        key: 'getTableData',
+	        value: function getTableData() {
+	            return [{ Name: 'Griffin Smith', Age: 18 }, { Age: 23, Name: 'Lee Salminen' }, { Age: 28, Position: 'Developer' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }, { Age: 23, Name: 'Lee Salminen' }];
+	        }
+	    }, {
+	        key: 'Modal',
+	        value: function Modal(e) {
+	            console.log("Hello i am le modal");
+	            console.log(e);
+	        }
+
+	        // TODO: Need to have real data to work with in order to finalie how the column/rows will appear.
+	        // TODO: Need to do styling.
+	        // TODO: Need to handle opening the modal or the page on click.
+	        // TODO: Need to handle having an appropriate cursor for clicking a link versus sorting. Might be better to have
+	        // its own column with a button
+	        // TODO: Need each row to have a "highlight" color for mouseover, and highlight off for mouseOff.
+
+	    }, {
 	        key: 'render',
 	        value: function render() {
-	            return _react2.default.createElement(_reactable2.default, { className: 'history-table', data: [{ Name: 'Griffin Smith', Age: 18 }, { Age: 23, Name: 'Lee Salminen' }, { Age: 28, Position: 'Developer' }] });
+	            return _react2.default.createElement(
+	                _reactable.Table,
+	                { className: 'table hover', data: this.getTableData(),
+	                    sortable: true, itemsPerPage: 10, pageButtonLimit: 5 },
+	                _react2.default.createElement(_reactable.Tr, { onClick: this.Modal, className: 'hover',
+	                    data: { name: 'Other Row', content: 'This is a different row' } })
+	            );
 	        }
 	    }]);
 
@@ -55275,7 +55267,7 @@
 	exports.default = HistoryTable;
 
 /***/ },
-/* 776 */
+/* 775 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55290,21 +55282,21 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactableTable = __webpack_require__(777);
+	var _reactableTable = __webpack_require__(776);
 
-	var _reactableTr = __webpack_require__(785);
+	var _reactableTr = __webpack_require__(784);
 
-	var _reactableTd = __webpack_require__(786);
+	var _reactableTd = __webpack_require__(785);
 
-	var _reactableTh = __webpack_require__(783);
+	var _reactableTh = __webpack_require__(782);
 
-	var _reactableTfoot = __webpack_require__(789);
+	var _reactableTfoot = __webpack_require__(788);
 
-	var _reactableThead = __webpack_require__(782);
+	var _reactableThead = __webpack_require__(781);
 
-	var _reactableSort = __webpack_require__(791);
+	var _reactableSort = __webpack_require__(790);
 
-	var _reactableUnsafe = __webpack_require__(781);
+	var _reactableUnsafe = __webpack_require__(780);
 
 	_react2['default'].Children.children = function (children) {
 	    return _react2['default'].Children.map(children, function (x) {
@@ -55353,7 +55345,7 @@
 
 
 /***/ },
-/* 777 */
+/* 776 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55378,21 +55370,21 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _libFilter_props_from = __webpack_require__(778);
+	var _libFilter_props_from = __webpack_require__(777);
 
-	var _libExtract_data_from = __webpack_require__(779);
+	var _libExtract_data_from = __webpack_require__(778);
 
-	var _unsafe = __webpack_require__(781);
+	var _unsafe = __webpack_require__(780);
 
-	var _thead = __webpack_require__(782);
+	var _thead = __webpack_require__(781);
 
-	var _th = __webpack_require__(783);
+	var _th = __webpack_require__(782);
 
-	var _tr = __webpack_require__(785);
+	var _tr = __webpack_require__(784);
 
-	var _tfoot = __webpack_require__(789);
+	var _tfoot = __webpack_require__(788);
 
-	var _paginator = __webpack_require__(790);
+	var _paginator = __webpack_require__(789);
 
 	var Table = (function (_React$Component) {
 	    _inherits(Table, _React$Component);
@@ -55936,7 +55928,7 @@
 
 
 /***/ },
-/* 778 */
+/* 777 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -55990,7 +55982,7 @@
 
 
 /***/ },
-/* 779 */
+/* 778 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56000,7 +55992,7 @@
 	});
 	exports.extractDataFrom = extractDataFrom;
 
-	var _stringable = __webpack_require__(780);
+	var _stringable = __webpack_require__(779);
 
 	function extractDataFrom(key, column) {
 	    var value;
@@ -56019,7 +56011,7 @@
 
 
 /***/ },
-/* 780 */
+/* 779 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -56035,7 +56027,7 @@
 
 
 /***/ },
-/* 781 */
+/* 780 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -56082,7 +56074,7 @@
 
 
 /***/ },
-/* 782 */
+/* 781 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56107,11 +56099,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _th = __webpack_require__(783);
+	var _th = __webpack_require__(782);
 
-	var _filterer = __webpack_require__(784);
+	var _filterer = __webpack_require__(783);
 
-	var _libFilter_props_from = __webpack_require__(778);
+	var _libFilter_props_from = __webpack_require__(777);
 
 	var Thead = (function (_React$Component) {
 	    _inherits(Thead, _React$Component);
@@ -56246,7 +56238,7 @@
 
 
 /***/ },
-/* 783 */
+/* 782 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56271,9 +56263,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _unsafe = __webpack_require__(781);
+	var _unsafe = __webpack_require__(780);
 
-	var _libFilter_props_from = __webpack_require__(778);
+	var _libFilter_props_from = __webpack_require__(777);
 
 	var Th = (function (_React$Component) {
 	    _inherits(Th, _React$Component);
@@ -56310,7 +56302,7 @@
 
 
 /***/ },
-/* 784 */
+/* 783 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56408,7 +56400,7 @@
 
 
 /***/ },
-/* 785 */
+/* 784 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56435,11 +56427,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _td = __webpack_require__(786);
+	var _td = __webpack_require__(785);
 
-	var _libTo_array = __webpack_require__(788);
+	var _libTo_array = __webpack_require__(787);
 
-	var _libFilter_props_from = __webpack_require__(778);
+	var _libFilter_props_from = __webpack_require__(777);
 
 	var Tr = (function (_React$Component) {
 	    _inherits(Tr, _React$Component);
@@ -56503,7 +56495,7 @@
 
 
 /***/ },
-/* 786 */
+/* 785 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56528,13 +56520,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _libIs_react_component = __webpack_require__(787);
+	var _libIs_react_component = __webpack_require__(786);
 
-	var _libStringable = __webpack_require__(780);
+	var _libStringable = __webpack_require__(779);
 
-	var _unsafe = __webpack_require__(781);
+	var _unsafe = __webpack_require__(780);
 
-	var _libFilter_props_from = __webpack_require__(778);
+	var _libFilter_props_from = __webpack_require__(777);
 
 	var Td = (function (_React$Component) {
 	    _inherits(Td, _React$Component);
@@ -56595,7 +56587,7 @@
 
 
 /***/ },
-/* 787 */
+/* 786 */
 /***/ function(module, exports) {
 
 	// this is a bit hacky - it'd be nice if React exposed an API for this
@@ -56612,7 +56604,7 @@
 
 
 /***/ },
-/* 788 */
+/* 787 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -56633,7 +56625,7 @@
 
 
 /***/ },
-/* 789 */
+/* 788 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56679,7 +56671,7 @@
 
 
 /***/ },
-/* 790 */
+/* 789 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56842,7 +56834,7 @@
 
 
 /***/ },
-/* 791 */
+/* 790 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -56935,16 +56927,16 @@
 
 
 /***/ },
-/* 792 */
+/* 791 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(793);
+	var content = __webpack_require__(792);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(795)(content, {});
+	var update = __webpack_require__(794)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -56961,21 +56953,21 @@
 	}
 
 /***/ },
-/* 793 */
+/* 792 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(794)();
+	exports = module.exports = __webpack_require__(793)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "#logo {\n  height: 40px;\n  width: auto;\n}\n\n#content {\n  margin: 0px 100px 100px 100px;\n}\n", ""]);
+	exports.push([module.id, ".history {\n  background-color: orange;\n}\n#logo {\n  height: 40px;\n  width: auto;\n}\n#content {\n  margin: 0px 100px 100px 100px;\n}\n", ""]);
 
 	// exports
 
 
 /***/ },
-/* 794 */
+/* 793 */
 /***/ function(module, exports) {
 
 	/*
@@ -57031,7 +57023,7 @@
 
 
 /***/ },
-/* 795 */
+/* 794 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -57280,6 +57272,46 @@
 		if(oldSrc)
 			URL.revokeObjectURL(oldSrc);
 	}
+
+
+/***/ },
+/* 795 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(796);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(794)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js?importLoaders=1!./../../node_modules/postcss-loader/index.js!./history.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js?importLoaders=1!./../../node_modules/postcss-loader/index.js!./history.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 796 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(793)();
+	// imports
+
+
+	// module
+	exports.push([module.id, ".history {\n    background-color: orange;\n}", ""]);
+
+	// exports
 
 
 /***/ }
