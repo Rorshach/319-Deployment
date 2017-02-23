@@ -1,5 +1,6 @@
 package com.coastcapitalsavings.mvc.services;
 
+import com.coastcapitalsavings.auth.SecretKeyProvider;
 import com.coastcapitalsavings.mvc.models.Employee;
 
 import com.coastcapitalsavings.mvc.repositories.EmployeeRepository;
@@ -9,6 +10,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -22,6 +24,7 @@ import java.util.Optional;
 import static java.time.ZoneOffset.UTC;
 
 
+@Component
 public class JwtService {
 
     private static final String ISSUER = "in.sdqali.jwt";
@@ -37,8 +40,8 @@ public class JwtService {
 
     /**
      * Tokenize a valid Employee object to be sent by client
-     * @param e
-     * @return
+     * @param e an employee
+     * @return tokenized string representing the employee
      * @throws IOException
      * @throws URISyntaxException
      */
@@ -59,13 +62,4 @@ public class JwtService {
         return employeeRepository.getUser(claims.getBody().getSubject().toString());
     }
 
-    /**
-     * Produces a secret key based on a strong password stored in file, which is then used to build JWT token
-     */
-    @Component
-    private class SecretKeyProvider {
-        public byte[] getKey() throws URISyntaxException, IOException {
-            return Files.readAllBytes(Paths.get(this.getClass().getResource("/src/main/resources/jwt.key").toURI()));
-        }
-    }
 }
