@@ -15,8 +15,7 @@ import Alerts from './alerts.jsx';
 import TabsComponent from "./tabs.jsx";
 import LoginComponent from "./login.jsx";
 import 'babel-polyfill';
-import HistoryContainer from "./history_container.jsx";
-import HistoryTable from "./history_container.jsx";
+import HistoryTable from "./history_table.jsx";
 
 // CSS:
 
