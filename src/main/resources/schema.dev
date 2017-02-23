@@ -1,4 +1,8 @@
 # noinspection SqlNoDataSourceInspectionForFile
+/*
+	The following scheme is properly formatted SQL for use in an external tool
+ */
+
 DROP TABLE IF EXISTS products_categories;
 DROP TABLE IF EXISTS products_profiles;
 DROP TABLE IF EXISTS products_requests;
@@ -42,7 +46,7 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 CREATE TABLE IF NOT EXISTS products_categories (
-product_id INT UNSIGNED,
+product_id INT UNSIGNED,r
 category_id INT UNSIGNED,
 
 PRIMARY KEY (product_id, category_id)
@@ -138,12 +142,14 @@ FOREIGN KEY (product_status_id) REFERENCES product_statuses(id)
 #---------------------------------------------------------------------------------------------
 
 DELIMITER $$
+
 DROP PROCEDURE IF EXISTS req_categories_getAll $$
 CREATE PROCEDURE req_categories_getAll
 	()
 	BEGIN
 		select id, name from categories;
 	END $$
+
 DELIMITER ;
 
 
