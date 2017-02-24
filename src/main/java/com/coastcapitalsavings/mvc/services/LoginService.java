@@ -41,7 +41,7 @@ public class LoginService {
      * @return Employee if credentials match that in the db, otherwise empty
      */
     public Optional<Employee> login(LoginCredentials credentials) {
-        return employeeRepository.getUser(credentials.getUserEmail())
+        return employeeRepository.getUser(credentials.getUsername())
                 .filter(user -> user.getPassword().equals(credentials.getPassword()));
     }
 

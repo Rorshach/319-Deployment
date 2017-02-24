@@ -51,7 +51,7 @@ public class LoginController {
                     return user;
                 })
                 // TODO: use a better exception
-                .orElseThrow(() -> new DataAccessException(credentials.getUserEmail()) {
+                .orElseThrow(() -> new DataAccessException(credentials.getUsername()) {
                     @Override
                     public String getMessage() {
                         return super.getMessage();

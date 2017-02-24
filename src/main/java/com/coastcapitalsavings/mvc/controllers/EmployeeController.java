@@ -27,12 +27,12 @@ public class EmployeeController {
 
     /**
      * Fetch the employee object from db using user's email
-     * @param userEmail
+     * @param username
      * @return Employee if email matches with one entry in db, throws DataAccessException otherwise
      */
-    public Employee getUser(String userEmail) {
-        return employeeRepository.getUser(userEmail)
-                .orElseThrow(()-> new DataAccessException(userEmail) {
+    public Employee getUser(String username) {
+        return employeeRepository.getUser(username)
+                .orElseThrow(()-> new DataAccessException(username) {
                     @Override
                     public String getMessage(){
                         return super.getMessage();

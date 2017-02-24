@@ -10,6 +10,6 @@ import java.nio.file.Paths;
 @Component
 public class SecretKeyProvider {
     public byte[] getKey() throws URISyntaxException, IOException {
-        return Files.readAllBytes(Paths.get(this.getClass().getResource("/src/main/resources/jwt.key").toURI()));
+        return Files.readAllBytes(Paths.get(this.getClass().getResource("/jwt.key").toURI()));
     }
 }

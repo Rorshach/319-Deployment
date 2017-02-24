@@ -32,8 +32,8 @@ public class EmployeeRepository {
         private PostLookupEmployeeByEmailStoredProc() {
             super(jdbcTemplate, procName);
             declareParameter(new SqlInOutParameter("out_employee_id", Types.INTEGER));
-            declareParameter(new SqlInOutParameter("out_employee_fName", Types.INTEGER));
-            declareParameter(new SqlInOutParameter("out_employee_lName", Types.INTEGER));
+            declareParameter(new SqlInOutParameter("out_employee_fName", Types.VARCHAR));
+            declareParameter(new SqlInOutParameter("out_employee_lName", Types.VARCHAR));
             declareParameter(new SqlInOutParameter("inout_employee_email", Types.VARCHAR));
             declareParameter(new SqlInOutParameter("out_employee_pwd", Types.VARCHAR));
             declareParameter(new SqlInOutParameter("out_employee_role", Types.INTEGER));
@@ -61,7 +61,8 @@ public class EmployeeRepository {
         private Optional<Employee> mapResponseToEmployee(Map<String, Object> responseMap) {
             try {
                 Employee e = new Employee();
-                e.setId((long)responseMap.get("out_employee_id"));
+                Integer id = (Integer) responseMap.get("out_employee_id");
+                e.setId((long)id);
                 e.setFName((String)responseMap.get("out_employee_fName"));
                 e.setLName((String)responseMap.get("out_employee_lName"));
                 e.setEmail((String)responseMap.get("inout_employee_email"));
