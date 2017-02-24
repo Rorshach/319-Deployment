@@ -33,6 +33,7 @@ public class EmployeeRepository {
             super(jdbcTemplate, procName);
             declareParameter(new SqlInOutParameter("out_employee_id", Types.INTEGER));
             declareParameter(new SqlInOutParameter("out_employee_fName", Types.INTEGER));
+            declareParameter(new SqlInOutParameter("out_employee_lName", Types.INTEGER));
             declareParameter(new SqlInOutParameter("inout_employee_email", Types.VARCHAR));
             declareParameter(new SqlInOutParameter("out_employee_pwd", Types.VARCHAR));
             declareParameter(new SqlInOutParameter("out_employee_role", Types.INTEGER));
@@ -48,19 +49,24 @@ public class EmployeeRepository {
          */
         private Optional<Employee> execute(String userEmail) {
             Map<String, Object> inputs = new HashMap<>();
+            inputs.put("out_employee_id", 1);
+            inputs.put("out_employee_fName", "june");
+            inputs.put("out_employee_lName", "m");
             inputs.put("inout_employee_email", userEmail);
+            inputs.put("out_employee_pwd", "");
+            inputs.put("out_employee_role", 2);
             Map<String, Object> outputs = execute(inputs);
             return mapResponseToEmployee(outputs);
         }
         private Optional<Employee> mapResponseToEmployee(Map<String, Object> responseMap) {
             try {
                 Employee e = new Employee();
-                e.setId((int)responseMap.get("out_employee_id"));
+                e.setId((long)responseMap.get("out_employee_id"));
                 e.setFName((String)responseMap.get("out_employee_fName"));
                 e.setLName((String)responseMap.get("out_employee_lName"));
                 e.setEmail((String)responseMap.get("inout_employee_email"));
                 e.setPassword((String)responseMap.get("out_employee_pwd"));
-                Role r = new Role((int)responseMap.get("out_employee_role"));
+                Role r = new Role((long)responseMap.get("out_employee_role"));
                 e.setRole(r);
                 Optional <Employee> oe = Optional.of(e);
                 return oe;

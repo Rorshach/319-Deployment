@@ -9,7 +9,7 @@ import java.util.List;
  */
 @Data
 public class Employee {
-    private int id;
+    private long id;
     private String fName;
     private String lName;
     private String email;

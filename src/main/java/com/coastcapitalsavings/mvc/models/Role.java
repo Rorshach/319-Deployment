@@ -10,10 +10,10 @@ import java.util.Map;
  */
 @Data
 public class Role {
-    Integer id;
+    long id;
     String name;
 
-    public Role (int role_id) {
+    public Role (long role_id) {
         id = role_id;
         name = role_map.get(role_id);
     }
