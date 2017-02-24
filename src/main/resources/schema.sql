@@ -374,3 +374,32 @@ CREATE PROCEDURE req_profile_lookupExists
   END ^;
 
 ^;
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve a request given its id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	in_id   INT UNSIGNED
+#
+# Returns:    	request record
+#
+# Created By:  	Chris Semiao, Felix Tso
+# Created On:  	2017-2-23
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_request_lookupById^;
+CREATE PROCEDURE req_request_lookupById
+  (
+    INOUT inout_id INT UNSIGNED,
+    OUT out_notes VARCHAR(255),
+    OUT out_dateCreated DATETIME,
+    OUT out_submittedBy_id INT,
+    OUT out_lastModified DATETIME,
+    OUT out_lastModifiedBy_id INT,
+    OUT out_status_id INT
+  )
+  BEGIN
+    SELECT notes, dateCreated, submittedBy_id, lastModified, lastModifiedBy_id, status_id INTO out_notes, out_dateCreated, out_submittedBy_id, out_lastModified, out_lastModifiedBy_id, out_status_id FROM requests WHERE id = inout_id;
+  END ^;
+
+^;

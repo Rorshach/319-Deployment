@@ -28,6 +28,7 @@ public class RequestRepository {
     JdbcTemplate jdbcTemplate;
 
     // Store stored procedures so that they don't have to be recompiled for every use;
+    GetRequestByIdStoredProc getRequestByIdStoredProc;
     PostNewRequestStoredProc postNewRequestStoredProc;
     PutRequestNewStatusIdStoredProc putRequestNewStatusIdStoredProc;
     CheckRequestExistsStoredProc checkRequestExistsStoredProc;
@@ -40,6 +41,7 @@ public class RequestRepository {
     public void setDataSource(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
 
+        getRequestByIdStoredProc = new GetRequestByIdStoredProc();
         postNewRequestStoredProc = new PostNewRequestStoredProc();
         putRequestNewStatusIdStoredProc = new PutRequestNewStatusIdStoredProc();
         checkRequestExistsStoredProc = new CheckRequestExistsStoredProc();
@@ -54,6 +56,10 @@ public class RequestRepository {
         return checkRequestExistsStoredProc.execute(reqId);
     }
 
+
+    public Request getRequestById(long reqId) {
+        return getRequestByIdStoredProc.execute(reqId);
+    }
     /**
      * Handles request posts by invoking a stored procedure
      * @param reqToPost request object to post without id set
@@ -87,6 +93,57 @@ public class RequestRepository {
         }
     }
 
+    private class GetRequestByIdStoredProc extends StoredProcedure {
+        private static final String procName = "req_request_lookupById";
+
+        private GetRequestByIdStoredProc() {
+            super(jdbcTemplate, procName);
+            declareParameter(new SqlInOutParameter("inout_id", Types.INTEGER));
+            declareParameter(new SqlOutParameter("out_notes", Types.VARCHAR));
+            declareParameter(new SqlOutParameter("out_dateCreated", Types.TIMESTAMP));
+            declareParameter(new SqlOutParameter("out_submittedBy_id", Types.INTEGER));
+            declareParameter(new SqlOutParameter("out_lastModified", Types.TIMESTAMP));
+            declareParameter(new SqlOutParameter("out_lastModifiedBy_id", Types.INTEGER));
+            declareParameter(new SqlOutParameter("out_status_id", Types.INTEGER));
+            compile();
+        }
+
+        /**
+         * Perform the stored procedure to get a request.
+         * @param reqId Request object to get.
+         * @return Request object with the reqId.
+         */
+        private Request execute(long reqId) {
+            Map<String, Object> inputs = new HashMap<>();
+            inputs.put("inout_id", reqId);
+
+            Map<String, Object> outputs= execute(inputs);
+
+            return mapResponseToRequest(outputs);
+        }
+
+        /**
+         * Parse out a new Request object from a HashMap
+         * @param responseMap Keys and values from the stored procedure response
+         * @return new Request object with id set
+         */
+        private Request mapResponseToRequest(Map<String, Object> responseMap) {
+            try {
+                Request req = new Request();
+                req.setId((long)responseMap.get("inout_id"));
+                req.setNotes((String)responseMap.get("out_notes"));
+                req.setDateCreated((Timestamp)responseMap.get("out_dateCreated"));
+                req.setSubmittedBy_employeeId((int)responseMap.get("out_submittedBy_id"));
+                req.setDateModified((Timestamp)responseMap.get("out_lastModified"));
+                req.setLastModifiedBy_employeeId((int)responseMap.get("out_lastModifiedBy_id"));
+                req.setRequestStatus_id((int)responseMap.get("out_status_id"));
+                return req;
+            } catch (ClassCastException e) {
+                System.err.println("Class cast exception in getRequestById.mapResponseToRequest, check DB");
+                throw new TypeMismatchDataAccessException(e.getMessage());
+            }
+        }
+    }
 
     private class PutRequestNewStatusIdStoredProc extends StoredProcedure {
 
