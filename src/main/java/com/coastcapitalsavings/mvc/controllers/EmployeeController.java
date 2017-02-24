@@ -30,7 +30,6 @@ public class EmployeeController {
      * @param userEmail
      * @return Employee if email matches with one entry in db, throws DataAccessException otherwise
      */
-    @RequestMapping(method = RequestMethod.POST)
     public Employee getUser(String userEmail) {
         return employeeRepository.getUser(userEmail)
                 .orElseThrow(()-> new DataAccessException(userEmail) {

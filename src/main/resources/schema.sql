@@ -159,7 +159,7 @@ CREATE PROCEDURE req_employees_lookupEmployeeByEmail
         OUT out_employee_lName VARCHAR(255),
         INOUT inout_employee_email VARCHAR(255),
         OUT out_employee_pwd VARCHAR(255),
-		OUT out_employee_role INT UNSIGNED
+	    OUT out_employee_role INT UNSIGNED
     )
 	BEGIN
 		SELECT employees.id, fName, lName, pwd, role_id
@@ -167,7 +167,7 @@ CREATE PROCEDURE req_employees_lookupEmployeeByEmail
         FROM employees
         INNER JOIN employees_roles
         ON employees.id = employees_roles.employee_id
-        WHERE employees.id = inout_employee_email;
+        WHERE employees.email = inout_employee_email;
 	END ^;
 
 #--------------------------------------------------------------------------------------------

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +35,7 @@ public class LoginController {
      * @modifies response
      * @return Employee if the credentials pass, otherwise throw exception
      */
-    @RequestMapping (path = "", method = POST, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST)
     public Employee login(@RequestBody LoginCredentials credentials,
                           HttpServletResponse response) {
         return loginService.login(credentials)

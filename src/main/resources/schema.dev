@@ -170,7 +170,7 @@ CREATE PROCEDURE req_employees_lookupEmployeeByEmail
         FROM employees
         INNER JOIN employees_roles
         ON employees.id = employees_roles.employee_id
-        WHERE employees.id = inout_employee_email;
+        WHERE employees.email = inout_employee_email;
 	END $$
 
 DELIMITER ;

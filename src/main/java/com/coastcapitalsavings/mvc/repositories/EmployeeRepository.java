@@ -19,9 +19,8 @@ import java.util.Optional;
 @Repository
 public class EmployeeRepository {
 
+    @Autowired
     JdbcTemplate jdbcTemplate;
-
-
 
     public Optional<Employee> getUser(String userEmail) throws DataAccessException{
 
