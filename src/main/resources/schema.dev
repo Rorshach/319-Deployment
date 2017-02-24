@@ -366,7 +366,6 @@ CREATE PROCEDURE req_productInProfile_lookupByProductId
   END $$
 DELIMITER ;
 
-
 #--------------------------------------------------------------------------------------------
 # Description: 	Verifies if a profile record exists, given its id
 #
@@ -389,4 +388,24 @@ CREATE PROCEDURE req_profile_lookupExists
   BEGIN
     SELECT EXISTS(SELECT id FROM profiles WHERE id = in_id) INTO out_exists;
   END $$
+DELIMITER ;
+
+#--------------------------------------------------------------------------------------------
+# Description:  Generates listing of all requests
+#
+# Called By:    Coast Capital Requisitioning Application
+# Parameters: 	none
+# Returns:    	recordset
+#
+# Created By:  	Felix Tso
+# Created On:  	2017-2-23
+#---------------------------------------------------------------------------------------------
+DELIMITER $$
+DROP PROCEDURE IF EXISTS req_requests_getAll$$
+
+CREATE PROCEDURE req_requests_getAll
+	()
+	BEGIN
+		select id, notes, dateCreated, submittedBy_id, lastModified, lastModifiedBy_id, status_id  from requests;
+	END $$
 DELIMITER ;
