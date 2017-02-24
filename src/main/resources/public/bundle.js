@@ -55077,6 +55077,12 @@
 
 	var _reactBootstrap = __webpack_require__(501);
 
+	var _superagent = __webpack_require__(477);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
+	var _alerts = __webpack_require__(486);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -55091,27 +55097,50 @@
 	    function LoginComponent(props) {
 	        _classCallCheck(this, LoginComponent);
 
-	        return _possibleConstructorReturn(this, (LoginComponent.__proto__ || Object.getPrototypeOf(LoginComponent)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (LoginComponent.__proto__ || Object.getPrototypeOf(LoginComponent)).call(this, props));
+
+	        _this.state = {
+	            showAlert: false
+	        };
+	        _this.login = _this.login.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(LoginComponent, [{
+	        key: 'login',
+	        value: function login(e, data) {
+	            e.preventDefault();
+	            console.log(data);
+	            var form = _reactDom2.default.findDOMNode(this.refs.loginform).elements;
+	            var username = form[0].value;
+	            var password = form[1].value;
+	            var payload = {
+	                username: username,
+	                password: password
+	            };
+	            _superagent2.default.post("/authenticate").send(payload).set('Content-Type', 'application/json').set('Accept', 'application/json').end(function (err, res) {
+	                console.log(err);
+	                console.log(res);
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
-	                _reactBootstrap.Form,
-	                { horizontal: true },
+	                'form',
+	                { ref: 'loginform', className: '#loginForm', onSubmit: this.login },
 	                _react2.default.createElement(
 	                    _reactBootstrap.FormGroup,
 	                    { controlId: 'formHorizontalEmail' },
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Col,
 	                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
-	                        'Email'
+	                        'Username'
 	                    ),
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Col,
 	                        { sm: 10 },
-	                        _react2.default.createElement(_reactBootstrap.FormControl, { type: 'email', placeholder: 'Email' })
+	                        _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: 'Please enter username' })
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -55125,7 +55154,7 @@
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Col,
 	                        { sm: 10 },
-	                        _react2.default.createElement(_reactBootstrap.FormControl, { type: 'password', placeholder: 'Password' })
+	                        _react2.default.createElement(_reactBootstrap.FormControl, { type: 'password', placeholder: 'Please enter password' })
 	                    )
 	                ),
 	                _react2.default.createElement(

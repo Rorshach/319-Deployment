@@ -27,7 +27,6 @@ public class LoginController {
         this.loginService = loginService;
         this.jwtService = jwtService;
     }
-
     /**
      * Log into the system using given credentials and the
      * @param credentials
