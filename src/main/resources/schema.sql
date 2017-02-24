@@ -1,123 +1,130 @@
-DROP TABLE IF EXISTS products_categories^;
-DROP TABLE IF EXISTS products_profiles^;
-DROP TABLE IF EXISTS products_requests^;
-DROP TABLE IF EXISTS product_statuses^;
-DROP TABLE IF EXISTS profiles^;
-DROP TABLE IF EXISTS categories^;
-DROP TABLE IF EXISTS employees_roles^;
-DROP TABLE IF EXISTS roles^;
-DROP TABLE IF EXISTS requests^;
-DROP TABLE IF EXISTS request_statuses^;
-DROP TABLE IF EXISTS products^;
-DROP TABLE IF EXISTS employees^;
-DROP TABLE IF EXISTS cost_centers^;
+DROP TABLE IF EXISTS Product_Category^;
+DROP TABLE IF EXISTS Product_ProfileGroup^;
+DROP TABLE IF EXISTS Product_Request^;
+DROP TABLE IF EXISTS ProductStatus^;
+DROP TABLE IF EXISTS ProfileGroup^;
+DROP TABLE IF EXISTS Category^;
+DROP TABLE IF EXISTS Employee_Role^;
+DROP TABLE IF EXISTS Role^;
+DROP TABLE IF EXISTS Request^;
+DROP TABLE IF EXISTS RequestStatus^;
+DROP TABLE IF EXISTS Product^;
+DROP TABLE IF EXISTS Employee^;
+DROP TABLE IF EXISTS CostCenter^;
 
-CREATE TABLE IF NOT EXISTS products (
-	id INT UNSIGNED AUTO_INCREMENT,
-	name VARCHAR(255),
-
-	PRIMARY KEY (id)
+CREATE TABLE IF NOT EXISTS Product (
+	productCode VARCHAR(10),
+	productDescription VARCHAR(50),
+	PRIMARY KEY (productCode)
 )^;
 
-CREATE TABLE IF NOT EXISTS profiles (
-	id INT UNSIGNED AUTO_INCREMENT,
-	name VARCHAR(255),
+CREATE TABLE IF NOT EXISTS ProfileGroup (
+	profileCode VARCHAR(10),
+	profileDescription VARCHAR(50),
 
-	PRIMARY KEY (id)
+	PRIMARY KEY (profileCode)
 )^;
 
-CREATE TABLE IF NOT EXISTS products_profiles (
-	product_id INT UNSIGNED,
-	profile_id INT UNSIGNED,
+CREATE TABLE IF NOT EXISTS Product_ProfileGroup (
+	productCode VARCHAR(10),
+	profileCode VARCHAR(10),
 
-	PRIMARY KEY (product_id, profile_id)
+	PRIMARY KEY (productCode, profileCode),
+	FOREIGN KEY (productCode) REFERENCES Product(productCode),
+	FOREIGN KEY (profileCode) REFERENCES ProfileGroup(profileCode)
 )^;
 
-CREATE TABLE IF NOT EXISTS categories (
-	id INT UNSIGNED AUTO_INCREMENT,
-	name VARCHAR(255),
+CREATE TABLE IF NOT EXISTS Category (
+	categoryCode VARCHAR(15),
+	categoryDescription VARCHAR(50),
 
-	PRIMARY KEY (id)
+	PRIMARY KEY (categoryCode)
 )^;
 
-CREATE TABLE IF NOT EXISTS products_categories (
-	product_id INT UNSIGNED,
-	category_id INT UNSIGNED,
+CREATE TABLE IF NOT EXISTS Product_Category (
+	productCode VARCHAR(10),
+	categoryCode VARCHAR(15),
 
-	PRIMARY KEY (product_id, category_id)
+	PRIMARY KEY (productCode, categoryCode),
+	FOREIGN KEY (productCode) REFERENCES Product(productCode),
+	FOREIGN KEY (categoryCode) REFERENCES Category(categoryCode)
 )^;
 
-CREATE TABLE IF NOT EXISTS product_statuses (
-	id INT UNSIGNED AUTO_INCREMENT,
-	status VARCHAR(255),
-	PRIMARY KEY (id)
+CREATE TABLE IF NOT EXISTS ProductStatus (
+	statusCode CHAR(4),
+	statusDescription VARCHAR(50),
+
+	PRIMARY KEY (statusCode)
 )^;
 
-CREATE TABLE IF NOT EXISTS cost_centers (
-	id INT UNSIGNED AUTO_INCREMENT,
-	name VARCHAR(255),
+CREATE TABLE IF NOT EXISTS CostCenter (
+	costCenterCode VARCHAR(10),
+	costCenterDescription VARCHAR(50),
 
-	PRIMARY KEY (id)
+	PRIMARY KEY (costCenterCode)
 )^;
 
-CREATE TABLE IF NOT EXISTS request_statuses (
-	id INT UNSIGNED AUTO_INCREMENT,
-	status VARCHAR(255),
+CREATE TABLE IF NOT EXISTS RequestStatus (
+	statusCode CHAR(4),
+	statusDescription VARCHAR(50),
 
-	PRIMARY KEY (id)
+	PRIMARY KEY (statusCode)
 )^;
 
-CREATE TABLE IF NOT EXISTS employees (
-	id INT,
-	fName VARCHAR(255) NOT NULL,
-	lName VARCHAR(255) NOT NULL,
-	email VARCHAR(255) NOT NULL,
-	reportsTo_id INT,
-	costCenter_id INT UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS Employee (
+	employeeId CHAR(9),
+	password VARCHAR(200),
+	firstName VARCHAR(50) NOT NULL,
+	lastName VARCHAR(50) NOT NULL,
+	email VARCHAR(100) NOT NULL,
+	reportsTo CHAR(9),
+	costCenterCode VARCHAR(10),
 
-	PRIMARY KEY (id),
-	FOREIGN KEY (reportsTo_id) REFERENCES employees(id),
-	FOREIGN KEY (costCenter_id) REFERENCES cost_centers(id)
+	PRIMARY KEY (employeeId, email),
+	FOREIGN KEY (reportsTo) REFERENCES Employee(employeeId),
+	FOREIGN KEY (costCenterCode) REFERENCES CostCenter(costCenterCode)
 )^;
 
-CREATE TABLE IF NOT EXISTS roles (
-	id INT UNSIGNED AUTO_INCREMENT,
-	name VARCHAR(255),
+CREATE TABLE IF NOT EXISTS Role (
+	roleCode CHAR(4),
+	roleDescription  VARCHAR(50),
 
-	PRIMARY KEY (id)
+	PRIMARY KEY (roleCode)
 )^;
 
-CREATE TABLE IF NOT EXISTS employees_roles (
-	employee_id INT,
-	role_id INT UNSIGNED,
+CREATE TABLE IF NOT EXISTS Employee_Role (
+	employeeId CHAR(9),
+	roleCode CHAR(4),
 
-	PRIMARY KEY (employee_id, role_id)
+	PRIMARY KEY (employeeId, roleCode),
+	FOREIGN KEY (employeeId) REFERENCES Employee(employeeId),
+	FOREIGN KEY (roleCode) REFERENCES Role(roleCode)
 )^;
 
-CREATE TABLE IF NOT EXISTS requests (
-	id INT UNSIGNED AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS Request (
+	requestId BIGINT AUTO_INCREMENT,
 	notes VARCHAR(255),
 	dateCreated DATETIME NOT NULL,
-	submittedBy_id INT NOT NULL,
+	submittedBy CHAR(9) NOT NULL,
 	lastModified DATETIME NOT NULL,
-	lastModifiedBy_id INT NOT NULL,
-	status_id INT UNSIGNED NOT NULL,
+	lastModifiedBy CHAR(9) NOT NULL,
+	statusCode CHAR(4) NOT NULL,
 
-	PRIMARY KEY (id),
-	FOREIGN KEY (submittedBy_id) REFERENCES employees(id),
-	FOREIGN KEY (lastModifiedBy_id) REFERENCES employees(id),
-	FOREIGN KEY (status_id) REFERENCES request_statuses(id)
+	PRIMARY KEY (requestId),
+	FOREIGN KEY (submittedBy) REFERENCES Employee(employeeId),
+	FOREIGN KEY (lastModifiedBy) REFERENCES Employee(employeeId),
+	FOREIGN KEY (statusCode) REFERENCES RequestStatus(statusCode)
 )^;
 
-CREATE TABLE IF NOT EXISTS products_requests (
-	id INT UNSIGNED AUTO_INCREMENT,
-	request_id INT UNSIGNED,
-	product_id INT UNSIGNED,
-	product_status_id INT UNSIGNED,
+CREATE TABLE IF NOT EXISTS Product_Request (
+	transactionId BIGINT AUTO_INCREMENT,
+	requestId BIGINT,
+	productCode VARCHAR(10),
+	statusCode CHAR(4),
 
-	PRIMARY KEY (id, request_id),
-	FOREIGN KEY (product_id) REFERENCES products(id),
-	FOREIGN KEY (product_status_id) REFERENCES product_statuses(id)
+	PRIMARY KEY (transactionId, requestId),
+	FOREIGN KEY (productCode) REFERENCES Product(productCode),
+	FOREIGN KEY (statusCode) REFERENCES ProductStatus(statusCode)
 )^;
 
 #--------------------------------------------------------------------------------------------
@@ -136,12 +143,11 @@ CREATE TABLE IF NOT EXISTS products_requests (
 # Created On:  	2017-2-20
 #---------------------------------------------------------------------------------------------
 ^;
-DROP PROCEDURE IF EXISTS req_categories_getAll^;
-
-CREATE PROCEDURE req_categories_getAll
+DROP PROCEDURE IF EXISTS req_category_lookupAll^;
+CREATE PROCEDURE req_category_lookupAll
 	()
 	BEGIN
-		select id, name from categories;
+		SELECT categoryCode, categoryDescription FROM Category;
 	END ^;
 
 #---------------------------------------------------------------------------------------------
@@ -149,12 +155,12 @@ CREATE PROCEDURE req_categories_getAll
 #
 # Called By:  	Coast Capital Requisitioning Application
 #
-# Parameters: 	inout_notes 				VARCHAR(255),
-#							inout_dateCreated			DATETIME,
-#							inout_submittedBy_id 		INT,
-#							inout_lastModified 		DATETIME,
-#							inout_lastModifiedBy_id 	INT,
-#							inout_status_id			INT,
+# Parameters: 	inout_notes 							VARCHAR(255),
+#								inout_dateCreated					DATETIME,
+#								inout_submittedBy 				CHAR(9),
+#								inout_lastModified 				DATETIME,
+#								inout_lastModifiedBy 			CHAR(9),
+#								inout_statusCode					CHAR(4)
 #
 # Returns:    	request record
 #
@@ -163,20 +169,19 @@ CREATE PROCEDURE req_categories_getAll
 #---------------------------------------------------------------------------------------------
 ^;
 DROP PROCEDURE IF EXISTS req_request_insert^;
-
 CREATE PROCEDURE req_request_insert
 	(
-		INOUT inout_notes VARCHAR(250),
+		INOUT inout_notes VARCHAR(255),
 		INOUT inout_dateCreated DATETIME,
-		INOUT inout_submittedBy_id INT,
+		INOUT inout_submittedBy CHAR(9),
 		INOUT inout_lastModified DATETIME,
-		INOUT inout_lastModifiedBy_id INT,
-		INOUT inout_status_id INT UNSIGNED,
-		OUT out_id INT UNSIGNED
+		INOUT inout_lastModifiedBy CHAR(9),
+		INOUT inout_statusCode CHAR(4),
+		OUT out_requestId BIGINT
 	)
 	BEGIN
-		INSERT INTO requests VALUES (null, inout_notes, inout_dateCreated, inout_submittedBy_id, inout_lastModified, inout_lastModifiedBy_id, inout_status_id);
-		SELECT LAST_INSERT_ID() INTO out_id;
+		INSERT INTO Request VALUES (null, inout_notes, inout_dateCreated, inout_submittedBy, inout_lastModified, inout_lastModifiedBy, inout_statusCode);
+		SELECT LAST_INSERT_ID() INTO out_requestId;
 	END ^;
 
 #--------------------------------------------------------------------------------------------
@@ -184,29 +189,28 @@ CREATE PROCEDURE req_request_insert
 #
 # Called By:  	Coast Capital Requisitioning Application
 #
-# Parameters: 	in_request_id 				INT UNSIGNED,
+# Parameters: 	in_requestId				BIGINT,
 #				inout_product_id 			INT UNSIGNED,
-#				inout_product_status_id 	INT UNSIGNED,
+#				inout_product_status_id 	INT UNSIGNED
 #
 # Returns:    	product record
-#				product_status record for product
+#				product_status record for that product
 #
 # Created By:  	Chris Semiao
 # Created On:  	2017-2-21
 #---------------------------------------------------------------------------------------------
 ^;
 DROP PROCEDURE IF EXISTS req_productInRequest_insert^;
-
 CREATE PROCEDURE req_productInRequest_insert
 	(
-		IN in_request_id INT UNSIGNED,
-		INOUT inout_product_id INT UNSIGNED,
-		INOUT inout_product_status_id INT UNSIGNED,
-		OUT out_product_name VARCHAR(255)
+		IN in_requestId BIGINT,
+		INOUT inout_productCode VARCHAR(10),
+		INOUT inout_statusCode CHAR(4),
+		OUT out_productDescription VARCHAR(50)
 	)
 	BEGIN
-		INSERT INTO products_requests VALUES (null, in_request_id, inout_product_id, inout_product_status_id);
-		SELECT name INTO out_product_name FROM products WHERE id = inout_product_id;
+		INSERT INTO Product_Request VALUES (null, in_requestId, inout_productCode, inout_statusCode);
+		SELECT productDescription INTO out_productDescription FROM Product WHERE productCode = inout_productCode;
 	END ^;
 
 #--------------------------------------------------------------------------------------------
@@ -214,8 +218,8 @@ CREATE PROCEDURE req_productInRequest_insert
 #
 # Called By:  	Coast Capital Requisitioning Application
 #
-# Parameters: 	inout_id 				INT UNSIGNED
-#								inout_status_id INT UNSIGNED
+# Parameters: 	inout_requestId 		BIGINT,
+#				inout_statusCode 		CHAR(4)
 #
 # Returns:    	request record
 #
@@ -224,20 +228,19 @@ CREATE PROCEDURE req_productInRequest_insert
 #---------------------------------------------------------------------------------------------
 ^;
 DROP PROCEDURE IF EXISTS req_request_updateStatus^;
-
 CREATE PROCEDURE req_request_updateStatus
 	(
-		INOUT inout_id INT UNSIGNED,
-		INOUT inout_status_id INT UNSIGNED,
+		INOUT inout_requestId BIGINT,
+		INOUT inout_statusCode CHAR(4),
 		OUT out_notes VARCHAR(255),
 		OUT out_dateCreated DATETIME,
-		OUT out_submittedBy_id INT,
+		OUT out_submittedBy CHAR(9),
 		OUT out_lastModified DATETIME,
-		OUT out_lastModifiedBy_id INT
+		OUT out_lastModifiedBy CHAR(9)
 	)
 	BEGIN
-		UPDATE requests SET status_id = inout_status_id WHERE id = inout_id;
-		SELECT notes, dateCreated, submittedBy_id, lastModified, lastModifiedBy_id INTO out_notes, out_dateCreated, out_submittedBy_id, out_lastModified, out_lastModifiedBy_Id FROM requests WHERE id = inout_id;
+		UPDATE Request SET statusCode = inout_statusCode WHERE requestId = inout_requestId;
+		SELECT notes, dateCreated, submittedBy, lastModified, lastModifiedBy INTO out_notes, out_dateCreated, out_submittedBy, out_lastModified, out_lastModifiedBy FROM Request WHERE requestId = inout_requestId;
 	END ^;
 
 #--------------------------------------------------------------------------------------------
@@ -245,7 +248,7 @@ CREATE PROCEDURE req_request_updateStatus
 #
 # Called By:  	Coast Capital Requisitioning Application
 #
-# Parameters: 	inout_id 				INT UNSIGNED
+# Parameters: 	in_requestId				BIGINT
 #
 # Returns:    	product and status recordset
 #
@@ -254,41 +257,39 @@ CREATE PROCEDURE req_request_updateStatus
 #---------------------------------------------------------------------------------------------
 ^;
 DROP PROCEDURE IF EXISTS req_productInRequest_lookupByRequestId^;
-
 CREATE PROCEDURE req_productInRequest_lookupByRequestId
 	(
-		IN in_request_id INT UNSIGNED
+		IN in_requestId BIGINT
 	)
 	BEGIN
-		SELECT p.id, p.name, pr.product_status_id FROM products p JOIN products_requests pr on p.id = pr.product_id where pr.request_id = in_request_id;
+		SELECT p.productCode, p.productDescription, pr.statusCode FROM Product p JOIN Product_Request pr ON p.productCode = pr.productCode where pr.requestId = in_requestId;
 	END ^;
 
 #--------------------------------------------------------------------------------------------
-# Description: 	Verifies if a request record exists, given an id
+# Description: 	Verifies if a request record exists, given its id
 #
 # Called By:  	Coast Capital Requisitioning Application
 #
-# Parameters: 	inout_id 				INT UNSIGNED
+# Parameters: 	in_requestId 		BIGINT
 #
-# Returns:    	out_exists      BOOLEAN
+# Returns:    	out_exists      	BOOLEAN
 #
 # Created By:  	Chris Semiao
 # Created On:  	2017-2-22
 #---------------------------------------------------------------------------------------------
 ^;
 DROP PROCEDURE IF EXISTS req_request_lookupExists^;
-
 CREATE PROCEDURE req_request_lookupExists
 	(
-		IN in_id INT UNSIGNED,
+		IN in_requestId BIGINT,
 		OUT out_exists BOOLEAN
 	)
 	BEGIN
-		SELECT EXISTS(SELECT id FROM requests WHERE id = in_id) INTO out_exists;
+		SELECT EXISTS(SELECT requestId FROM Request WHERE requestId = in_requestId) INTO out_exists;
 	END ^;
 
 #--------------------------------------------------------------------------------------------
-# Description: 	Retrieve id and name information for all profiles
+# Description: 	Retrieve id and name information for all profileGroups
 #
 # Called By:  	Coast Capital Requisitioning Application
 #
@@ -300,42 +301,42 @@ CREATE PROCEDURE req_request_lookupExists
 # Created On:  	2017-2-22
 #---------------------------------------------------------------------------------------------
 ^;
-DROP PROCEDURE IF EXISTS req_profile_lookupAll^;
-CREATE PROCEDURE req_profile_lookupAll
-  ()
-  BEGIN
-    select id, name from profiles;
-  END ^;
+DROP PROCEDURE IF EXISTS req_profileGroup_lookupAll^;
+CREATE PROCEDURE req_profileGroup_lookupAll
+	()
+	BEGIN
+		select profileCode, profileDescription from ProfileGroup;
+	END ^;
 
 #--------------------------------------------------------------------------------------------
-# Description: 	Retrieve a profile given its id
+# Description: 	Retrieve a profileGroup given its profileCode
 #
 # Called By:  	Coast Capital Requisitioning Application
 #
-# Parameters: 	in_id   INT UNSIGNED
+# Parameters: 	in_profileCode   VARCHAR(10)
 #
-# Returns:    	profile record
+# Returns:    	profileGroup record
 #
 # Created By:  	Chris Semiao
 # Created On:  	2017-2-22
 #---------------------------------------------------------------------------------------------
 ^;
-DROP PROCEDURE IF EXISTS req_profile_lookupById^;
-CREATE PROCEDURE req_profile_lookupById
-  (
-    INOUT inout_id INT UNSIGNED,
-    OUT out_name VARCHAR(255)
-  )
-  BEGIN
-    SELECT name INTO out_name FROM profiles WHERE id = inout_id;
-  END ^;
+DROP PROCEDURE IF EXISTS req_profileGroup_lookupById^;
+CREATE PROCEDURE req_profileGroup_lookupById
+	(
+		INOUT inout_profileCode VARCHAR(10),
+		OUT out_profileDescription VARCHAR(50)
+	)
+	BEGIN
+		SELECT profileDescription INTO out_profileDescription FROM ProfileGroup WHERE profileCode = inout_profileCode;
+	END ^;
 
 #--------------------------------------------------------------------------------------------
-# Description: 	Retrieve a list of products associated with a profile, given a profile id
+# Description: 	Retrieve a list of products associated with a profileGroup, given a profileCode
 #
 # Called By:  	Coast Capital Requisitioning Application
 #
-# Parameters: 	in_profile_id   INT UNSIGNED
+# Parameters: 	in_profileCode 		VARCHAR(10)
 #
 # Returns:    	products recordset
 #
@@ -343,15 +344,17 @@ CREATE PROCEDURE req_profile_lookupById
 # Created On:  	2017-2-23
 #---------------------------------------------------------------------------------------------
 ^;
-DROP PROCEDURE IF EXISTS req_productInProfile_lookupByProductId^;
-CREATE PROCEDURE req_productInProfile_lookupByProductId
-  (INOUT in_profile_id INT UNSIGNED)
-  BEGIN
-    SELECT p.id, p.name FROM products p JOIN products_profiles pp ON p.id = pp.product_id WHERE pp.profile_id = in_profile_id;
-  END ^;
+DROP PROCEDURE IF EXISTS req_productInProfileGroup_lookupByProfileGroupCode^;
+CREATE PROCEDURE req_productInProfileGroup_lookupByProfileGroupCode
+	(
+		INOUT in_profileCode VARCHAR(10)
+	)
+	BEGIN
+		SELECT p.productCode, p.productDescription FROM Product p JOIN Product_ProfileGroup pg ON p.productCode = pg.productCode WHERE pg.profileCode = in_profileCode;
+	END ^;
 
 #--------------------------------------------------------------------------------------------
-# Description: 	Verifies if a profile record exists, given an id
+# Description: 	Verifies if a profileGroup record exists, given its profileCode
 #
 # Called By:  	Coast Capital Requisitioning Application
 #
@@ -363,14 +366,12 @@ CREATE PROCEDURE req_productInProfile_lookupByProductId
 # Created On:  	2017-2-23
 #---------------------------------------------------------------------------------------------
 ^;
-DROP PROCEDURE IF EXISTS req_profile_lookupExists^;
-CREATE PROCEDURE req_profile_lookupExists
-  (
-    IN in_id INT UNSIGNED,
-    OUT out_exists BOOLEAN
-  )
-  BEGIN
-    SELECT EXISTS(SELECT id FROM profiles WHERE id = in_id) INTO out_exists;
-  END ^;
-
-^;
+DROP PROCEDURE IF EXISTS req_profileGroup_lookupExists^;
+CREATE PROCEDURE req_profileGroup_lookupExists
+	(
+		IN in_profileCode VARCHAR(10),
+		OUT out_exists BOOLEAN
+	)
+	BEGIN
+		SELECT EXISTS(SELECT profileCode FROM ProfileGroup WHERE profileCode = in_profileCode) INTO out_exists;
+	END ^;

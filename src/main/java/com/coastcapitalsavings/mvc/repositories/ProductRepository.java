@@ -1,7 +1,6 @@
 package com.coastcapitalsavings.mvc.repositories;
 
 
-import com.coastcapitalsavings.mvc.models.Profile;
 import com.coastcapitalsavings.mvc.repositories.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -46,34 +45,34 @@ public class ProductRepository {
         return getRequestProductsInRequestStoredProc.execute(reqId);
     }
 
-    public RequestProduct addProductToRequest(long prodId, long reqId) {
-        return addProductToRequestStoredProc.execute(prodId, reqId);
+    public RequestProduct addProductToRequest(String productCode, long reqId) {
+        return addProductToRequestStoredProc.execute(productCode, reqId);
     }
 
-    public List<Product> getProductsInProfileByProfileId(long profileId) {
-        return getProductInProfileStoredProc.execute(profileId);
+    public List<Product> getProductsInProfileByProfileCode(String profileCode) {
+        return getProductInProfileStoredProc.execute(profileCode);
     }
+
 
     private class GetProductInProfileStoredProc extends StoredProcedure {
 
-        private static final String PROC_NAME = "req_productInProfile_lookupByProductId";
+        private static final String PROC_NAME = "req_productInProfileGroup_lookupByProfileGroupCode";
 
         private GetProductInProfileStoredProc() {
             super(jdbcTemplate, PROC_NAME);
-            declareParameter(new SqlParameter("in_profile_id", Types.INTEGER));
+            declareParameter(new SqlParameter("in_profileCode", Types.VARCHAR));
             declareParameter(new SqlReturnResultSet("products", new ProductMapper()));
             compile();
         }
 
-        private List<Product> execute(long profileId) {
+        private List<Product> execute(String profileCode) {
             Map<String, Object> inputs = new HashMap<>();
-            inputs.put("in_profile_id", profileId);
+            inputs.put("in_profileCode", profileCode);
 
             Map<String, Object> outputs = execute(inputs);
             return (List<Product>) outputs.get("products");
         }
     }
-
 
     private class GetRequestProductsInRequestStoredProc extends StoredProcedure {
 
@@ -81,48 +80,46 @@ public class ProductRepository {
 
         private GetRequestProductsInRequestStoredProc() {
             super(jdbcTemplate, PROC_NAME);
-            declareParameter(new SqlParameter("in_request_id", Types.INTEGER));
+            declareParameter(new SqlParameter("in_requestId", Types.BIGINT));
             declareParameter(new SqlReturnResultSet("products", new RequestProductMapper()));
             compile();
         }
 
         private List<RequestProduct> execute(long reqId) {
             Map<String, Object> inputs = new HashMap<>();
-            inputs.put("in_request_id", reqId);
+            inputs.put("in_requestId", reqId);
 
             Map<String, Object> outputs = execute(inputs);
             return (List<RequestProduct>) outputs.get("products");
         }
     }
 
-
     /**
-     * Responsible for calling the stored procedure to update the products_requests table and populating
-     * Requests with RequestProducts;
+     * Responsible for calling the stored procedure to add a product to a request
      */
     private class AddProductToRequestStoredProc extends StoredProcedure {
         private static final String procName = "req_productInRequest_insert";
 
         private AddProductToRequestStoredProc() {
             super(jdbcTemplate, procName);
-            declareParameter(new SqlParameter("in_request_id", Types.INTEGER));
-            declareParameter(new SqlInOutParameter("inout_product_id", Types.INTEGER));
-            declareParameter(new SqlInOutParameter("inout_product_status_id", Types.INTEGER));
-            declareParameter(new SqlOutParameter("out_product_name", Types.VARCHAR));
+            declareParameter(new SqlParameter("in_requestId", Types.BIGINT));
+            declareParameter(new SqlInOutParameter("inout_productCode", Types.VARCHAR));
+            declareParameter(new SqlInOutParameter("inout_statusCode", Types.CHAR));
+            declareParameter(new SqlOutParameter("out_productDescription", Types.VARCHAR));
             compile();
         }
 
         /**
          * Associates a product with a request and returns a RequestProduct object
-         * @param prodId Id number of Product to add.
+         * @param productCode Code of the product to add.
          * @param reqId Id number of the Request being added to
          * @return Request with RequestedProduct in it.
          */
-        private RequestProduct execute(long prodId, long reqId) {
+        private RequestProduct execute(String productCode, long reqId) {
             Map<String, Object> inputs = new HashMap<>();
-            inputs.put("in_request_id", reqId);
-            inputs.put("inout_product_id", prodId);
-            inputs.put("inout_product_status_id", 1);       // TODO Hardcoded product status value until enum set
+            inputs.put("in_requestId", reqId);
+            inputs.put("inout_productCode", productCode);
+            inputs.put("inout_statusCode", "PEND");       // TODO Hardcoded product status value until enum set
 
             Map<String, Object> outputs = execute(inputs);
 
@@ -138,14 +135,14 @@ public class ProductRepository {
         private RequestProduct mapResponseToRequestProduct(Map<String, Object> responseMap) {
             try {
                 Product p = new Product();
-                p.setId((long) responseMap.get("inout_product_id"));
-                p.setName((String) responseMap.get("out_product_name"));
+                p.setCode((String) responseMap.get("inout_productCode"));
+                p.setDescription((String) responseMap.get("out_productDescription"));
 
-                long pStatusId = (long) responseMap.get("inout_product_status_id");
+                String productStatusCode = (String) responseMap.get("inout_statusCode");
 
                 RequestProduct rp = new RequestProduct();
                 rp.setProduct(p);
-                rp.setProductStatus_id(pStatusId);
+                rp.setStatusCode(productStatusCode);
 
                 return rp;
 

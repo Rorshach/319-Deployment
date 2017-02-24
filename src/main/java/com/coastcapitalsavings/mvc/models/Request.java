@@ -12,13 +12,13 @@ import java.util.List;
  */
 @Data
 public class Request {
-    private long id;            // seems like MySQL unsigned int == java long
+    private long id;        // mysql BIGINT
     private String notes;
     private Timestamp dateCreated;
-    private int submittedBy_employeeId;
+    private String submittedBy;
     private Timestamp dateModified;
-    private int lastModifiedBy_employeeId;
-    private long requestStatus_id;
+    private String lastModifiedBy;
+    private String statusCode;
     private List<RequestProduct> products;       // Storing as a list stops us from having to write a painful map serializer
 
 

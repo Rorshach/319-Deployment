@@ -28,7 +28,7 @@ public class CategoryRepository {
     JdbcTemplate jdbcTemplate;
 
     public List<Category> getAllCategories() throws DataAccessException {
-        String query = "call req_categories_getAll";
+        String query = "call req_category_lookupAll";
         return jdbcTemplate.execute(query, new PreparedStatementCallback<List<Category>>() {
 
             @Override
@@ -52,8 +52,8 @@ public class CategoryRepository {
         @Override
         public Category mapRow(ResultSet rs, int rowNum) throws SQLException {
             Category c = new Category();
-            c.setCid(rs.getInt("id"));
-            c.setName(rs.getString("name"));
+            c.setCode(rs.getString("categoryCode"));
+            c.setDescription(rs.getString("categoryDescription"));
             return c;
         }
     }

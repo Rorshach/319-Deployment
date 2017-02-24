@@ -14,12 +14,12 @@ public class RequestProductMapper implements RowMapper<RequestProduct> {
     @Override
     public RequestProduct mapRow(ResultSet rs, int rowNum) throws SQLException {
         Product p = new Product();
-        p.setId(rs.getLong("id"));
-        p.setName(rs.getString("name"));
+        p.setCode(rs.getString("productCode"));
+        p.setDescription(rs.getString("productDescription"));
 
         RequestProduct rp = new RequestProduct();
         rp.setProduct(p);
-        rp.setProductStatus_id(rs.getLong("product_status_id"));
+        rp.setStatusCode(rs.getString("statusCode"));
 
         return rp;
     }

@@ -28,14 +28,14 @@ public class ProfileService {
         return profileRepo.getAllProfiles();
     }
 
-    public Profile getProfilebyId(long profileId) {
-        if (profileRepo.checkProfileExists(profileId)) {
-            Profile profile = profileRepo.getProfileById(profileId);
-            List<Product> products = productRepo.getProductsInProfileByProfileId(profileId);
+    public Profile getProfilebyId(String profileCode) {
+        if (profileRepo.checkProfileExists(profileCode)) {
+            Profile profile = profileRepo.getProfileById(profileCode);
+            List<Product> products = productRepo.getProductsInProfileByProfileCode(profileCode);
             profile.setProducts(products);
             return profile;
         } else {
-            throw new DataRetrievalFailureException("Cannot find resource in database: Profile: id " + profileId);
+            throw new DataRetrievalFailureException("Cannot find resource in database: Profile: id " + profileCode);
         }
     }
 }
