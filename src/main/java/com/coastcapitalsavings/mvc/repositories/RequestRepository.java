@@ -136,7 +136,7 @@ public class RequestRepository {
                 req.setSubmittedBy_employeeId((int)responseMap.get("out_submittedBy_id"));
                 req.setDateModified((Timestamp)responseMap.get("out_lastModified"));
                 req.setLastModifiedBy_employeeId((int)responseMap.get("out_lastModifiedBy_id"));
-                req.setRequestStatus_id((int)responseMap.get("out_status_id"));
+                req.setRequestStatus_id((int)responseMap.get("out_status_id")); //TODO: Casted to int but returned value should be long. No errors as of 2017-02-23
                 return req;
             } catch (ClassCastException e) {
                 System.err.println("Class cast exception in getRequestById.mapResponseToRequest, check DB");
