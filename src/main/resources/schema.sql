@@ -427,3 +427,24 @@ CREATE PROCEDURE req_request_lookupById
   END ^;
 
 ^;
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve a list of products associated with a category, given a category id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	in_category_id   INT UNSIGNED
+#
+# Returns:    	products recordset
+#
+# Created By:  	Felix Tso
+# Created On:  	2017-2-24
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_productInCategory_lookupByProductId^;
+CREATE PROCEDURE req_productInCategory_lookupByProductId
+  (INOUT in_category_id INT UNSIGNED)
+  BEGIN
+    SELECT p.id, p.name FROM products p JOIN products_categories pp ON p.id = pp.product_id WHERE pp.category_id = in_category_id;
+  END ^;
+
+^;
