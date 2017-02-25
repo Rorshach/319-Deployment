@@ -3,7 +3,9 @@ package com.coastcapitalsavings.mvc.repositories;
 
 import com.coastcapitalsavings.mvc.models.Profile;
 import com.coastcapitalsavings.mvc.repositories.mapper.ProductMapper;
+import org.apache.catalina.Store;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Repository;
 
 import com.coastcapitalsavings.mvc.models.Product;
@@ -29,7 +31,7 @@ public class ProductRepository {
     GetRequestProductsInRequestStoredProc getRequestProductsInRequestStoredProc;
     AddProductToRequestStoredProc addProductToRequestStoredProc;
     GetProductInProfileStoredProc getProductInProfileStoredProc;
-
+    GetProductInCategoryStoredProc getProductInCategoryStoredProc;
     /*
     Tricky:  Need to do this instead of autowiring the Jdbc template so that we can ensure that the
     template is up before the stored procedures are initialized.
@@ -40,6 +42,7 @@ public class ProductRepository {
         getRequestProductsInRequestStoredProc = new GetRequestProductsInRequestStoredProc();
         addProductToRequestStoredProc = new AddProductToRequestStoredProc();
         getProductInProfileStoredProc = new GetProductInProfileStoredProc();
+        getProductInCategoryStoredProc = new GetProductInCategoryStoredProc();
     }
 
     public List<RequestProduct> getRequestProductsinRequestByRequestId(long reqId) {
@@ -52,6 +55,10 @@ public class ProductRepository {
 
     public List<Product> getProductsInProfileByProfileId(long profileId) {
         return getProductInProfileStoredProc.execute(profileId);
+    }
+
+    public List<Product> getProductsInCategoryByCategoryId(long categoryId) {
+        return getProductInCategoryStoredProc.execute(categoryId);
     }
 
     private class GetProductInProfileStoredProc extends StoredProcedure {
@@ -71,6 +78,26 @@ public class ProductRepository {
 
             Map<String, Object> outputs = execute(inputs);
             return (List<Product>) outputs.get("products");
+        }
+    }
+
+    private class GetProductInCategoryStoredProc extends StoredProcedure {
+        private static final String PROC_NAME = "req_productInCategory_lookupByProductId";
+
+        private GetProductInCategoryStoredProc() {
+            super(jdbcTemplate, PROC_NAME);
+            declareParameter(new SqlParameter("in_category_id", Types.INTEGER));
+            declareParameter(new SqlReturnResultSet("products", new ProductMapper()));
+            compile();
+        }
+
+        private List<Product> execute(long categoryId) {
+            Map<String, Object> inputs = new HashMap<>();
+            inputs.put("in_category_id", categoryId);
+
+            Map<String, Object> outputs = execute(inputs);
+            return (List<Product>) outputs.get("products");
+
         }
     }
 
