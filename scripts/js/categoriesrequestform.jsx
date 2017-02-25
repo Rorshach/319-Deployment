@@ -35,7 +35,7 @@ export default class CategoriesRequestForm extends React.Component {
         }
     }
 
-    getCategories(id) {
+    getProducts(id) {
         request
            .get("/categories/"+ id)
            .end((err, res) => {
@@ -82,7 +82,7 @@ export default class CategoriesRequestForm extends React.Component {
     }
 
     getProductsInCategories(e) {
-        this.getCategories(e.target.options[e.target.selectedIndex].value);
+        this.getProducts(e.target.options[e.target.selectedIndex].value);
         this.setState({categoryOption: e.target.options[e.target.selectedIndex].value});
     }
 

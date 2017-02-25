@@ -54204,8 +54204,8 @@
 	    }
 
 	    _createClass(CategoriesRequestForm, [{
-	        key: 'getCategories',
-	        value: function getCategories(id) {
+	        key: 'getProducts',
+	        value: function getProducts(id) {
 	            var _this2 = this;
 
 	            _superagent2.default.get("/categories/" + id).end(function (err, res) {
@@ -54258,7 +54258,7 @@
 	    }, {
 	        key: 'getProductsInCategories',
 	        value: function getProductsInCategories(e) {
-	            this.getCategories(e.target.options[e.target.selectedIndex].value);
+	            this.getProducts(e.target.options[e.target.selectedIndex].value);
 	            this.setState({ categoryOption: e.target.options[e.target.selectedIndex].value });
 	        }
 	    }, {
