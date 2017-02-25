@@ -2,8 +2,11 @@ package com.coastcapitalsavings.mvc.controllers;
 
 
 
+import com.coastcapitalsavings.mvc.services.CategoryService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataRetrievalFailureException;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,17 +31,30 @@ import java.util.List;
 public class CategoriesController {
 
     @Autowired
-    CategoryRepository controllerRepo;
+    CategoryRepository categoryRepo;
+
+    @Autowired
+    CategoryService categoryService;
 
     @JsonView(ModelViews.Summary.class)
     @RequestMapping(method= RequestMethod.GET)
     public ResponseEntity<List<Category>> getAllCategories() {
         try {
-            List<Category> response = controllerRepo.getAllCategories();
+            List<Category> response = categoryService.getAllCategories();
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (DataAccessException e) {
             System.err.println(new Date() + " " +  e.getMessage());     // TODO:  Can be logged by a logger
             return new ResponseEntity(Responses.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value="/{categoryId}", method=RequestMethod.GET)
+    public ResponseEntity<Category> getCategoryById(@PathVariable String categoryId) {
+        try {
+            Category c = categoryService.getCategoryById(categoryId);
+            return new ResponseEntity<Category>(c, HttpStatus.OK);
+        } catch (DataRetrievalFailureException e) {
+            return new ResponseEntity(Responses.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
     }
 }

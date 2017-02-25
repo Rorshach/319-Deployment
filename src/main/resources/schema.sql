@@ -405,3 +405,48 @@ CREATE PROCEDURE req_request_lookupById
   END ^;
 
 ^;
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve a category given its id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	inout_categoryCode   VARCHAR(15)
+#
+# Returns:    	category record
+#
+# Created By:  	Chris Semiao, Felix Tso
+# Created On:  	2017-2-24
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_category_lookupById^;
+CREATE PROCEDURE req_category_lookupById
+  (
+    INOUT inout_categoryCode VARCHAR(15),
+    OUT out_categoryDescription VARCHAR(50)
+  )
+  BEGIN
+    SELECT categoryDescription INTO out_categoryDescription FROM category WHERE categoryCode = inout_categoryCode;
+  END ^;
+
+^;
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve a list of products associated with a category, given a category id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	in_categoryCode   VARCHAR(15)
+#
+# Returns:    	products recordset
+#
+# Created By:  	Felix Tso
+# Created On:  	2017-2-24
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_productInCategory_lookupByProductId^;
+CREATE PROCEDURE req_productInCategory_lookupByProductId
+  (IN in_categoryCode VARCHAR(15))
+  BEGIN
+    SELECT p.productCode, p.productDescription FROM Product p JOIN Product_Category pc ON p.productCode = pc.productCode WHERE pc.categoryCode = in_categoryCode;
+  END ^;
+
+^;
