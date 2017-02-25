@@ -35,9 +35,9 @@ export default class CategoriesRequestForm extends React.Component {
         }
     }
 
-    getCategories() {
+    getCategories(id) {
         request
-           .get("/categories")
+           .get("/categories/"+ id)
            .end((err, res) => {
                 if (err) {
                     this.setState({
@@ -46,9 +46,9 @@ export default class CategoriesRequestForm extends React.Component {
                     });
                 } else {
                     var categoryOptions = [];
-                    var jsonResponse = JSON.parse(res.text);
+                    var jsonResponse = JSON.parse(res.text).products;
                     for (var i = 0; i < jsonResponse.length; i++) {
-                        categoryOptions.push(<option value={jsonResponse[i].cid} key={jsonResponse[i].cid}>{jsonResponse[i].name}</option>);
+                        categoryOptions.push(<option value={jsonResponse[i].code} key={jsonResponse[i].code}>{jsonResponse[i].description}</option>);
                     }
                     this.setState({
                         categoryResponse : categoryOptions
@@ -82,12 +82,8 @@ export default class CategoriesRequestForm extends React.Component {
     }
 
     getProductsInCategories(e) {
-      for (var i = 0; i < this.state.categoriesResponse.length; i++) {
-        if (e.target.options[i].selected) {
-          this.getCategories();
-          this.setState({categoryOption: e.target.options[i].value});
-        }
-      }
+        this.getCategories(e.target.options[e.target.selectedIndex].value);
+        this.setState({categoryOption: e.target.options[e.target.selectedIndex].value});
     }
 
     componentWillMount() {
@@ -104,7 +100,7 @@ export default class CategoriesRequestForm extends React.Component {
                   var categoriesOptions = [];
                   var jsonResponse = JSON.parse(res.text);
                   for (var i = 0; i < jsonResponse.length; i++) {
-                      categoriesOptions.push(<option value={jsonResponse[i].cid} key={jsonResponse[i].cid}>{jsonResponse[i].name}</option>);
+                      categoriesOptions.push(<option value={jsonResponse[i].code} key={jsonResponse[i].code}>{jsonResponse[i].description}</option>);
                   }
                   this.setState({
                       categoriesResponse : categoriesOptions
@@ -118,8 +114,14 @@ export default class CategoriesRequestForm extends React.Component {
     }
 
     createCheckboxes(e) {
-        if (e.target.value !== null && e.target.value !== "") {
-          this.toggleCheckbox(e.target.text, e.target.value);
+        var selected;
+        try {
+          selected = e.target.options[e.target.selectedIndex];
+        } catch (err) {
+          selected = e.target;
+        }
+        if (selected.value !== null && selected.value !== "") {
+          this.toggleCheckbox(selected.text, selected.value);
         }
     }
 
@@ -179,7 +181,7 @@ export default class CategoriesRequestForm extends React.Component {
                   <Col sm={8}>
                     <FormControl className="categoryResponse" componentClass="select" multiple style={{ height : 200 }} onClick={this.createCheckboxes} disabled={this.state.hasOverThreeItems}>
                       {this.state.categoryResponse}
-                  </FormControl>
+                    </FormControl>
                   </Col>
                 </Row>
                 <p/>

@@ -8222,11 +8222,7 @@
 
 	var _categoriesrequestform2 = _interopRequireDefault(_categoriesrequestform);
 
-<<<<<<< a11c4cd9662217ef28f0c990db64631524d1d0af
 	var _profilerequestform = __webpack_require__(745);
-=======
-	var _profilerequestform = __webpack_require__(753);
->>>>>>> Mock categories request form
 
 	var _profilerequestform2 = _interopRequireDefault(_profilerequestform);
 
@@ -29576,14 +29572,6 @@
 
 	var _categoriesrequestform2 = _interopRequireDefault(_categoriesrequestform);
 
-	var _profilerequestform = __webpack_require__(753);
-
-	var _profilerequestform2 = _interopRequireDefault(_profilerequestform);
-
-	var _categoriesrequestform = __webpack_require__(754);
-
-	var _categoriesrequestform2 = _interopRequireDefault(_categoriesrequestform);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -29601,11 +29589,6 @@
 	        var _this = _possibleConstructorReturn(this, (RequestForm.__proto__ || Object.getPrototypeOf(RequestForm)).call(this, props));
 
 	        _this.state = {
-<<<<<<< a11c4cd9662217ef28f0c990db64631524d1d0af
-=======
-	            statusDisplay: false,
-	            statusMessage: null,
->>>>>>> Mock categories request form
 	            selectedOption: null
 	        };
 	        (0, _classAutobind2.default)(_this);
@@ -29617,27 +29600,12 @@
 	        value: function handleOptionChange(e) {
 	            this.setState({ selectedOption: e });
 	        }
-<<<<<<< a11c4cd9662217ef28f0c990db64631524d1d0af
 	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _this2 = this;
 
 	            var form;
-=======
-	    }, {
-	        key: 'handleOptionChange',
-	        value: function handleOptionChange(e) {
-	            this.setState({ selectedOption: e });
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var _this3 = this;
-
-	            var form;
-	            var alert;
->>>>>>> Mock categories request form
 
 	            if (this.state.selectedOption === 'categories') {
 	                form = _react2.default.createElement(_categoriesrequestform2.default, null);
@@ -29645,13 +29613,6 @@
 	                form = _react2.default.createElement(_profilerequestform2.default, null);
 	            }
 
-<<<<<<< a11c4cd9662217ef28f0c990db64631524d1d0af
-=======
-	            if (this.state.statusDisplay === true) {
-	                alert = _react2.default.createElement(_alerts2.default, { title: this.state.statusMessage });
-	            }
-
->>>>>>> Mock categories request form
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -29660,7 +29621,6 @@
 	                    null,
 	                    'Create a Request'
 	                ),
-<<<<<<< a11c4cd9662217ef28f0c990db64631524d1d0af
 	                _react2.default.createElement(
 	                    _reactBootstrap.ControlLabel,
 	                    null,
@@ -29677,29 +29637,6 @@
 	                        _reactBootstrap.FormGroup,
 	                        { controlId: 'formControlsSelect' },
 	                        _react2.default.createElement(
-=======
-	                alert,
-	                _react2.default.createElement(
-	                    _reactBootstrap.Form,
-	                    { horizontal: true },
-	                    _react2.default.createElement(
-	                        _reactBootstrap.FormGroup,
-	                        { controlId: 'formControlsSelect' },
-	                        _react2.default.createElement(
-	                            _reactBootstrap.Col,
-	                            { smOffset: 1 },
-	                            _react2.default.createElement(
-	                                _reactBootstrap.ControlLabel,
-	                                null,
-	                                _react2.default.createElement(
-	                                    'b',
-	                                    null,
-	                                    'Select a Product Type'
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
->>>>>>> Mock categories request form
 	                            _reactBootstrap.FormGroup,
 	                            null,
 	                            _react2.default.createElement(
@@ -29711,11 +29648,7 @@
 	                                    _react2.default.createElement(
 	                                        _reactBootstrap.Radio,
 	                                        { inline: true, name: 'groupOptions', onChange: function onChange() {
-<<<<<<< a11c4cd9662217ef28f0c990db64631524d1d0af
 	                                                return _this2.handleOptionChange('categories');
-=======
-	                                                return _this3.handleOptionChange('categories');
->>>>>>> Mock categories request form
 	                                            } },
 	                                        'Categories'
 	                                    )
@@ -29726,31 +29659,16 @@
 	                                    _react2.default.createElement(
 	                                        _reactBootstrap.Radio,
 	                                        { inline: true, name: 'groupOptions', onChange: function onChange() {
-<<<<<<< a11c4cd9662217ef28f0c990db64631524d1d0af
 	                                                return _this2.handleOptionChange('profiles');
-=======
-	                                                return _this3.handleOptionChange('profiles');
->>>>>>> Mock categories request form
 	                                            } },
 	                                        'Profiles'
 	                                    )
 	                                )
 	                            )
-<<<<<<< a11c4cd9662217ef28f0c990db64631524d1d0af
 	                        )
 	                    )
 	                ),
 	                form
-=======
-	                        ),
-	                        _react2.default.createElement(
-	                            _reactBootstrap.Col,
-	                            { smOffset: 1, sm: 10 },
-	                            form
-	                        )
-	                    )
-	                )
->>>>>>> Mock categories request form
 	            );
 	        }
 	    }]);
@@ -54280,17 +54198,17 @@
 	            statusMessage: null,
 	            categoriesResponse: null,
 	            categoryResponse: null,
-	            description: null
+	            description: ""
 	        };
 	        return _this;
 	    }
 
 	    _createClass(CategoriesRequestForm, [{
 	        key: 'getCategories',
-	        value: function getCategories() {
+	        value: function getCategories(id) {
 	            var _this2 = this;
 
-	            _superagent2.default.get("/categories").end(function (err, res) {
+	            _superagent2.default.get("/categories/" + id).end(function (err, res) {
 	                if (err) {
 	                    _this2.setState({
 	                        statusMessage: err,
@@ -54298,12 +54216,12 @@
 	                    });
 	                } else {
 	                    var categoryOptions = [];
-	                    var jsonResponse = JSON.parse(res.text);
+	                    var jsonResponse = JSON.parse(res.text).products;
 	                    for (var i = 0; i < jsonResponse.length; i++) {
 	                        categoryOptions.push(_react2.default.createElement(
 	                            'option',
-	                            { value: jsonResponse[i].cid, key: jsonResponse[i].cid },
-	                            jsonResponse[i].name
+	                            { value: jsonResponse[i].code, key: jsonResponse[i].code },
+	                            jsonResponse[i].description
 	                        ));
 	                    }
 	                    _this2.setState({
@@ -54313,17 +54231,16 @@
 	            });
 	        }
 	    }, {
-	        key: 'callRequest',
-	        value: function callRequest(e) {
+	        key: 'submitRequest',
+	        value: function submitRequest(e) {
 	            var _this3 = this;
 
 	            e.preventDefault();
-	            console.log(this.selectedItemsList);
-	            console.log(this.state.description);
-	            _superagent2.default.get("/categories")
-	            //.send({ "category_id": 11})
-	            .end(function (err, res) {
-	                console.log(JSON.parse(res.text));
+	            var selectedItemsKeys = this.selectedItemsList.map(function (e) {
+	                return e.key;
+	            });
+	            var payload = { "products": selectedItemsKeys, "notes": this.state.description };
+	            _superagent2.default.post("/requests").send(payload).end(function (err, res) {
 	                if (err) {
 	                    _this3.setState({
 	                        statusMessage: "noConnection",
@@ -54334,18 +54251,15 @@
 	                        statusMessage: "Success",
 	                        statusDisplay: true
 	                    });
+	                    window.location.reload();
 	                }
 	            });
 	        }
 	    }, {
 	        key: 'getProductsInCategories',
 	        value: function getProductsInCategories(e) {
-	            for (var i = 0; i < this.state.categoriesResponse.length; i++) {
-	                if (e.target.options[i].selected) {
-	                    this.getCategories();
-	                    this.setState({ categoryOption: e.target.options[i].value });
-	                }
-	            }
+	            this.getCategories(e.target.options[e.target.selectedIndex].value);
+	            this.setState({ categoryOption: e.target.options[e.target.selectedIndex].value });
 	        }
 	    }, {
 	        key: 'componentWillMount',
@@ -54365,8 +54279,8 @@
 	                    for (var i = 0; i < jsonResponse.length; i++) {
 	                        categoriesOptions.push(_react2.default.createElement(
 	                            'option',
-	                            { value: jsonResponse[i].cid, key: jsonResponse[i].cid },
-	                            jsonResponse[i].name
+	                            { value: jsonResponse[i].code, key: jsonResponse[i].code },
+	                            jsonResponse[i].description
 	                        ));
 	                    }
 	                    _this4.setState({
@@ -54391,8 +54305,14 @@
 	    }, {
 	        key: 'createCheckboxes',
 	        value: function createCheckboxes(e) {
-	            if (e.target.value !== null && e.target.value !== "") {
-	                this.toggleCheckbox(e.target.text, e.target.value);
+	            var selected;
+	            try {
+	                selected = e.target.options[e.target.selectedIndex];
+	            } catch (err) {
+	                selected = e.target;
+	            }
+	            if (selected.value !== null && selected.value !== "") {
+	                this.toggleCheckbox(selected.text, selected.value);
 	            }
 	        }
 	    }, {
@@ -54444,7 +54364,7 @@
 
 	            return _react2.default.createElement(
 	                _reactBootstrap.Form,
-	                { onSubmit: this.callRequest },
+	                { onSubmit: this.submitRequest },
 	                alert,
 	                _react2.default.createElement(
 	                    _reactBootstrap.FormGroup,
@@ -54471,7 +54391,7 @@
 	                            { sm: 4 },
 	                            _react2.default.createElement(
 	                                _reactBootstrap.FormControl,
-	                                { componentClass: 'select', multiple: true, style: { height: 200 }, onChange: this.getProductsInCategories, disabled: this.state.hasOverThreeItems },
+	                                { className: 'categoriesResponse', componentClass: 'select', multiple: true, style: { height: 200 }, onChange: this.getProductsInCategories, disabled: this.state.hasOverThreeItems },
 	                                this.state.categoriesResponse
 	                            )
 	                        ),
@@ -54480,7 +54400,7 @@
 	                            { sm: 8 },
 	                            _react2.default.createElement(
 	                                _reactBootstrap.FormControl,
-	                                { componentClass: 'select', multiple: true, style: { height: 200 }, onClick: this.createCheckboxes, disabled: this.state.hasOverThreeItems },
+	                                { className: 'categoryResponse', componentClass: 'select', multiple: true, style: { height: 200 }, onClick: this.createCheckboxes, disabled: this.state.hasOverThreeItems },
 	                                this.state.categoryResponse
 	                            )
 	                        )
@@ -54497,7 +54417,7 @@
 	                    ),
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Well,
-	                        { style: { height: 135 } },
+	                        { style: { height: 135 }, className: 'selectedItems' },
 	                        this.selectedItemsCheckboxes
 	                    ),
 	                    _react2.default.createElement(
@@ -54517,12 +54437,12 @@
 	                            null,
 	                            'Enter an optional short description about your request (max 250 characters).'
 	                        ),
-	                        _react2.default.createElement(_reactBootstrap.FormControl, { componentClass: 'textarea', placeholder: 'Description', maxLength: '250', onChange: this.handleDescription })
+	                        _react2.default.createElement(_reactBootstrap.FormControl, { className: 'description', componentClass: 'textarea', placeholder: 'Description', maxLength: '250', onChange: this.handleDescription })
 	                    ),
 	                    _react2.default.createElement('p', null),
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Button,
-	                        { type: 'submit', disabled: !this.state.canSubmit },
+	                        { type: 'submit', className: 'submitBtn', disabled: !this.state.canSubmit },
 	                        'Submit Request'
 	                    )
 	                )
@@ -54531,385 +54451,6 @@
 	    }]);
 
 	    return CategoriesRequestForm;
-	}(_react2.default.Component);
-
-	exports.default = CategoriesRequestForm;
-
-/***/ },
-/* 755 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(300);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(330);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _superagent = __webpack_require__(477);
-
-	var _superagent2 = _interopRequireDefault(_superagent);
-
-	var _classAutobind = __webpack_require__(485);
-
-	var _classAutobind2 = _interopRequireDefault(_classAutobind);
-
-	var _reactBootstrap = __webpack_require__(501);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ProfileRequestForm = function (_React$Component) {
-	    _inherits(ProfileRequestForm, _React$Component);
-
-	    function ProfileRequestForm(props) {
-	        _classCallCheck(this, ProfileRequestForm);
-
-	        var _this = _possibleConstructorReturn(this, (ProfileRequestForm.__proto__ || Object.getPrototypeOf(ProfileRequestForm)).call(this, props));
-
-	        (0, _classAutobind2.default)(_this);
-	        return _this;
-	    }
-
-	    _createClass(ProfileRequestForm, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                _reactBootstrap.FormGroup,
-	                null,
-	                _react2.default.createElement(
-	                    _reactBootstrap.ControlLabel,
-	                    null,
-	                    _react2.default.createElement(
-	                        'b',
-	                        null,
-	                        'Select a Profile'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    _reactBootstrap.Row,
-	                    null,
-	                    _react2.default.createElement(
-	                        _reactBootstrap.Col,
-	                        { sm: 4 },
-	                        _react2.default.createElement(
-	                            _reactBootstrap.FormControl,
-	                            { componentClass: 'select', multiple: true, style: { height: 200 } },
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: 'profile1' },
-	                                'Profile 1'
-	                            ),
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: 'profile2' },
-	                                'Profile 2'
-	                            ),
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: 'profile3' },
-	                                'Profile 3'
-	                            ),
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: 'profile4' },
-	                                'Profile 4'
-	                            ),
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: 'profile5' },
-	                                'Profile 5'
-	                            ),
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: 'profile6' },
-	                                'Profile 6'
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        _reactBootstrap.Col,
-	                        { sm: 8 },
-	                        _react2.default.createElement(
-	                            _reactBootstrap.FormControl,
-	                            { componentClass: 'textarea', readOnly: true, style: { height: 200 } },
-	                            'Test test test'
-	                        )
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return ProfileRequestForm;
-	}(_react2.default.Component);
-
-	exports.default = ProfileRequestForm;
-
-/***/ },
-/* 754 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(300);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(330);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _superagent = __webpack_require__(477);
-
-	var _superagent2 = _interopRequireDefault(_superagent);
-
-	var _classAutobind = __webpack_require__(485);
-
-	var _classAutobind2 = _interopRequireDefault(_classAutobind);
-
-	var _reactBootstrap = __webpack_require__(501);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var CategoriesRequestForm = function (_React$Component) {
-	  _inherits(CategoriesRequestForm, _React$Component);
-
-	  function CategoriesRequestForm(props) {
-	    _classCallCheck(this, CategoriesRequestForm);
-
-	    var _this = _possibleConstructorReturn(this, (CategoriesRequestForm.__proto__ || Object.getPrototypeOf(CategoriesRequestForm)).call(this, props));
-
-	    (0, _classAutobind2.default)(_this);
-	    var selectedCheckboxesSet = null;
-	    var categories = null;
-	    var selectedProducts = null;
-
-	    _this.state = {
-	      isCheckboxSelected: false,
-	      categoryOption: null,
-	      hasOverThreeItems: false,
-	      canSubmit: false
-	    };
-	    return _this;
-	  }
-
-	  _createClass(CategoriesRequestForm, [{
-	    key: 'getProductsInCategories',
-	    value: function getProductsInCategories(e) {
-	      var checkboxes = new Array();
-	      for (var i = 0; i < 6; i++) {
-	        if (e.target.options[i].selected) {
-	          var label = "Category" + i;
-	          checkboxes.push(_react2.default.createElement(
-	            'option',
-	            { value: label, key: label },
-	            label
-	          ));
-	          this.setState({ categoryOption: e.target.options[i].value });
-	        }
-	      }
-	      this.categories = checkboxes;
-	    }
-	  }, {
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      this.selectedCheckboxesSet = new Set();
-	    }
-	  }, {
-	    key: 'createCheckbox',
-	    value: function createCheckbox(label) {
-	      var _this2 = this;
-
-	      return _react2.default.createElement(
-	        _reactBootstrap.Checkbox,
-	        { onChange: function onChange() {
-	            return _this2.toggleCheckbox(label);
-	          }, checked: true, key: label },
-	        label
-	      );
-	    }
-	  }, {
-	    key: 'createCheckboxes',
-	    value: function createCheckboxes(e) {
-	      if (e.target.value !== null && e.target.value !== "") {
-	        this.toggleCheckbox(e.target.value);
-	      }
-	    }
-	  }, {
-	    key: 'toggleCheckbox',
-	    value: function toggleCheckbox(label) {
-	      if (this.selectedCheckboxesSet.has(label)) {
-	        this.selectedCheckboxesSet.delete(label);
-	        this.setState({ isCheckboxSelected: false });
-	      } else {
-	        this.selectedCheckboxesSet.add(label);
-	        this.setState({ isCheckboxSelected: true });
-	      }
-
-	      if (this.selectedCheckboxesSet.size > 0) {
-	        this.setState({ canSubmit: true });
-	      } else {
-	        this.setState({ canSubmit: false });
-	      }
-
-	      if (this.selectedCheckboxesSet.size > 2) {
-	        this.setState({ hasOverThreeItems: true });
-	      } else {
-	        this.setState({ hasOverThreeItems: false });
-	      }
-
-	      var array = [];
-	      var data = this;
-	      this.selectedCheckboxesSet.forEach(function (i) {
-	        array.push(i);
-	      });
-	      this.selectedProducts = array.map(function (a) {
-	        return data.createCheckbox(a, true);
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        _reactBootstrap.FormGroup,
-	        null,
-	        _react2.default.createElement(
-	          _reactBootstrap.ControlLabel,
-	          null,
-	          _react2.default.createElement(
-	            'b',
-	            null,
-	            'Select a Category'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          _reactBootstrap.HelpBlock,
-	          null,
-	          'Select up to 3 items.'
-	        ),
-	        _react2.default.createElement(
-	          _reactBootstrap.Row,
-	          null,
-	          _react2.default.createElement(
-	            _reactBootstrap.Col,
-	            { sm: 4 },
-	            _react2.default.createElement(
-	              _reactBootstrap.FormControl,
-	              { componentClass: 'select', multiple: true, style: { height: 200 }, onChange: this.getProductsInCategories, disabled: this.state.hasOverThreeItems },
-	              _react2.default.createElement(
-	                'option',
-	                { value: 'category1' },
-	                'Category 1'
-	              ),
-	              _react2.default.createElement(
-	                'option',
-	                { value: 'category2' },
-	                'Category 2'
-	              ),
-	              _react2.default.createElement(
-	                'option',
-	                { value: 'category3' },
-	                'Category 3'
-	              ),
-	              _react2.default.createElement(
-	                'option',
-	                { value: 'category4' },
-	                'Category 4'
-	              ),
-	              _react2.default.createElement(
-	                'option',
-	                { value: 'category5' },
-	                'Category 5'
-	              ),
-	              _react2.default.createElement(
-	                'option',
-	                { value: 'category6' },
-	                'Category 6'
-	              )
-	            )
-	          ),
-	          _react2.default.createElement(
-	            _reactBootstrap.Col,
-	            { sm: 8 },
-	            _react2.default.createElement(
-	              _reactBootstrap.FormControl,
-	              { componentClass: 'select', multiple: true, style: { height: 200 }, onClick: this.createCheckboxes, disabled: this.state.hasOverThreeItems },
-	              this.categories
-	            )
-	          )
-	        ),
-	        _react2.default.createElement('p', null),
-	        _react2.default.createElement(
-	          _reactBootstrap.ControlLabel,
-	          null,
-	          _react2.default.createElement(
-	            'b',
-	            null,
-	            'Selected Items'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          _reactBootstrap.Well,
-	          { style: { height: 135 } },
-	          this.selectedProducts
-	        ),
-	        _react2.default.createElement(
-	          _reactBootstrap.Col,
-	          null,
-	          _react2.default.createElement(
-	            _reactBootstrap.ControlLabel,
-	            null,
-	            _react2.default.createElement(
-	              'b',
-	              null,
-	              'Description'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            _reactBootstrap.HelpBlock,
-	            null,
-	            'Enter an optional short description about your request (max 250 characters).'
-	          ),
-	          _react2.default.createElement(_reactBootstrap.FormControl, { componentClass: 'textarea', placeholder: 'Description', maxLength: '250' })
-	        ),
-	        _react2.default.createElement('p', null),
-	        _react2.default.createElement(
-	          _reactBootstrap.Button,
-	          { onSubmit: this.callRequest, type: 'submit', disabled: !this.state.canSubmit },
-	          'Submit Request'
-	        )
-	      );
-	    }
-	  }]);
-
-	  return CategoriesRequestForm;
 	}(_react2.default.Component);
 
 	exports.default = CategoriesRequestForm;
