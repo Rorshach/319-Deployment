@@ -43,10 +43,10 @@ public class ProfilesController {
      * Handles GET to /profiles/id
      * @return a Profile including all product info
      */
-    @RequestMapping(value="/{profileId}", method=RequestMethod.GET)
-    public ResponseEntity<Profile> getProfileById(@PathVariable long profileId) {
+    @RequestMapping(value="/{profileCode}", method=RequestMethod.GET)
+    public ResponseEntity<Profile> getProfileById(@PathVariable String profileCode) {
         try {
-            Profile profile = profileService.getProfilebyId(profileId);
+            Profile profile = profileService.getProfilebyId(profileCode);
             return new ResponseEntity(profile, HttpStatus.OK);
         } catch (DataRetrievalFailureException e) {
             return new ResponseEntity(Responses.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND);

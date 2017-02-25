@@ -31,7 +31,7 @@ import java.util.List;
 public class CategoriesController {
 
     @Autowired
-    CategoryRepository controllerRepo;
+    CategoryRepository categoryRepo;
 
     @Autowired
     CategoryService categoryService;
@@ -40,7 +40,7 @@ public class CategoriesController {
     @RequestMapping(method= RequestMethod.GET)
     public ResponseEntity<List<Category>> getAllCategories() {
         try {
-            List<Category> response = controllerRepo.getAllCategories();
+            List<Category> response = categoryService.getAllCategories();
             return new ResponseEntity(response, HttpStatus.OK);
         } catch (DataAccessException e) {
             System.err.println(new Date() + " " +  e.getMessage());     // TODO:  Can be logged by a logger
@@ -49,7 +49,7 @@ public class CategoriesController {
     }
 
     @RequestMapping(value="/{categoryId}", method=RequestMethod.GET)
-    public ResponseEntity<Category> getCategoryById(@PathVariable long categoryId) {
+    public ResponseEntity<Category> getCategoryById(@PathVariable String categoryId) {
         try {
             Category c = categoryService.getCategoryById(categoryId);
             return new ResponseEntity<Category>(c, HttpStatus.OK);

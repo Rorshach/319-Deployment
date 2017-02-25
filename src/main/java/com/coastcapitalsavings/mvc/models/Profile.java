@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Data
 public class Profile {
-    @JsonView(ModelViews.Summary.class) private long id;
-    @JsonView(ModelViews.Summary.class) private String name;
+    @JsonView(ModelViews.Summary.class) private String code;
+    @JsonView(ModelViews.Summary.class) private String description;
     private List<Product> products;
 }

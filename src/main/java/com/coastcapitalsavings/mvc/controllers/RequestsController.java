@@ -30,7 +30,7 @@ public class RequestsController {
     public ResponseEntity<Request> getRequestById(@PathVariable long requestId) {
         try {
             Request r = requestService.getRequestById(requestId);
-            return new ResponseEntity<Request>(r, HttpStatus.OK);
+            return new ResponseEntity(r, HttpStatus.OK);
         } catch (DataRetrievalFailureException e) {
             return new ResponseEntity(Responses.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
@@ -57,11 +57,11 @@ public class RequestsController {
 
     @RequestMapping(value="/{requestId}", method=RequestMethod.PUT)
     public ResponseEntity<Request> putNewRequestStatus(@PathVariable long requestId, @RequestBody PutIdBodyInput input) {
-        if (input.getRequestStatus_id() == null) {
+        if (input.getStatusCode() == null) {
             return new ResponseEntity(Responses.MISSING_REQUIRED_PARAMETER, HttpStatus.BAD_REQUEST);
         } else {
             try {
-                Request req = requestService.putNewRequestStatus(requestId, input.getRequestStatus_id());
+                Request req = requestService.putNewRequestStatus(requestId, input.getStatusCode());
                 return new ResponseEntity(req, HttpStatus.OK);
             } catch (DataRetrievalFailureException e) {
                 return new ResponseEntity(Responses.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND);
@@ -79,7 +79,7 @@ public class RequestsController {
     @Data
     private static class PostBodyInput {        // static class required to work properly for jackson
         String notes;
-        long[] products;
+        String[] products;
     }
 
     /**
@@ -87,6 +87,6 @@ public class RequestsController {
      */
     @Data
     private static class PutIdBodyInput {
-        Integer requestStatus_id;
+        String statusCode;
     }
 }

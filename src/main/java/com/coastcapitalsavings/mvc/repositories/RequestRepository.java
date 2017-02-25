@@ -69,9 +69,11 @@ public class RequestRepository {
         return postNewRequestStoredProc.execute(reqToPost);
     }
 
-    public Request putRequestNewStatusId(long reqId, int statusId) {
-        return putRequestNewStatusIdStoredProc.execute(reqId, statusId);
+
+    public Request putRequestNewStatusId(long reqId, String statusCode) {
+        return putRequestNewStatusIdStoredProc.execute(reqId, statusCode);
     }
+
 
     private class CheckRequestExistsStoredProc extends StoredProcedure {
 
@@ -79,14 +81,14 @@ public class RequestRepository {
 
         private CheckRequestExistsStoredProc() {
             super(jdbcTemplate, procName);
-            declareParameter(new SqlParameter("in_id", Types.INTEGER));
+            declareParameter(new SqlParameter("in_requestId", Types.BIGINT));
             declareParameter(new SqlOutParameter("out_exists", Types.BOOLEAN));
             compile();
         }
 
         private boolean execute(long reqId) {
             HashMap<String, Object> inputs = new HashMap<>();
-            inputs.put("in_id",reqId);
+            inputs.put("in_requestId",reqId);
 
             Map<String, Object> outputs = execute(inputs);
             return (boolean) outputs.get("out_exists");
@@ -98,13 +100,13 @@ public class RequestRepository {
 
         private GetRequestByIdStoredProc() {
             super(jdbcTemplate, procName);
-            declareParameter(new SqlInOutParameter("inout_id", Types.INTEGER));
+            declareParameter(new SqlInOutParameter("inout_requestId", Types.BIGINT));
             declareParameter(new SqlOutParameter("out_notes", Types.VARCHAR));
             declareParameter(new SqlOutParameter("out_dateCreated", Types.TIMESTAMP));
-            declareParameter(new SqlOutParameter("out_submittedBy_id", Types.INTEGER));
+            declareParameter(new SqlOutParameter("out_submittedBy", Types.CHAR));
             declareParameter(new SqlOutParameter("out_lastModified", Types.TIMESTAMP));
-            declareParameter(new SqlOutParameter("out_lastModifiedBy_id", Types.INTEGER));
-            declareParameter(new SqlOutParameter("out_status_id", Types.INTEGER));
+            declareParameter(new SqlOutParameter("out_lastModifiedBy", Types.CHAR));
+            declareParameter(new SqlOutParameter("out_statusCode", Types.CHAR));
             compile();
         }
 
@@ -115,7 +117,7 @@ public class RequestRepository {
          */
         private Request execute(long reqId) {
             Map<String, Object> inputs = new HashMap<>();
-            inputs.put("inout_id", reqId);
+            inputs.put("inout_requestId", reqId);
 
             Map<String, Object> outputs= execute(inputs);
 
@@ -130,13 +132,13 @@ public class RequestRepository {
         private Request mapResponseToRequest(Map<String, Object> responseMap) {
             try {
                 Request req = new Request();
-                req.setId((long)responseMap.get("inout_id"));
+                req.setId((long)responseMap.get("inout_requestId"));
                 req.setNotes((String)responseMap.get("out_notes"));
                 req.setDateCreated((Timestamp)responseMap.get("out_dateCreated"));
-                req.setSubmittedBy_employeeId((int)responseMap.get("out_submittedBy_id"));
+                req.setSubmittedBy((String)responseMap.get("out_submittedBy"));
                 req.setDateModified((Timestamp)responseMap.get("out_lastModified"));
-                req.setLastModifiedBy_employeeId((int)responseMap.get("out_lastModifiedBy_id"));
-                req.setRequestStatus_id((int)responseMap.get("out_status_id")); //TODO: Casted to int but returned value should be long. No errors as of 2017-02-23
+                req.setLastModifiedBy((String)responseMap.get("out_lastModifiedBy"));
+                req.setStatusCode((String)responseMap.get("out_statusCode"));
                 return req;
             } catch (ClassCastException e) {
                 System.err.println("Class cast exception in getRequestById.mapResponseToRequest, check DB");
@@ -151,20 +153,20 @@ public class RequestRepository {
 
         private PutRequestNewStatusIdStoredProc() {
             super(jdbcTemplate, procName);
-            declareParameter(new SqlInOutParameter("inout_id", Types.INTEGER));
-            declareParameter(new SqlInOutParameter("inout_status_id", Types.INTEGER));
+            declareParameter(new SqlInOutParameter("inout_requestId", Types.BIGINT));
+            declareParameter(new SqlInOutParameter("inout_inout_statusCode", Types.CHAR));
             declareParameter(new SqlOutParameter("out_notes", Types.VARCHAR));
             declareParameter(new SqlOutParameter("out_dateCreated", Types.TIMESTAMP));
-            declareParameter(new SqlOutParameter("out_submittedBy_id", Types.INTEGER));
+            declareParameter(new SqlOutParameter("out_submittedBy", Types.CHAR));
             declareParameter(new SqlOutParameter("out_lastModified", Types.TIMESTAMP));
-            declareParameter(new SqlOutParameter("out_lastModifiedBy_id", Types.INTEGER));
+            declareParameter(new SqlOutParameter("out_lastModifiedBy", Types.CHAR));
             compile();
         }
 
-        private Request execute(long reqId, int statusId) {
+        private Request execute(long reqId, String statusCode) {
             Map<String, Object> inputs = new HashMap<>();
-            inputs.put("inout_id", reqId);
-            inputs.put("inout_status_id", statusId);
+            inputs.put("inout_requestId", reqId);
+            inputs.put("inout_inout_statusCode", statusCode);
             Map<String, Object> outputs = execute(inputs);
             return mapResponseToRequest(outputs);
         }
@@ -172,13 +174,13 @@ public class RequestRepository {
         private Request mapResponseToRequest(Map<String, Object> responseMap) {
             try {
                 Request req = new Request();
-                req.setId((long) responseMap.get("inout_id"));
-                req.setRequestStatus_id((long) responseMap.get("inout_status_id"));
+                req.setId((long) responseMap.get("inout_requestId"));
+                req.setStatusCode((String) responseMap.get("inout_inout_statusCode"));
                 req.setNotes((String) responseMap.get("out_notes"));
                 req.setDateCreated((Timestamp) responseMap.get("out_dateCreated"));
-                req.setSubmittedBy_employeeId((int) responseMap.get("out_submittedBy_id"));
+                req.setSubmittedBy((String) responseMap.get("out_submittedBy"));
                 req.setDateModified((Timestamp) responseMap.get("out_lastModified"));
-                req.setLastModifiedBy_employeeId((int) responseMap.get("out_lastModifiedBy_id"));
+                req.setLastModifiedBy((String) responseMap.get("out_lastModifiedBy"));
 
                 return req;
 
@@ -201,11 +203,11 @@ public class RequestRepository {
             super(jdbcTemplate, procName);
             declareParameter(new SqlInOutParameter("inout_notes", Types.VARCHAR));
             declareParameter(new SqlInOutParameter("inout_dateCreated", Types.TIMESTAMP));
-            declareParameter(new SqlInOutParameter("inout_submittedBy_id", Types.INTEGER));
+            declareParameter(new SqlInOutParameter("inout_submittedBy", Types.CHAR));
             declareParameter(new SqlInOutParameter("inout_lastModified", Types.TIMESTAMP));
-            declareParameter(new SqlInOutParameter("inout_lastModifiedBy_id", Types.INTEGER));
-            declareParameter(new SqlInOutParameter("inout_status_id", Types.INTEGER));
-            declareParameter(new SqlOutParameter("out_id", Types.INTEGER));
+            declareParameter(new SqlInOutParameter("inout_lastModifiedBy", Types.CHAR));
+            declareParameter(new SqlInOutParameter("inout_statusCode", Types.CHAR));
+            declareParameter(new SqlOutParameter("out_requestId", Types.BIGINT));
             compile();
         }
 
@@ -219,10 +221,10 @@ public class RequestRepository {
             Map<String, Object> inputs = new HashMap<>();
             inputs.put("inout_notes", req.getNotes());
             inputs.put("inout_dateCreated", req.getDateCreated());
-            inputs.put("inout_submittedBy_id", req.getSubmittedBy_employeeId());
+            inputs.put("inout_submittedBy", req.getSubmittedBy());
             inputs.put("inout_lastModified", req.getDateModified());
-            inputs.put("inout_lastModifiedBy_id", req.getLastModifiedBy_employeeId());
-            inputs.put("inout_status_id", req.getRequestStatus_id());
+            inputs.put("inout_lastModifiedBy", req.getLastModifiedBy());
+            inputs.put("inout_statusCode", req.getStatusCode());
 
             Map<String, Object> outputs= execute(inputs);
 
@@ -237,13 +239,13 @@ public class RequestRepository {
         private Request mapResponseToRequest(Map<String, Object> responseMap) {
             try {
                 Request req = new Request();
-                req.setId((long)responseMap.get("out_id"));
-                req.setNotes((String)responseMap.get("inout_notes"));
-                req.setDateCreated((Timestamp)responseMap.get("inout_dateCreated"));
-                req.setSubmittedBy_employeeId((int)responseMap.get("inout_submittedBy_id"));
-                req.setDateModified((Timestamp)responseMap.get("inout_lastModified"));
-                req.setLastModifiedBy_employeeId((int)responseMap.get("inout_lastModifiedBy_id"));
-                req.setRequestStatus_id((long)responseMap.get("inout_status_id"));
+                req.setId((long) responseMap.get("out_requestId"));
+                req.setNotes((String) responseMap.get("inout_notes"));
+                req.setDateCreated((Timestamp) responseMap.get("inout_dateCreated"));
+                req.setSubmittedBy((String) responseMap.get("inout_submittedBy"));
+                req.setDateModified((Timestamp) responseMap.get("inout_lastModified"));
+                req.setLastModifiedBy((String) responseMap.get("inout_lastModifiedBy"));
+                req.setStatusCode((String) responseMap.get("inout_statusCode"));
                 return req;
             } catch (ClassCastException e) {
                 System.err.println("Class cast exception in addProductToRequest.mapResponseToRequest, check DB");

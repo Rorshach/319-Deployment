@@ -18,10 +18,14 @@ public class CategoryService {
     @Autowired
     ProductRepository productRepo;
 
-    public Category getCategoryById(long categoryId) {
-        Category c = categoryRepo.getCategoryById(categoryId);
-        List<Product> products = productRepo.getProductsInCategoryByCategoryId(categoryId);
+    public Category getCategoryById(String categoryCode) {
+        Category c = categoryRepo.getCategoryById(categoryCode);
+        List<Product> products = productRepo.getProductsInCategoryByCategoryCode(categoryCode);
         c.setProducts(products);
         return c;
+    }
+
+    public List<Category> getAllCategories() {
+        return categoryRepo.getAllCategories();
     }
 }
