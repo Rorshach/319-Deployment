@@ -3,6 +3,7 @@ package com.coastcapitalsavings;
 import com.coastcapitalsavings.datasource.DatasourceInfo;
 import com.coastcapitalsavings.datasource.IDataSourceInfoParser;
 import com.coastcapitalsavings.datasource.JSONDataSourceInfoParser;
+import com.coastcapitalsavings.datasource.LocalDataSourceInfoParser;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
@@ -25,7 +26,9 @@ public class RequisitioningApplication {
 	@Bean
 	@Primary
 	public DataSource dataSource() throws Exception {
-		IDataSourceInfoParser parser = new JSONDataSourceInfoParser();
+//		IDataSourceInfoParser parser = new JSONDataSourceInfoParser();
+//		DatasourceInfo dbInfo = parser.createDatabaseInfo("./src/main/resources/dbproperties.json");
+		IDataSourceInfoParser parser = new LocalDataSourceInfoParser();
 		DatasourceInfo dbInfo = parser.createDatabaseInfo("./src/main/resources/dbproperties.json");
 		return DataSourceBuilder
 				.create()

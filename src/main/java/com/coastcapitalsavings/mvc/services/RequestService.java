@@ -1,6 +1,7 @@
 package com.coastcapitalsavings.mvc.services;
 
 
+import com.coastcapitalsavings.mvc.models.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,6 +25,17 @@ public class RequestService {
 
     @Autowired
     ProductRepository productRepo;
+
+    public Request getRequestById(long reqId) {
+        if (requestRepo.checkRequestExists(reqId)) {
+            Request r = requestRepo.getRequestById(reqId);
+            List<RequestProduct> products = productRepo.getRequestProductsinRequestByRequestId(reqId);
+            r.setProducts(products);
+            return r;
+        } else {
+            throw new DataRetrievalFailureException("Cannot find resource in database: Request: id " + reqId);
+        }
+    }
 
     /**
      * Posts a new request by first adding it to the database, then adding each product individually to

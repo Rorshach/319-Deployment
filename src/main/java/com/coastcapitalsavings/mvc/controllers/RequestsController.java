@@ -1,5 +1,6 @@
 package com.coastcapitalsavings.mvc.controllers;
 
+import com.coastcapitalsavings.mvc.repositories.RequestRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,6 +25,16 @@ public class RequestsController {
 
     @Autowired
     RequestService requestService;
+
+    @RequestMapping(value="/{requestId}", method=RequestMethod.GET)
+    public ResponseEntity<Request> getRequestById(@PathVariable long requestId) {
+        try {
+            Request r = requestService.getRequestById(requestId);
+            return new ResponseEntity(r, HttpStatus.OK);
+        } catch (DataRetrievalFailureException e) {
+            return new ResponseEntity(Responses.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+    }
 
     @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity<Request> postNewRequest(@RequestBody PostBodyInput input) {
