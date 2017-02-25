@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Data
 public class Category {
-    @JsonView(ModelViews.Summary.class) private Integer cid;
+    @JsonView(ModelViews.Summary.class) private long cid;
     @JsonView(ModelViews.Summary.class) private String name;
     private List<Product> products;
 }

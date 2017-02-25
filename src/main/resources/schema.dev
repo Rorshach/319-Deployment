@@ -418,3 +418,26 @@ CREATE PROCEDURE req_request_lookupById
     SELECT notes, dateCreated, submittedBy_id, lastModified, lastModifiedBy_id, status_id INTO out_notes, out_dateCreated, out_submittedBy_id, out_lastModified, out_lastModifiedBy_id, out_status_id FROM requests WHERE id = inout_id;
   END $$
 DELIMITER ;
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve a category given its id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	in_id   INT UNSIGNED
+#
+# Returns:    	category record
+#
+# Created By:  	Chris Semiao, Felix Tso
+# Created On:  	2017-2-24
+#---------------------------------------------------------------------------------------------
+DELIMITER $$
+DROP PROCEDURE IF EXISTS req_category_lookupById $$
+CREATE PROCEDURE req_request_lookupById
+  (
+    INOUT inout_id INT UNSIGNED,
+    OUT out_name VARCHAR(255)
+  )
+  BEGIN
+    SELECT name INTO out_name FROM categories WHERE id = inout_id;
+  END $$
+DELIMITER ;

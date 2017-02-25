@@ -403,3 +403,27 @@ CREATE PROCEDURE req_request_lookupById
   END ^;
 
 ^;
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve a category given its id
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	in_id   INT UNSIGNED
+#
+# Returns:    	category record
+#
+# Created By:  	Chris Semiao, Felix Tso
+# Created On:  	2017-2-24
+#---------------------------------------------------------------------------------------------
+^;
+DROP PROCEDURE IF EXISTS req_category_lookupById^;
+CREATE PROCEDURE req_request_lookupById
+  (
+    INOUT inout_id INT UNSIGNED,
+    OUT out_name VARCHAR(255)
+  )
+  BEGIN
+    SELECT name INTO out_name FROM categories WHERE id = inout_id;
+  END ^;
+
+^;
