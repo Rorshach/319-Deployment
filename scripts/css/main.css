@@ -6,3 +6,6 @@
 #content {
   margin: 0px 100px 100px 100px;
 }
+.form-control-feedback{
+  right : 10px;
+}

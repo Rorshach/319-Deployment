@@ -55100,9 +55100,11 @@
 	        var _this = _possibleConstructorReturn(this, (LoginComponent.__proto__ || Object.getPrototypeOf(LoginComponent)).call(this, props));
 
 	        _this.state = {
-	            showAlert: false
+	            showAlert: false,
+	            userNameValue: null
 	        };
 	        _this.login = _this.login.bind(_this);
+	        _this.validation = _this.validation.bind(_this);
 	        return _this;
 	    }
 
@@ -55124,6 +55126,17 @@
 	            });
 	        }
 	    }, {
+	        key: 'validation',
+	        value: function validation() {
+	            var length = this.state.value.length;
+	            if (length > 5) return 'success';else if (length > 1) return 'warning';else if (length > 0) return 'error';
+	        }
+	    }, {
+	        key: 'updateUserNameValue',
+	        value: function updateUserNameValue(e) {
+	            this.setState({ userNameValue: e.target.value });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -55131,7 +55144,9 @@
 	                { ref: 'loginform', className: '#loginForm', onSubmit: this.login },
 	                _react2.default.createElement(
 	                    _reactBootstrap.FormGroup,
-	                    { controlId: 'formHorizontalEmail' },
+	                    {
+	                        validationState: this.validation(),
+	                        controlId: 'formBasicText' },
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Col,
 	                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },
@@ -55140,12 +55155,15 @@
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Col,
 	                        { sm: 10 },
-	                        _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', placeholder: 'Please enter username' })
+	                        _react2.default.createElement(_reactBootstrap.FormControl, {
+	                            value: this.state.userNameValue,
+	                            onChange: this.updateUserNameValue,
+	                            type: 'text', placeholder: 'Please enter username' })
 	                    )
 	                ),
 	                _react2.default.createElement(
 	                    _reactBootstrap.FormGroup,
-	                    { controlId: 'formHorizontalPassword' },
+	                    { controlId: 'formBasicText' },
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Col,
 	                        { componentClass: _reactBootstrap.ControlLabel, sm: 2 },

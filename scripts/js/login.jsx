@@ -7,9 +7,15 @@ export default class LoginComponent extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            showAlert : false
+            showAlert : false,
+            userNameValue : "",
+            passwordValue : ""
         }
         this.login = this.login.bind(this);
+        this.userNameValidation = this.userNameValidation.bind(this);
+        this.updateUserNameValue = this.updateUserNameValue.bind(this);
+        this.passwordValueValidation = this.passwordValueValidation.bind(this);
+        this.updatePasswordValue = this.updatePasswordValue.bind(this);
     }
 
     login(e, data){
@@ -33,25 +39,54 @@ export default class LoginComponent extends React.Component {
             });
 
     }
-
+    userNameValidation(){
+        const length = this.state.userNameValue.length;
+        if (length > 6) return 'success';
+        else if (length > 5) return 'warning';
+        else if (length > 0) return 'error';
+    }
+    passwordValueValidation(){
+        const length = this.state.passwordValue.length;
+        if (length > 6) return 'success';
+        else if (length > 5) return 'warning';
+        else if (length > 0) return 'error';
+    }
+    updateUserNameValue(e){
+        this.setState({ userNameValue: e.target.value });
+    }
+    updatePasswordValue(e){
+        this.setState({ passwordValue: e.target.value });
+    }
     render() {
         return (
             <form ref="loginform" className = "#loginForm" onSubmit = {this.login}>
-                <FormGroup controlId="formHorizontalEmail">
+                <FormGroup
+                    validationState = {this.userNameValidation()}
+                    controlId="formBasicText">
                     <Col componentClass={ControlLabel} sm={2}>
                         Username
                     </Col>
                     <Col sm={10}>
-                        <FormControl type="text" placeholder="Please enter username" />
+                        <FormControl
+                            value={this.state.userNameValue}
+                            onChange={this.updateUserNameValue}
+                            type="text" placeholder="Please enter username" />
+                        <FormControl.Feedback />
                     </Col>
                 </FormGroup>
 
-                <FormGroup controlId="formHorizontalPassword">
+                <FormGroup
+                    validationState = {this.passwordValueValidation()}
+                    controlId="formBasicText">
                     <Col componentClass={ControlLabel} sm={2}>
                         Password
                     </Col>
                     <Col sm={10}>
-                        <FormControl type="password" placeholder="Please enter password" />
+                        <FormControl
+                            value={this.state.passwordValue}
+                            onChange={this.updatePasswordValue}
+                            placeholder="Please enter password" />
+                        <FormControl.Feedback />
                     </Col>
                 </FormGroup>
 
