@@ -45,6 +45,7 @@ export default class CategoriesRequestForm extends React.Component {
                         statusDisplay: true
                     });
                 } else {
+                  try {
                     var categoryOptions = [];
                     var jsonResponse = JSON.parse(res.text).products;
                     for (var i = 0; i < jsonResponse.length; i++) {
@@ -53,6 +54,9 @@ export default class CategoriesRequestForm extends React.Component {
                     this.setState({
                         categoryResponse : categoryOptions
                     });
+                  } catch (e) {
+                    console.log(e);
+                  }
                 }
       });
     }
@@ -98,13 +102,17 @@ export default class CategoriesRequestForm extends React.Component {
                   });
               } else {
                   var categoriesOptions = [];
-                  var jsonResponse = JSON.parse(res.text);
-                  for (var i = 0; i < jsonResponse.length; i++) {
-                      categoriesOptions.push(<option value={jsonResponse[i].code} key={jsonResponse[i].code}>{jsonResponse[i].description}</option>);
+                  try {
+                    var jsonResponse = JSON.parse(res.text);
+                    for (var i = 0; i < jsonResponse.length; i++) {
+                        categoriesOptions.push(<option value={jsonResponse[i].code} key={jsonResponse[i].code}>{jsonResponse[i].description}</option>);
+                    }
+                    this.setState({
+                        categoriesResponse : categoriesOptions
+                    });
+                  } catch (e) {
+                    console.log(e);
                   }
-                  this.setState({
-                      categoriesResponse : categoriesOptions
-                  });
               }
           });
     }
