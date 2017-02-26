@@ -6,3 +6,7 @@
 #content {
   margin: 0px 100px 100px 100px;
 }
+
+#dropzonePad {
+  padding-left: 40px;
+}

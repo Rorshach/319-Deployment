@@ -15,7 +15,7 @@ module.exports = {
                 loader: 'babel',
                 exclude: /node_modules/,
                 query: {
-                    presets: ['es2015', 'react']
+                    presets: ['es2015', 'react', 'stage-1']
                 }
             },
             {
@@ -29,7 +29,8 @@ module.exports = {
             {
                 test: /\.(png|jpg)$/,
                 loader: 'url?limit=25000'
-            }
+            },
+            
         ],
         externals: {
             'react/addons': true,
