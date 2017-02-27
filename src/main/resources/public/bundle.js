@@ -52072,6 +52072,10 @@
 
 	var _reactBootstrap = __webpack_require__(493);
 
+	var _alerts = __webpack_require__(478);
+
+	var _alerts2 = _interopRequireDefault(_alerts);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -52089,73 +52093,196 @@
 	        var _this = _possibleConstructorReturn(this, (ProfileRequestForm.__proto__ || Object.getPrototypeOf(ProfileRequestForm)).call(this, props));
 
 	        (0, _classAutobind2.default)(_this);
+
+	        _this.state = {
+	            canSubmit: false,
+	            statusDisplay: false,
+	            statusMessage: null,
+	            description: "",
+	            profilesResponse: null,
+	            profileResponse: null,
+	            profileOption: null
+	        };
 	        return _this;
 	    }
 
 	    _createClass(ProfileRequestForm, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            var _this2 = this;
+
+	            _superagent2.default.get("/profiles").end(function (err, res) {
+	                if (err) {
+	                    _this2.setState({
+	                        statusMessage: err,
+	                        statusDisplay: true
+	                    });
+	                } else {
+	                    var profilesOptions = [];
+	                    try {
+	                        var jsonResponse = JSON.parse(res.text); //JSON.parse('[{"code":"1", "description": "Profile 1"}, {"code": "2", "description": "Profile 2"}]');
+	                        for (var i = 0; i < jsonResponse.length; i++) {
+	                            profilesOptions.push(_react2.default.createElement(
+	                                'option',
+	                                { value: jsonResponse[i].code, key: jsonResponse[i].code },
+	                                jsonResponse[i].description
+	                            ));
+	                        }
+	                        _this2.setState({
+	                            profilesResponse: profilesOptions
+	                        });
+	                    } catch (e) {
+	                        console.log(e);
+	                    }
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'getProductsInProfiles',
+	        value: function getProductsInProfiles(e) {
+	            console.log(_reactDom2.default.findDOMNode(this));
+	            this.getProducts(e.target.options[e.target.selectedIndex].value);
+	            this.setState({ profileOption: e.target.options[e.target.selectedIndex].value });
+	        }
+	    }, {
+	        key: 'getProducts',
+	        value: function getProducts(id) {
+	            var _this3 = this;
+
+	            _superagent2.default.get("/profiles/" + id).end(function (err, res) {
+	                if (err) {
+	                    _this3.setState({
+	                        statusMessage: err,
+	                        statusDisplay: true
+	                    });
+	                } else {
+	                    var profileOptions = [];
+	                    try {
+	                        var jsonResponse = JSON.parse(res.text).products; //JSON.parse('{"code":"1", "description":"Profile 1", "products":[{"code":"1", "description": "Product 1"}, {"code": "2", "description": "Product 2"}]}').products;
+	                        for (var i = 0; i < jsonResponse.length; i++) {
+	                            profileOptions.push(_react2.default.createElement(
+	                                _reactBootstrap.Checkbox,
+	                                { style: { margin: 15 }, checked: true, readOnly: true, key: jsonResponse[i].code },
+	                                jsonResponse[i].description
+	                            ));
+	                        }
+	                        _this3.setState({
+	                            profileResponse: profileOptions,
+	                            canSubmit: true
+	                        });
+	                    } catch (e) {
+	                        console.log(e);
+	                    }
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'handleDescription',
+	        value: function handleDescription(e) {
+	            this.setState({ description: e.target.value });
+	        }
+	    }, {
+	        key: 'submitRequest',
+	        value: function submitRequest(e) {
+	            var _this4 = this;
+
+	            e.preventDefault();
+	            var selectedItemsKeys = this.state.profileResponse.map(function (e) {
+	                return e.key;
+	            });
+	            var payload = { "products": selectedItemsKeys, "notes": this.state.description };
+	            _superagent2.default.post("/requests").send(payload).end(function (err, res) {
+	                if (err) {
+	                    _this4.setState({
+	                        statusMessage: "noConnection",
+	                        statusDisplay: true
+	                    });
+	                } else {
+	                    _this4.setState({
+	                        statusMessage: "Success",
+	                        statusDisplay: true
+	                    });
+	                    window.location.reload();
+	                }
+	            });
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var alert;
+
+	            if (this.state.statusDisplay === true) {
+	                alert = _react2.default.createElement(_alerts2.default, { title: this.state.statusMessage });
+	            }
+
 	            return _react2.default.createElement(
-	                _reactBootstrap.FormGroup,
-	                null,
+	                _reactBootstrap.Form,
+	                { onSubmit: this.submitRequest },
+	                alert,
 	                _react2.default.createElement(
-	                    _reactBootstrap.ControlLabel,
+	                    _reactBootstrap.FormGroup,
 	                    null,
 	                    _react2.default.createElement(
-	                        'b',
+	                        _reactBootstrap.ControlLabel,
 	                        null,
-	                        'Select a Profile'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    _reactBootstrap.Row,
-	                    null,
-	                    _react2.default.createElement(
-	                        _reactBootstrap.Col,
-	                        { sm: 4 },
 	                        _react2.default.createElement(
-	                            _reactBootstrap.FormControl,
-	                            { componentClass: 'select', multiple: true, style: { height: 200 } },
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: 'profile1' },
-	                                'Profile 1'
-	                            ),
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: 'profile2' },
-	                                'Profile 2'
-	                            ),
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: 'profile3' },
-	                                'Profile 3'
-	                            ),
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: 'profile4' },
-	                                'Profile 4'
-	                            ),
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: 'profile5' },
-	                                'Profile 5'
-	                            ),
-	                            _react2.default.createElement(
-	                                'option',
-	                                { value: 'profile6' },
-	                                'Profile 6'
-	                            )
+	                            'b',
+	                            null,
+	                            'Select a Profile'
 	                        )
 	                    ),
 	                    _react2.default.createElement(
-	                        _reactBootstrap.Col,
-	                        { sm: 8 },
+	                        _reactBootstrap.HelpBlock,
+	                        null,
+	                        'Select a profile with predefined items.'
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Row,
+	                        null,
 	                        _react2.default.createElement(
-	                            _reactBootstrap.FormControl,
-	                            { componentClass: 'textarea', readOnly: true, style: { height: 200 } },
-	                            'Test test test'
+	                            _reactBootstrap.Col,
+	                            { sm: 4 },
+	                            _react2.default.createElement(
+	                                _reactBootstrap.FormControl,
+	                                { className: 'profilesResponse', componentClass: 'select', multiple: true, style: { height: 200 }, onChange: this.getProductsInProfiles },
+	                                this.state.profilesResponse
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.Col,
+	                            { sm: 8 },
+	                            _react2.default.createElement(
+	                                _reactBootstrap.Well,
+	                                { className: 'profileResponse', style: { height: 200 } },
+	                                this.state.profileResponse
+	                            )
 	                        )
+	                    ),
+	                    _react2.default.createElement('p', null),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Col,
+	                        null,
+	                        _react2.default.createElement(
+	                            _reactBootstrap.ControlLabel,
+	                            null,
+	                            _react2.default.createElement(
+	                                'b',
+	                                null,
+	                                'Description'
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactBootstrap.HelpBlock,
+	                            null,
+	                            'Enter an optional short description about your request (max 250 characters).'
+	                        ),
+	                        _react2.default.createElement(_reactBootstrap.FormControl, { className: 'description', componentClass: 'textarea', placeholder: 'Description', maxLength: '250', onChange: this.handleDescription })
+	                    ),
+	                    _react2.default.createElement('p', null),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Button,
+	                        { type: 'submit', className: 'submitBtn', disabled: !this.state.canSubmit },
+	                        'Submit Request'
 	                    )
 	                )
 	            );
@@ -54215,18 +54342,22 @@
 	                        statusDisplay: true
 	                    });
 	                } else {
-	                    var categoryOptions = [];
-	                    var jsonResponse = JSON.parse(res.text).products;
-	                    for (var i = 0; i < jsonResponse.length; i++) {
-	                        categoryOptions.push(_react2.default.createElement(
-	                            'option',
-	                            { value: jsonResponse[i].code, key: jsonResponse[i].code },
-	                            jsonResponse[i].description
-	                        ));
+	                    try {
+	                        var categoryOptions = [];
+	                        var jsonResponse = JSON.parse(res.text).products;
+	                        for (var i = 0; i < jsonResponse.length; i++) {
+	                            categoryOptions.push(_react2.default.createElement(
+	                                'option',
+	                                { value: jsonResponse[i].code, key: jsonResponse[i].code },
+	                                jsonResponse[i].description
+	                            ));
+	                        }
+	                        _this2.setState({
+	                            categoryResponse: categoryOptions
+	                        });
+	                    } catch (e) {
+	                        console.log(e);
 	                    }
-	                    _this2.setState({
-	                        categoryResponse: categoryOptions
-	                    });
 	                }
 	            });
 	        }
@@ -54275,17 +54406,21 @@
 	                    });
 	                } else {
 	                    var categoriesOptions = [];
-	                    var jsonResponse = JSON.parse(res.text);
-	                    for (var i = 0; i < jsonResponse.length; i++) {
-	                        categoriesOptions.push(_react2.default.createElement(
-	                            'option',
-	                            { value: jsonResponse[i].code, key: jsonResponse[i].code },
-	                            jsonResponse[i].description
-	                        ));
+	                    try {
+	                        var jsonResponse = JSON.parse(res.text);
+	                        for (var i = 0; i < jsonResponse.length; i++) {
+	                            categoriesOptions.push(_react2.default.createElement(
+	                                'option',
+	                                { value: jsonResponse[i].code, key: jsonResponse[i].code },
+	                                jsonResponse[i].description
+	                            ));
+	                        }
+	                        _this4.setState({
+	                            categoriesResponse: categoriesOptions
+	                        });
+	                    } catch (e) {
+	                        console.log(e);
 	                    }
-	                    _this4.setState({
-	                        categoriesResponse: categoriesOptions
-	                    });
 	                }
 	            });
 	        }
