@@ -26,7 +26,7 @@ public class RequisitioningApplication {
 	@Bean
 	@Primary
 	public DataSource dataSource() throws Exception {
-		IDataSourceInfoParser parser = new JSONDataSourceInfoParser();
+		IDataSourceInfoParser parser = new LocalDataSourceInfoParser();
 //		DatasourceInfo dbInfo = parser.createDatabaseInfo("./src/main/resources/dbproperties.json");
 //		IDataSourceInfoParser parser = new LocalDataSourceInfoParser();
 		DatasourceInfo dbInfo = parser.createDatabaseInfo("./src/main/resources/dbproperties.json");

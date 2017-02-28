@@ -16,6 +16,7 @@ import TabsComponent from "./tabs.jsx";
 import LoginComponent from "./login.jsx";
 import CategoriesRequestForm from './categoriesrequestform.jsx';
 import ProfileRequestForm from './profilerequestform.jsx';
+import AdminComponent from "./admin.jsx";
 import 'babel-polyfill';
 // CSS:
 

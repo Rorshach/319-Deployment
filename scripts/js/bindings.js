@@ -7,6 +7,7 @@ import Content from './content.jsx';
 import Toolbar from './toolbar.jsx';
 import TabsComponent from "./tabs.jsx";
 import LoginComponent from "./login.jsx";
+import AdminComponent from "./admin.jsx";
 
 module.exports.bindings
 {
@@ -21,6 +22,11 @@ module.exports.bindings
     if (document.getElementById("login")) {
         ReactDOM.render(<LoginComponent/>, document.getElementById("login"));
     }
+
+    if (document.getElementById("admin")) {
+        ReactDOM.render(<AdminComponent/>, document.getElementById("admin"));
+    }
+
 }/**
  * Created by alekhrycaiko on 2017-01-24.
  */
