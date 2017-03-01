@@ -132,12 +132,12 @@ export default class IDRequest extends React.Component {
 
         return (
         <div>
-            <FormGroup controlId="formValidationError2" validationState={this.state.errorMessage}>
+            <FormGroup controlId="formValidation" validationState={this.state.errorMessage}>
             <FormControl className="ID" componentClass="textarea" placeholder="ID" maxLength='5' onChange={this.handleID}/>
             <FormControl.Feedback />
             </FormGroup>
             <Button type="submit" className="submitBtn" onClick={this.getRequest}>
-                Submit
+                Search For ID
             </Button>
             <div>
             <Table striped bordered condensed hover>
@@ -147,7 +147,6 @@ export default class IDRequest extends React.Component {
                     <th>Date Created</th>
                     <th>submittedBy</th>
                     <th>statusCode</th>
-                    <th>Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -156,7 +155,6 @@ export default class IDRequest extends React.Component {
                     <td>{this.state.dateCreated}</td>
                     <td>{this.state.submittedBy}</td>
                     <td>{status}</td>
-                    <td>{this.state.statusCode}</td>
                 </tr>
                 </tbody>
             </Table>

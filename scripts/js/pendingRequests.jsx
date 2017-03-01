@@ -33,46 +33,65 @@ export default class PendingRequests extends React.Component {
                 <Table striped bordered condensed hover>
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
+                        <th>Request ID</th>
+                        <th>Author</th>
+                        <th>Date Created</th>
+                        <th>Status</th>
+                        <th>Date Expected</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
                     </tr>
                     <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
                     </tr>
                     <tr>
-                        <td>3</td>
-                        <td colSpan="2">Larry the Bird</td>
-                        <td>@twitter</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                    </tr>
+                    <tr>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                    </tr>
+                    <tr>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
+                        <td>Temp Data</td>
                     </tr>
                     </tbody>
                 </Table>
                 <div>
-                    <p>Change status</p>
+                    <p>Change The status of A Request</p>
 
                     <Button
                         bsStyle="primary"
                         bsSize="large"
                         onClick={this.open}
                     >
-                        Edit
+                        Edit A Request
                     </Button>
 
                     <Modal show={this.state.showModal} onHide={this.close}>
                         <Modal.Header closeButton>
-                            <Modal.Title>Edit Status</Modal.Title>
+                            <Modal.Title>Edit Status Of a Request</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             {form}

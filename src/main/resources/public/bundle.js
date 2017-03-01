@@ -56311,22 +56311,27 @@
 	                            _react2.default.createElement(
 	                                'th',
 	                                null,
-	                                '#'
+	                                'Request ID'
 	                            ),
 	                            _react2.default.createElement(
 	                                'th',
 	                                null,
-	                                'First Name'
+	                                'Author'
 	                            ),
 	                            _react2.default.createElement(
 	                                'th',
 	                                null,
-	                                'Last Name'
+	                                'Date Created'
 	                            ),
 	                            _react2.default.createElement(
 	                                'th',
 	                                null,
-	                                'Username'
+	                                'Status'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Date Expected'
 	                            )
 	                        )
 	                    ),
@@ -56339,22 +56344,27 @@
 	                            _react2.default.createElement(
 	                                'td',
 	                                null,
-	                                '1'
+	                                'Temp Data'
 	                            ),
 	                            _react2.default.createElement(
 	                                'td',
 	                                null,
-	                                'Mark'
+	                                'Temp Data'
 	                            ),
 	                            _react2.default.createElement(
 	                                'td',
 	                                null,
-	                                'Otto'
+	                                'Temp Data'
 	                            ),
 	                            _react2.default.createElement(
 	                                'td',
 	                                null,
-	                                '@mdo'
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -56363,22 +56373,27 @@
 	                            _react2.default.createElement(
 	                                'td',
 	                                null,
-	                                '2'
+	                                'Temp Data'
 	                            ),
 	                            _react2.default.createElement(
 	                                'td',
 	                                null,
-	                                'Jacob'
+	                                'Temp Data'
 	                            ),
 	                            _react2.default.createElement(
 	                                'td',
 	                                null,
-	                                'Thornton'
+	                                'Temp Data'
 	                            ),
 	                            _react2.default.createElement(
 	                                'td',
 	                                null,
-	                                '@fat'
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -56387,17 +56402,85 @@
 	                            _react2.default.createElement(
 	                                'td',
 	                                null,
-	                                '3'
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                { colSpan: '2' },
-	                                'Larry the Bird'
+	                                'Temp Data'
 	                            ),
 	                            _react2.default.createElement(
 	                                'td',
 	                                null,
-	                                '@twitter'
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                'Temp Data'
 	                            )
 	                        )
 	                    )
@@ -56408,7 +56491,7 @@
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        'Change status'
+	                        'Change The status of A Request'
 	                    ),
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Button,
@@ -56417,7 +56500,7 @@
 	                            bsSize: 'large',
 	                            onClick: this.open
 	                        },
-	                        'Edit'
+	                        'Edit A Request'
 	                    ),
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Modal,
@@ -56428,7 +56511,7 @@
 	                            _react2.default.createElement(
 	                                _reactBootstrap.Modal.Title,
 	                                null,
-	                                'Edit Status'
+	                                'Edit Status Of a Request'
 	                            )
 	                        ),
 	                        _react2.default.createElement(
@@ -56536,8 +56619,6 @@
 	        value: function getRequest() {
 	            var _this2 = this;
 
-	            var x = document.getElementById('displayGet');
-	            x.style.display = 'none';
 	            _superagent2.default.get("/requests/" + this.state.ID).end(function (err, res) {
 	                if (err) {
 	                    _this2.setState({
@@ -56645,18 +56726,18 @@
 	                null,
 	                _react2.default.createElement(
 	                    _reactBootstrap.FormGroup,
-	                    { controlId: 'formValidationError2', validationState: this.state.errorMessage },
+	                    { controlId: 'formValidation', validationState: this.state.errorMessage },
 	                    _react2.default.createElement(_reactBootstrap.FormControl, { className: 'ID', componentClass: 'textarea', placeholder: 'ID', maxLength: '5', onChange: this.handleID }),
 	                    _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
 	                ),
 	                _react2.default.createElement(
 	                    _reactBootstrap.Button,
 	                    { type: 'submit', className: 'submitBtn', onClick: this.getRequest },
-	                    'Submit'
+	                    'Search For ID'
 	                ),
 	                _react2.default.createElement(
 	                    'div',
-	                    { id: 'displayGet', display: 'block' },
+	                    null,
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Table,
 	                        { striped: true, bordered: true, condensed: true, hover: true },
@@ -56685,11 +56766,6 @@
 	                                    'th',
 	                                    null,
 	                                    'statusCode'
-	                                ),
-	                                _react2.default.createElement(
-	                                    'th',
-	                                    null,
-	                                    'Status'
 	                                )
 	                            )
 	                        ),
@@ -56718,11 +56794,6 @@
 	                                    'td',
 	                                    null,
 	                                    status
-	                                ),
-	                                _react2.default.createElement(
-	                                    'td',
-	                                    null,
-	                                    this.state.statusCode
 	                                )
 	                            )
 	                        )
