@@ -60,29 +60,22 @@ export default class PendingRequests extends React.Component {
                     </tbody>
                 </Table>
                 <div>
-                    <p>Click to get the full Modal experience!</p>
+                    <p>Change status</p>
 
                     <Button
                         bsStyle="primary"
                         bsSize="large"
                         onClick={this.open}
                     >
-                        Launch demo modal
+                        Edit
                     </Button>
 
                     <Modal show={this.state.showModal} onHide={this.close}>
                         <Modal.Header closeButton>
-                            <Modal.Title>Modal heading</Modal.Title>
+                            <Modal.Title>Edit Status</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             {form}
-
-                            <hr />
-
-
-                            <h4>Overflowing text to show scroll behavior</h4>
-                            <p>Cras mattis consectetur purus sit amet fermentum. </p>
-
                         </Modal.Body>
                         <Modal.Footer>
                             <Button onClick={this.close}>Close</Button>

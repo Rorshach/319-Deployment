@@ -21,43 +21,15 @@ export default class AdminComponent extends React.Component {
         }
     }
 
-    callRequest(e) {
-        e.preventDefault();
-        request
-            .post("/requests")
-            .send({ "category_id": 11})
-            .end((err, res) => {
-                console.log(res);
-                if (err){
-                    this.setState({
-                        statusMessage: "noConnection",
-                        statusDisplay: true
-                    });
-                }
-                else{
-                    this.setState({
-                        statusMessage: 'success',
-                        statusDisplay: true
-
-                    });
-                }
-            });
-    }
     handleOptionChange(e) {
         this.setState({selectedOption: e});
     }
 
     render() {
         var page;
-        var state;
-        var alert;
-        var description;
-        var submit;
 
         if (this.state.selectedOption === 'AllPending') {
             page = <PendingRequests/>
-        } else if (this.state.selectedOption === 'Add') {
-            page = <text>Product</text>
         } else if (this.state.selectedOption === 'import') {
             page = <ImportCSV/>
         } else if (this.state.selectedOption === 'reports') {
@@ -70,7 +42,6 @@ export default class AdminComponent extends React.Component {
                 <Col sm={2}>
                     <ListGroup>
                         <ListGroupItem onClick={() => this.handleOptionChange('AllPending')}>All Pending Requests</ListGroupItem>
-                        <ListGroupItem onClick={() => this.handleOptionChange('Add')}>Add a Product/Category</ListGroupItem>
                         <ListGroupItem onClick={() => this.handleOptionChange('import')}>Import CSV</ListGroupItem>
                         <ListGroupItem onClick={() => this.handleOptionChange('reports')}>Reports</ListGroupItem>
                     </ListGroup>

@@ -8272,7 +8272,7 @@
 
 	__webpack_require__(1);
 
-	var _main = __webpack_require__(779);
+	var _main = __webpack_require__(780);
 
 	var _main2 = _interopRequireDefault(_main);
 
@@ -55472,28 +55472,6 @@
 	    }
 
 	    _createClass(AdminComponent, [{
-	        key: 'callRequest',
-	        value: function callRequest(e) {
-	            var _this2 = this;
-
-	            e.preventDefault();
-	            _superagent2.default.post("/requests").send({ "category_id": 11 }).end(function (err, res) {
-	                console.log(res);
-	                if (err) {
-	                    _this2.setState({
-	                        statusMessage: "noConnection",
-	                        statusDisplay: true
-	                    });
-	                } else {
-	                    _this2.setState({
-	                        statusMessage: 'success',
-	                        statusDisplay: true
-
-	                    });
-	                }
-	            });
-	        }
-	    }, {
 	        key: 'handleOptionChange',
 	        value: function handleOptionChange(e) {
 	            this.setState({ selectedOption: e });
@@ -55501,22 +55479,12 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this3 = this;
+	            var _this2 = this;
 
 	            var page;
-	            var state;
-	            var alert;
-	            var description;
-	            var submit;
 
 	            if (this.state.selectedOption === 'AllPending') {
 	                page = _react2.default.createElement(_pendingRequests2.default, null);
-	            } else if (this.state.selectedOption === 'Add') {
-	                page = _react2.default.createElement(
-	                    'text',
-	                    null,
-	                    'Product'
-	                );
 	            } else if (this.state.selectedOption === 'import') {
 	                page = _react2.default.createElement(_importCSV2.default, null);
 	            } else if (this.state.selectedOption === 'reports') {
@@ -55539,28 +55507,21 @@
 	                        _react2.default.createElement(
 	                            _reactBootstrap.ListGroupItem,
 	                            { onClick: function onClick() {
-	                                    return _this3.handleOptionChange('AllPending');
+	                                    return _this2.handleOptionChange('AllPending');
 	                                } },
 	                            'All Pending Requests'
 	                        ),
 	                        _react2.default.createElement(
 	                            _reactBootstrap.ListGroupItem,
 	                            { onClick: function onClick() {
-	                                    return _this3.handleOptionChange('Add');
-	                                } },
-	                            'Add a Product/Category'
-	                        ),
-	                        _react2.default.createElement(
-	                            _reactBootstrap.ListGroupItem,
-	                            { onClick: function onClick() {
-	                                    return _this3.handleOptionChange('import');
+	                                    return _this2.handleOptionChange('import');
 	                                } },
 	                            'Import CSV'
 	                        ),
 	                        _react2.default.createElement(
 	                            _reactBootstrap.ListGroupItem,
 	                            { onClick: function onClick() {
-	                                    return _this3.handleOptionChange('reports');
+	                                    return _this2.handleOptionChange('reports');
 	                                } },
 	                            'Reports'
 	                        )
@@ -56442,7 +56403,7 @@
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        'Click to get the full Modal experience!'
+	                        'Change status'
 	                    ),
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Button,
@@ -56451,7 +56412,7 @@
 	                            bsSize: 'large',
 	                            onClick: this.open
 	                        },
-	                        'Launch demo modal'
+	                        'Edit'
 	                    ),
 	                    _react2.default.createElement(
 	                        _reactBootstrap.Modal,
@@ -56462,24 +56423,13 @@
 	                            _react2.default.createElement(
 	                                _reactBootstrap.Modal.Title,
 	                                null,
-	                                'Modal heading'
+	                                'Edit Status'
 	                            )
 	                        ),
 	                        _react2.default.createElement(
 	                            _reactBootstrap.Modal.Body,
 	                            null,
-	                            form,
-	                            _react2.default.createElement('hr', null),
-	                            _react2.default.createElement(
-	                                'h4',
-	                                null,
-	                                'Overflowing text to show scroll behavior'
-	                            ),
-	                            _react2.default.createElement(
-	                                'p',
-	                                null,
-	                                'Cras mattis consectetur purus sit amet fermentum. '
-	                            )
+	                            form
 	                        ),
 	                        _react2.default.createElement(
 	                            _reactBootstrap.Modal.Footer,
@@ -56531,6 +56481,10 @@
 
 	var _reactBootstrap = __webpack_require__(493);
 
+	var _reactJsonTable = __webpack_require__(779);
+
+	var _reactJsonTable2 = _interopRequireDefault(_reactJsonTable);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -56552,11 +56506,20 @@
 	            categoryOption: null,
 	            hasOverThreeItems: false,
 	            canSubmit: false,
+	            canApprove: false,
+	            canDeny: false,
+	            canPend: false,
 	            statusDisplay: false,
 	            statusMessage: null,
 	            categoriesResponse: null,
-	            categoryResponse: null,
-	            ID: ""
+	            requestResponse: null,
+	            ID: "",
+	            ide: "",
+	            dateCreated: "",
+	            submittedBy: "",
+	            statusCode: "",
+	            changedStatusCode: ""
+
 	        };
 	        (0, _classAutobind2.default)(_this);
 	        return _this;
@@ -56567,7 +56530,7 @@
 	        value: function getRequest() {
 	            var _this2 = this;
 
-	            _superagent2.default.get("/requests/" + 8).end(function (err, res) {
+	            _superagent2.default.get("/requests/" + this.state.ID).end(function (err, res) {
 	                if (err) {
 	                    _this2.setState({
 	                        statusMessage: err,
@@ -56575,23 +56538,58 @@
 	                    });
 	                } else {
 	                    try {
-	                        var categoryOptions = [];
 	                        var jsonResponse = JSON.parse(res.text);
-	                        console.log(jsonResponse);
-	                        for (var i = 0; i < jsonResponse.length; i++) {
-	                            categoryOptions.push(_react2.default.createElement(
-	                                'option',
-	                                { key: jsonResponse[i].id },
-	                                jsonResponse[i].id
-	                            ));
-	                        }
 	                        _this2.setState({
-	                            categoryResponse: JSON.stringify(jsonResponse, null, 4)
+	                            ide: jsonResponse.id,
+	                            dateCreated: jsonResponse.dateCreated,
+	                            submittedBy: jsonResponse.submittedBy,
+	                            statusCode: jsonResponse.statusCode
+
 	                        });
-	                        console.log(JSON.stringify(jsonResponse, null, 4));
+	                        if (_this2.state.statusCode === 'PEND') {
+	                            _this2.setState({
+	                                canApprove: true,
+	                                canDeny: true,
+	                                canPend: false
+	                            });
+	                        } else if (_this2.state.statusCode === 'APPR') {
+	                            _this2.setState({
+	                                canApprove: false,
+	                                canDeny: true,
+	                                canPend: true
+	                            });
+	                        } else if (_this2.state.statusCode === 'DEN') {
+	                            _this2.setState({
+	                                canApprove: true,
+	                                canDeny: false,
+	                                canPend: true
+	                            });
+	                        }
+	                        console.log(jsonResponse);
 	                    } catch (e) {
 	                        console.log(e);
 	                    }
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'editRequest',
+	        value: function editRequest(e) {
+	            var _this3 = this;
+
+	            var payload = { "statusCode": e };
+	            _superagent2.default.put("/requests/" + this.state.ID).send(payload).end(function (err, res) {
+	                if (err) {
+	                    _this3.setState({
+	                        statusMessage: "noConnection",
+	                        statusDisplay: true
+	                    });
+	                } else {
+	                    _this3.setState({
+	                        statusMessage: "Success",
+	                        statusDisplay: true
+	                    });
+	                    _this3.getRequest();
 	                }
 	            });
 	        }
@@ -56603,6 +56601,30 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _this4 = this;
+
+	            var status;
+
+	            if (this.state.statusCode === 'PEND') {
+	                status = _react2.default.createElement(
+	                    _reactBootstrap.Label,
+	                    { bsStyle: 'warning' },
+	                    'PENDING'
+	                );
+	            } else if (this.state.statusCode === 'APPR') {
+	                status = _react2.default.createElement(
+	                    _reactBootstrap.Label,
+	                    { bsStyle: 'success' },
+	                    'APPROVED'
+	                );
+	            } else if (this.state.statusCode === 'DEN') {
+	                status = _react2.default.createElement(
+	                    _reactBootstrap.Label,
+	                    { bsStyle: 'danger' },
+	                    'DENIED'
+	                );
+	            }
+
 	            return _react2.default.createElement(
 	                'div',
 	                null,
@@ -56612,7 +56634,98 @@
 	                    { type: 'submit', className: 'submitBtn', onClick: this.getRequest },
 	                    'Submit'
 	                ),
-	                this.state.categoryResponse
+	                this.state.requestResponse,
+	                _react2.default.createElement(
+	                    _reactBootstrap.Table,
+	                    { striped: true, bordered: true, condensed: true, hover: true },
+	                    _react2.default.createElement(
+	                        'thead',
+	                        null,
+	                        _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'ID'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Date Created'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'submittedBy'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'statusCode'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Status'
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tbody',
+	                        null,
+	                        _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                this.state.ide
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                this.state.dateCreated
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                this.state.submittedBy
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                status
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                this.state.statusCode
+	                            )
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Button,
+	                    { type: 'submit', className: 'ApproveBtn', disabled: !this.state.canApprove, onClick: function onClick() {
+	                            return _this4.editRequest('APPR');
+	                        } },
+	                    'Approve'
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Button,
+	                    { type: 'submit', className: 'DenyBtn', disabled: !this.state.canDeny, onClick: function onClick() {
+	                            return _this4.editRequest('DEN');
+	                        } },
+	                    'Deny'
+	                ),
+	                _react2.default.createElement(
+	                    _reactBootstrap.Button,
+	                    { type: 'submit', className: 'PendBtn', disabled: !this.state.canPend, onClick: function onClick() {
+	                            return _this4.editRequest('PEND');
+	                        } },
+	                    'Set To Pend'
+	                )
 	            );
 	        }
 	    }]);
@@ -56626,13 +56739,248 @@
 /* 779 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var React = __webpack_require__(300);
+
+	var $ = React.DOM;
+
+	// Some shared attrs for JsonTable and JsonRow
+	var defaultSettings = {
+			header: true,
+			noRowsMessage: 'No items',
+			classPrefix: 'json'
+		},
+		getSetting = function( name ){
+			var settings = this.props.settings;
+
+			if( !settings || typeof settings[ name ] == 'undefined' )
+				return defaultSettings[ name ];
+
+			return settings[ name ];
+		}
+	;
+
+	var JsonTable = React.createClass({
+		getSetting: getSetting,
+
+		render: function(){
+			var cols = this.normalizeColumns(),
+				contents = [this.renderRows( cols )]
+			;
+
+			if( this.getSetting('header') )
+				contents.unshift( this.renderHeader( cols ) );
+
+			var tableClass = this.props.className || this.getSetting( 'classPrefix' ) + 'Table';
+
+			return $.table({ className: tableClass }, contents );
+		},
+
+		renderHeader: function( cols ){
+			var me = this,
+				prefix = this.getSetting( 'classPrefix' ),
+				headerClass = this.getSetting( 'headerClass' ),
+				cells = cols.map( function(col){
+					var className = prefix + 'Column';
+					if( headerClass )
+						className = headerClass( className, col.key );
+
+					return $.th(
+						{ className: className, key: col.key, onClick: me.onClickHeader, "data-key": col.key },
+						col.label
+					);
+				})
+			;
+
+			return $.thead({ key: 'th' },
+				$.tr({ className: prefix + 'Header' }, cells )
+			);
+		},
+
+		renderRows: function( cols ){
+			var me = this,
+				items = this.props.rows,
+				settings = this.props.settings || {},
+				i = 1
+			;
+
+			if( !items || !items.length )
+				return $.tbody({key:'body'}, [$.tr({key:'row'}, $.td({key:'column'}, this.getSetting('noRowsMessage') ))]);
+
+			var rows = items.map( function( item ){
+				var key = me.getKey( item, i );
+				return React.createElement(Row, {
+					key: key,
+					reactKey: key,
+					item: item,
+					settings: settings,
+					columns: cols,
+					i: i++,
+					onClickRow: me.onClickRow,
+					onClickCell: me.onClickCell
+				});
+			});
+
+			return $.tbody({key:'body'}, rows);
+		},
+
+		getItemField: function( item, field ){
+			return item[ field ];
+		},
+
+		normalizeColumns: function(){
+			var getItemField = this.props.cellRenderer || this.getItemField,
+				cols = this.props.columns,
+				items = this.props.rows
+			;
+
+			if( !cols ){
+				if( !items || !items.length )
+					return [];
+
+				return Object.keys( items[0] ).map( function( key ){
+					return { key: key, label: key, cell: getItemField };
+				});
+			}
+
+			return cols.map( function( col ){
+				var key;
+				if( typeof col == 'string' ){
+					return {
+						key: col,
+						label: col,
+						cell: getItemField
+					};
+				}
+
+				if( typeof col == 'object' ){
+					key = col.key || col.label;
+
+					// This is about get default column definition
+					// we use label as key if not defined
+					// we use key as label if not defined
+					// we use getItemField as cell function if not defined
+					return {
+						key: key,
+						label: col.label || key,
+						cell: col.cell || getItemField
+					};
+				}
+
+				return {
+					key: 'unknown',
+					name:'unknown',
+					cell: 'Unknown'
+				};
+			});
+		},
+
+		getKey: function( item, i ){
+			var field = this.props.settings && this.props.settings.keyField;
+			if( field && item[ field ] )
+				return item[ field ];
+
+			if( item.id )
+				return item.id;
+
+			if( item._id )
+				return item._id;
+
+			return i;
+		},
+
+		shouldComponentUpdate: function(){
+			return true;
+		},
+
+		onClickRow: function( e, item ){
+			if( this.props.onClickRow ){
+				this.props.onClickRow( e, item );
+			}
+		},
+
+		onClickHeader: function( e ){
+			if( this.props.onClickHeader ){
+				this.props.onClickHeader( e, e.target.dataset.key );
+			}
+		},
+
+		onClickCell: function( e, key, item ){
+			if( this.props.onClickCell ){
+				this.props.onClickCell( e, key, item );
+			}
+		}
+	});
+
+	var Row = React.createClass({
+		getSetting: getSetting,
+
+		render: function() {
+			var me = this,
+				props = this.props,
+				cellClass = this.getSetting('cellClass'),
+				rowClass = this.getSetting('rowClass'),
+				prefix = this.getSetting('classPrefix'),
+				cells = props.columns.map( function( col ){
+					var content = col.cell,
+						key = col.key,
+						className = prefix + 'Cell ' + prefix + 'Cell_' + key
+					;
+
+					if( cellClass )
+						className = cellClass( className, key, props.item );
+
+					if( typeof content == 'function' )
+						content = content( props.item, key );
+
+					return $.td( {
+						className: className,
+						key: key,
+						"data-key": key,
+						onClick: me.onClickCell
+					}, content );
+				})
+			;
+
+			var className = prefix + 'Row ' + prefix +
+				(props.i % 2 ? 'Odd' : 'Even')
+			;
+
+			if( props.reactKey )
+				className += ' ' + prefix + 'Row_' + props.reactKey;
+
+			if( rowClass )
+				className = rowClass( className, props.item );
+
+			return $.tr({
+				className: className,
+				onClick: me.onClickRow,
+				key: this.props.reactKey
+			}, cells );
+		},
+
+		onClickCell: function( e ){
+			this.props.onClickCell( e, e.target.dataset.key, this.props.item );
+		},
+
+		onClickRow: function( e ){
+			this.props.onClickRow( e, this.props.item );
+		}
+	});
+
+	module.exports = JsonTable;
+
+
+/***/ },
+/* 780 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(780);
+	var content = __webpack_require__(781);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(782)(content, {});
+	var update = __webpack_require__(783)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -56649,10 +56997,10 @@
 	}
 
 /***/ },
-/* 780 */
+/* 781 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(781)();
+	exports = module.exports = __webpack_require__(782)();
 	// imports
 
 
@@ -56663,7 +57011,7 @@
 
 
 /***/ },
-/* 781 */
+/* 782 */
 /***/ function(module, exports) {
 
 	/*
@@ -56719,7 +57067,7 @@
 
 
 /***/ },
-/* 782 */
+/* 783 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
