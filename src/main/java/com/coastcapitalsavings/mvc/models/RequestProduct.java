@@ -8,5 +8,5 @@ import lombok.Data;
 @Data
 public class RequestProduct {
     Product product;
-    long productStatus_id;
+    String statusCode;
 }

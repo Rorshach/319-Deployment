@@ -7,6 +7,6 @@ import lombok.Data;
  */
 @Data
 public class RequestStatus {
-    private int id;
-    private String status;
+    private String code;
+    private String description;
 }

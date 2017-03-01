@@ -32,7 +32,7 @@
     "react-alert": "^1.0.14",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.2",
-    "reactable": "^0.14.1",
+    "react-table": "^5.3.3",
     "style-loader": "^0.13.1",
     "superagent": "^3.4.3",
     "webpack": "^1.14.0",

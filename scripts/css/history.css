@@ -1,20 +1,16 @@
 #history {
     margin: 0 40px;
 }
-.reactable-data tr:hover{
+.rt-tr-group:hover{
     background-color: #66c2ff;
     cursor: pointer;
-}
-.reactable-page-button {
-    margin: 5px;
-}
-thead tr{
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    cursor: default
 }
 
 :-ms-input-placeholder {
     color: #66c2ff;
+}
+.css-history-title{
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom:15px;
 }

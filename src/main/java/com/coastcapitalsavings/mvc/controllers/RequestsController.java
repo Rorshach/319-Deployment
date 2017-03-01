@@ -1,17 +1,18 @@
 package com.coastcapitalsavings.mvc.controllers;
 
+import com.coastcapitalsavings.mvc.repositories.RequestRepository;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.coastcapitalsavings.mvc.models.Request;
 import com.coastcapitalsavings.mvc.services.RequestService;
 import com.coastcapitalsavings.util.Responses;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -21,8 +22,19 @@ import java.util.Date;
 @RestController
 @RequestMapping("/requests")
 public class RequestsController {
+
     @Autowired
     RequestService requestService;
+
+    @RequestMapping(value="/{requestId}", method=RequestMethod.GET)
+    public ResponseEntity<Request> getRequestById(@PathVariable long requestId) {
+        try {
+            Request r = requestService.getRequestById(requestId);
+            return new ResponseEntity(r, HttpStatus.OK);
+        } catch (DataRetrievalFailureException e) {
+            return new ResponseEntity(Responses.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+    }
 
     @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity<Request> postNewRequest(@RequestBody PostBodyInput input) {
@@ -43,9 +55,38 @@ public class RequestsController {
         }
     }
 
+    @RequestMapping(value="/{requestId}", method=RequestMethod.PUT)
+    public ResponseEntity<Request> putNewRequestStatus(@PathVariable long requestId, @RequestBody PutIdBodyInput input) {
+        if (input.getStatusCode() == null) {
+            return new ResponseEntity(Responses.MISSING_REQUIRED_PARAMETER, HttpStatus.BAD_REQUEST);
+        } else {
+            try {
+                Request req = requestService.putNewRequestStatus(requestId, input.getStatusCode());
+                return new ResponseEntity(req, HttpStatus.OK);
+            } catch (DataRetrievalFailureException e) {
+                return new ResponseEntity(Responses.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND);
+            } catch (DataAccessException e) {
+                System.err.println(new Date() + " " + e.getMessage());
+                return new ResponseEntity(Responses.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+
+    /**
+     *  Payload template for POST /requests
+     */
     @Data
     private static class PostBodyInput {        // static class required to work properly for jackson
         String notes;
-        int[] products;
+        String[] products;
+    }
+
+    /**
+     * Payload template for PUT /requests/{id}
+     */
+    @Data
+    private static class PutIdBodyInput {
+        String statusCode;
     }
 }

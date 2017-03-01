@@ -1,5 +1,7 @@
 package com.coastcapitalsavings.mvc.models;
 
+import com.coastcapitalsavings.mvc.models.modelviews.ModelViews;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
 import java.util.List;
@@ -9,7 +11,7 @@ import java.util.List;
  */
 @Data
 public class Profile {
-    private int id;
-    private String name;
+    @JsonView(ModelViews.Summary.class) private String code;
+    @JsonView(ModelViews.Summary.class) private String description;
     private List<Product> products;
 }

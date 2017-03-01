@@ -14,8 +14,11 @@ import Content from './content.jsx';
 import Alerts from './alerts.jsx';
 import TabsComponent from "./tabs.jsx";
 import LoginComponent from "./login.jsx";
+import CategoriesRequestForm from './categoriesrequestform.jsx';
+import ProfileRequestForm from './profilerequestform.jsx';
 import 'babel-polyfill';
 import HistoryTable from "./history_table.jsx";
+import 'react-table/react-table.css'
 
 // CSS:
 
