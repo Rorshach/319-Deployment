@@ -1,22 +1,21 @@
 package com.coastcapitalsavings.mvc.repositories;
 
 
+import com.coastcapitalsavings.mvc.repositories.mapper.RequestSummaryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.*;
 import org.springframework.stereotype.Repository;
 
 import com.coastcapitalsavings.mvc.models.Request;
 import org.apache.tomcat.jdbc.pool.DataSource;
 
 import org.springframework.dao.TypeMismatchDataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.SqlInOutParameter;
-import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.object.StoredProcedure;
 
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +31,7 @@ public class RequestRepository {
     PostNewRequestStoredProc postNewRequestStoredProc;
     PutRequestNewStatusIdStoredProc putRequestNewStatusIdStoredProc;
     CheckRequestExistsStoredProc checkRequestExistsStoredProc;
+    GetRequestsBetweenDateRangeStoredProc getRequestBetweenDateRangeStoredProc;
 
     @Autowired
     /*
@@ -45,6 +45,7 @@ public class RequestRepository {
         postNewRequestStoredProc = new PostNewRequestStoredProc();
         putRequestNewStatusIdStoredProc = new PutRequestNewStatusIdStoredProc();
         checkRequestExistsStoredProc = new CheckRequestExistsStoredProc();
+        getRequestBetweenDateRangeStoredProc = new GetRequestsBetweenDateRangeStoredProc();
     }
 
     /**
@@ -74,13 +75,17 @@ public class RequestRepository {
         return putRequestNewStatusIdStoredProc.execute(reqId, statusCode);
     }
 
+    public List<Request> getRequestsByDateRange(Timestamp tsFrom, Timestamp tsTo) {
+        return getRequestBetweenDateRangeStoredProc.execute(tsFrom, tsTo);
+    }
+
 
     private class CheckRequestExistsStoredProc extends StoredProcedure {
 
-        private static final String procName = "req_request_lookupExists";
+        private static final String PROC_NAME = "req_request_lookupExists";
 
         private CheckRequestExistsStoredProc() {
-            super(jdbcTemplate, procName);
+            super(jdbcTemplate, PROC_NAME);
             declareParameter(new SqlParameter("in_requestId", Types.BIGINT));
             declareParameter(new SqlOutParameter("out_exists", Types.BOOLEAN));
             compile();
@@ -96,10 +101,10 @@ public class RequestRepository {
     }
 
     private class GetRequestByIdStoredProc extends StoredProcedure {
-        private static final String procName = "req_request_lookupById";
+        private static final String PROC_NAME = "req_request_lookupById";
 
         private GetRequestByIdStoredProc() {
-            super(jdbcTemplate, procName);
+            super(jdbcTemplate, PROC_NAME);
             declareParameter(new SqlInOutParameter("inout_requestId", Types.BIGINT));
             declareParameter(new SqlOutParameter("out_notes", Types.VARCHAR));
             declareParameter(new SqlOutParameter("out_dateCreated", Types.TIMESTAMP));
@@ -149,10 +154,10 @@ public class RequestRepository {
 
     private class PutRequestNewStatusIdStoredProc extends StoredProcedure {
 
-        private static final String procName = "req_request_updateStatus";
+        private static final String PROC_NAME = "req_request_updateStatus";
 
         private PutRequestNewStatusIdStoredProc() {
-            super(jdbcTemplate, procName);
+            super(jdbcTemplate, PROC_NAME);
             declareParameter(new SqlInOutParameter("inout_requestId", Types.BIGINT));
             declareParameter(new SqlInOutParameter("inout_inout_statusCode", Types.CHAR));
             declareParameter(new SqlOutParameter("out_notes", Types.VARCHAR));
@@ -197,10 +202,10 @@ public class RequestRepository {
      * database using autoincrement.
      */
     private class PostNewRequestStoredProc extends StoredProcedure {
-        private static final String procName = "req_request_insert";
+        private static final String PROC_NAME = "req_request_insert";
 
         private PostNewRequestStoredProc() {
-            super(jdbcTemplate, procName);
+            super(jdbcTemplate, PROC_NAME);
             declareParameter(new SqlInOutParameter("inout_notes", Types.VARCHAR));
             declareParameter(new SqlInOutParameter("inout_dateCreated", Types.TIMESTAMP));
             declareParameter(new SqlInOutParameter("inout_submittedBy", Types.CHAR));
@@ -251,6 +256,28 @@ public class RequestRepository {
                 System.err.println("Class cast exception in addProductToRequest.mapResponseToRequest, check DB");
                 throw new TypeMismatchDataAccessException(e.getMessage());
             }
+        }
+    }
+
+    private class GetRequestsBetweenDateRangeStoredProc extends StoredProcedure {
+
+        private static final String PROC_NAME = "req_request_lookUpByDateRange";
+
+        private GetRequestsBetweenDateRangeStoredProc() {
+            super(jdbcTemplate, PROC_NAME);
+            declareParameter(new SqlParameter("in_fromDate", Types.TIMESTAMP));
+            declareParameter(new SqlParameter("in_toDate", Types.TIMESTAMP));
+            declareParameter(new SqlReturnResultSet("requests", new RequestSummaryMapper()));
+            compile();
+        }
+
+        private List<Request> execute(Timestamp from, Timestamp to) {
+            Map<String, Object> inputs = new HashMap<>();
+            inputs.put("in_fromDate", from);
+            inputs.put("in_toDate", to);
+
+            Map<String, Object> outputs = execute(inputs);
+            return (List<Request>) outputs.get("requests");
         }
     }
 }

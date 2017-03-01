@@ -1,6 +1,8 @@
 package com.coastcapitalsavings.mvc.controllers;
 
+import com.coastcapitalsavings.mvc.models.modelviews.ModelViews;
 import com.coastcapitalsavings.mvc.repositories.RequestRepository;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.time.DateTimeException;
 import java.util.Date;
 import java.util.List;
 
@@ -27,10 +31,21 @@ public class RequestsController {
     @Autowired
     RequestService requestService;
 
+    //TODO:  This endpoint will need to be locked down once authentication is resolved
+    @JsonView(ModelViews.Summary.class)
     @RequestMapping(method=RequestMethod.GET)
-    public ResponseEntity<List<Request>> getRequestsByDateRange(@RequestParam String from, @RequestParam String to) {
-        requestService.getRequestsByDateRange(from, to);
-        return null;
+    public ResponseEntity<List<Request>> getRequestsByDateRange(@RequestParam(required = false) String from,
+                                                                @RequestParam(required = false) String to) {
+        try {
+            List<Request> requests = requestService.getRequestsByDateRange(from, to);
+            return new ResponseEntity(requests, HttpStatus.OK);
+        } catch (ParseException e) {
+            return new ResponseEntity(Responses.INVALID_PARAMETER_VALUE, HttpStatus.BAD_REQUEST);
+        } catch (DateTimeException e) {
+            return new ResponseEntity(Responses.INVALID_PARAMETER_VALUE, HttpStatus.PRECONDITION_FAILED);
+        } catch (DataAccessException e) {
+            return new ResponseEntity(Responses.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(method=RequestMethod.POST)
@@ -78,13 +93,6 @@ public class RequestsController {
             }
         }
     }
-
-    @Data
-    private static class GetBodyInput {
-        String from;
-        String to;
-    }
-
 
     /**
      *  Payload template for POST /requests

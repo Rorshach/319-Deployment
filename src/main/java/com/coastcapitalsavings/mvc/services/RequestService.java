@@ -13,7 +13,12 @@ import com.coastcapitalsavings.mvc.repositories.ProductRepository;
 import com.coastcapitalsavings.mvc.repositories.RequestRepository;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -84,10 +89,38 @@ public class RequestService {
         }
     }
 
-    public List<Request> getRequestsByDateRange(String from, String to) {
-        // sanitize the date range here and convert to sql.timestamp
-        // from should have time 0:00:00 set, to should have 23:59:59 set.
-        // call repository
-        return null;
+    public List<Request> getRequestsByDateRange(String from, String to) throws ParseException, DateTimeException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+
+        Date fromDate = null;
+        Date toDate = null;
+        Timestamp tsFrom = null;
+        Timestamp tsTo = null;
+
+        if (from != null) {
+            fromDate = dateFormat.parse(from);
+            c.setTime(fromDate);
+            tsFrom = new Timestamp(c.getTimeInMillis());
+        }
+
+        if (to != null) {
+            toDate = dateFormat.parse(to);
+            c.setTime(toDate);
+            // Add a day to get us to the next day, then subtract one millisecond from it to get the
+            // last millisecond of the day in question.
+            c.add(Calendar.DATE, 1);
+            c.add(Calendar.MILLISECOND, -1);
+            tsTo = new Timestamp(c.getTimeInMillis());
+        }
+
+        // Java will short circuit this if any of the conditions returns false (in order)
+        if ((toDate != null) && (fromDate != null) && (fromDate.after(toDate))) {
+            throw new DateTimeException("Date:from must occur before Date:to");
+        }
+
+        List<Request> response = requestRepo.getRequestsByDateRange(tsFrom, tsTo);
+
+        return response;
     }
 }
