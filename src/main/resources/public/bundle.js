@@ -55587,7 +55587,12 @@
 	    function ImportCSV(props) {
 	        _classCallCheck(this, ImportCSV);
 
-	        return _possibleConstructorReturn(this, (ImportCSV.__proto__ || Object.getPrototypeOf(ImportCSV)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (ImportCSV.__proto__ || Object.getPrototypeOf(ImportCSV)).call(this, props));
+
+	        _this.state = {
+	            imageFiles: []
+	        };
+	        return _this;
 	    }
 
 	    _createClass(ImportCSV, [{
@@ -55596,23 +55601,23 @@
 	            this.setState({
 	                uploadedFile: files[0]
 	            });
+	            console.log(this.state.uploadedFile);
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
-	                { 'class': 'dropzonePad' },
+	                { className: 'dropzonePad' },
 	                _react2.default.createElement(
 	                    _reactDropzone2.default,
 	                    {
-	                        multiple: false,
-	                        accept: 'image/*',
+	                        accept: 'text/csv',
 	                        onDrop: this.onImageDrop.bind(this) },
 	                    _react2.default.createElement(
 	                        'p',
 	                        null,
-	                        'Drop an image or click to select a file to upload.'
+	                        'Drop a CSV file or click to select a file to upload.'
 	                    )
 	                )
 	            );
@@ -56485,6 +56490,10 @@
 
 	var _reactJsonTable2 = _interopRequireDefault(_reactJsonTable);
 
+	var _alerts = __webpack_require__(478);
+
+	var _alerts2 = _interopRequireDefault(_alerts);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -56502,23 +56511,20 @@
 	        var _this = _possibleConstructorReturn(this, (IDRequest.__proto__ || Object.getPrototypeOf(IDRequest)).call(this, props));
 
 	        _this.state = {
-	            isCheckboxSelected: false,
 	            categoryOption: null,
-	            hasOverThreeItems: false,
-	            canSubmit: false,
 	            canApprove: false,
 	            canDeny: false,
 	            canPend: false,
 	            statusDisplay: false,
 	            statusMessage: null,
-	            categoriesResponse: null,
 	            requestResponse: null,
 	            ID: "",
 	            ide: "",
 	            dateCreated: "",
 	            submittedBy: "",
 	            statusCode: "",
-	            changedStatusCode: ""
+	            changedStatusCode: "",
+	            errMessage: ""
 
 	        };
 	        (0, _classAutobind2.default)(_this);
@@ -56530,16 +56536,21 @@
 	        value: function getRequest() {
 	            var _this2 = this;
 
+	            var x = document.getElementById('displayGet');
+	            x.style.display = 'none';
 	            _superagent2.default.get("/requests/" + this.state.ID).end(function (err, res) {
 	                if (err) {
 	                    _this2.setState({
 	                        statusMessage: err,
-	                        statusDisplay: true
+	                        statusDisplay: true,
+	                        errorMessage: "error"
 	                    });
+	                    console.log("errrrrror");
 	                } else {
 	                    try {
 	                        var jsonResponse = JSON.parse(res.text);
 	                        _this2.setState({
+	                            errorMessage: "success",
 	                            ide: jsonResponse.id,
 	                            dateCreated: jsonResponse.dateCreated,
 	                            submittedBy: jsonResponse.submittedBy,
@@ -56625,106 +56636,118 @@
 	                );
 	            }
 
+	            if (this.state.statusDisplay === true) {
+	                alert = _react2.default.createElement('text', null);
+	            }
+
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                _react2.default.createElement(_reactBootstrap.FormControl, { className: 'ID', componentClass: 'textarea', placeholder: 'ID', maxLength: '5', onChange: this.handleID }),
+	                _react2.default.createElement(
+	                    _reactBootstrap.FormGroup,
+	                    { controlId: 'formValidationError2', validationState: this.state.errorMessage },
+	                    _react2.default.createElement(_reactBootstrap.FormControl, { className: 'ID', componentClass: 'textarea', placeholder: 'ID', maxLength: '5', onChange: this.handleID }),
+	                    _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
+	                ),
 	                _react2.default.createElement(
 	                    _reactBootstrap.Button,
 	                    { type: 'submit', className: 'submitBtn', onClick: this.getRequest },
 	                    'Submit'
 	                ),
-	                this.state.requestResponse,
 	                _react2.default.createElement(
-	                    _reactBootstrap.Table,
-	                    { striped: true, bordered: true, condensed: true, hover: true },
+	                    'div',
+	                    { id: 'displayGet', display: 'block' },
 	                    _react2.default.createElement(
-	                        'thead',
-	                        null,
+	                        _reactBootstrap.Table,
+	                        { striped: true, bordered: true, condensed: true, hover: true },
 	                        _react2.default.createElement(
-	                            'tr',
+	                            'thead',
 	                            null,
 	                            _react2.default.createElement(
-	                                'th',
+	                                'tr',
 	                                null,
-	                                'ID'
-	                            ),
+	                                _react2.default.createElement(
+	                                    'th',
+	                                    null,
+	                                    'ID'
+	                                ),
+	                                _react2.default.createElement(
+	                                    'th',
+	                                    null,
+	                                    'Date Created'
+	                                ),
+	                                _react2.default.createElement(
+	                                    'th',
+	                                    null,
+	                                    'submittedBy'
+	                                ),
+	                                _react2.default.createElement(
+	                                    'th',
+	                                    null,
+	                                    'statusCode'
+	                                ),
+	                                _react2.default.createElement(
+	                                    'th',
+	                                    null,
+	                                    'Status'
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'tbody',
+	                            null,
 	                            _react2.default.createElement(
-	                                'th',
+	                                'tr',
 	                                null,
-	                                'Date Created'
-	                            ),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'submittedBy'
-	                            ),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'statusCode'
-	                            ),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'Status'
+	                                _react2.default.createElement(
+	                                    'td',
+	                                    null,
+	                                    this.state.ide
+	                                ),
+	                                _react2.default.createElement(
+	                                    'td',
+	                                    null,
+	                                    this.state.dateCreated
+	                                ),
+	                                _react2.default.createElement(
+	                                    'td',
+	                                    null,
+	                                    this.state.submittedBy
+	                                ),
+	                                _react2.default.createElement(
+	                                    'td',
+	                                    null,
+	                                    status
+	                                ),
+	                                _react2.default.createElement(
+	                                    'td',
+	                                    null,
+	                                    this.state.statusCode
+	                                )
 	                            )
 	                        )
 	                    ),
 	                    _react2.default.createElement(
-	                        'tbody',
-	                        null,
-	                        _react2.default.createElement(
-	                            'tr',
-	                            null,
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                this.state.ide
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                this.state.dateCreated
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                this.state.submittedBy
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                status
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                this.state.statusCode
-	                            )
-	                        )
+	                        _reactBootstrap.Button,
+	                        { type: 'submit', className: 'ApproveBtn', disabled: !this.state.canApprove, onClick: function onClick() {
+	                                return _this4.editRequest('APPR');
+	                            } },
+	                        'Approve'
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Button,
+	                        { type: 'submit', className: 'DenyBtn', disabled: !this.state.canDeny, onClick: function onClick() {
+	                                return _this4.editRequest('DEN');
+	                            } },
+	                        'Deny'
+	                    ),
+	                    _react2.default.createElement(
+	                        _reactBootstrap.Button,
+	                        { type: 'submit', className: 'PendBtn', disabled: !this.state.canPend, onClick: function onClick() {
+	                                return _this4.editRequest('PEND');
+	                            } },
+	                        'Set To Pend'
 	                    )
-	                ),
-	                _react2.default.createElement(
-	                    _reactBootstrap.Button,
-	                    { type: 'submit', className: 'ApproveBtn', disabled: !this.state.canApprove, onClick: function onClick() {
-	                            return _this4.editRequest('APPR');
-	                        } },
-	                    'Approve'
-	                ),
-	                _react2.default.createElement(
-	                    _reactBootstrap.Button,
-	                    { type: 'submit', className: 'DenyBtn', disabled: !this.state.canDeny, onClick: function onClick() {
-	                            return _this4.editRequest('DEN');
-	                        } },
-	                    'Deny'
-	                ),
-	                _react2.default.createElement(
-	                    _reactBootstrap.Button,
-	                    { type: 'submit', className: 'PendBtn', disabled: !this.state.canPend, onClick: function onClick() {
-	                            return _this4.editRequest('PEND');
-	                        } },
-	                    'Set To Pend'
 	                )
 	            );
 	        }

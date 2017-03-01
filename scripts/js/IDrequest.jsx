@@ -8,29 +8,27 @@ import {FormGroup, FormControl, Table} from 'react-bootstrap';
 import {ControlLabel, Label} from 'react-bootstrap';
 import {Button} from 'react-bootstrap';
 import JsonTable from 'react-json-table';
+import Alerts from "./alerts.jsx";
 
 export default class IDRequest extends React.Component {
 
     constructor(props){
         super(props);
         this.state = {
-            isCheckboxSelected : false,
             categoryOption : null,
-            hasOverThreeItems : false,
-            canSubmit : false,
             canApprove : false,
             canDeny : false,
             canPend : false,
             statusDisplay : false,
             statusMessage : null,
-            categoriesResponse : null,
             requestResponse : null,
             ID : "",
             ide: "",
             dateCreated: "",
             submittedBy: "",
             statusCode: "",
-            changedStatusCode: ""
+            changedStatusCode: "",
+            errMessage: ""
 
         }
         autobind(this);
@@ -43,12 +41,15 @@ export default class IDRequest extends React.Component {
                 if (err) {
                     this.setState({
                         statusMessage: err,
-                        statusDisplay: true
+                        statusDisplay: true,
+                        errorMessage: "error"
                     });
+                    console.log("errrrrror")
                 } else {
                     try {
                         var jsonResponse = JSON.parse(res.text);
                         this.setState({
+                            errorMessage: "success",
                             ide : jsonResponse.id,
                             dateCreated : jsonResponse.dateCreated,
                             submittedBy : jsonResponse.submittedBy,
@@ -112,6 +113,7 @@ export default class IDRequest extends React.Component {
 
 
     render() {
+
         var status;
 
         if (this.state.statusCode === 'PEND'){
@@ -124,13 +126,20 @@ export default class IDRequest extends React.Component {
             status = <Label bsStyle="danger">DENIED</Label>
         }
 
+        if (this.state.statusDisplay === true) {
+            alert = <text/>
+        }
+
         return (
         <div>
+            <FormGroup controlId="formValidationError2" validationState={this.state.errorMessage}>
             <FormControl className="ID" componentClass="textarea" placeholder="ID" maxLength='5' onChange={this.handleID}/>
+            <FormControl.Feedback />
+            </FormGroup>
             <Button type="submit" className="submitBtn" onClick={this.getRequest}>
                 Submit
             </Button>
-            {this.state.requestResponse}
+            <div>
             <Table striped bordered condensed hover>
                 <thead>
                 <tr>
@@ -160,6 +169,7 @@ export default class IDRequest extends React.Component {
             <Button type="submit" className="PendBtn" disabled={!this.state.canPend} onClick={ () => this.editRequest('PEND')} >
                 Set To Pend
             </Button>
+            </div>
         </div>
 
         );
