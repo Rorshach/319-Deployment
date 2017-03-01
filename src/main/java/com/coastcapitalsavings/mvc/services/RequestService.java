@@ -83,4 +83,11 @@ public class RequestService {
             throw new DataRetrievalFailureException("Cannot find resource in database: Request: id " +reqId);
         }
     }
+
+    public List<Request> getRequestsByDateRange(String from, String to) {
+        // sanitize the date range here and convert to sql.timestamp
+        // from should have time 0:00:00 set, to should have 23:59:59 set.
+        // call repository
+        return null;
+    }
 }

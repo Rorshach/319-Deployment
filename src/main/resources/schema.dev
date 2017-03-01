@@ -462,3 +462,32 @@ CREATE PROCEDURE req_productInCategory_lookupByProductId
 		SELECT p.productCode, p.productDescription FROM Product p JOIN Product_Category pc ON p.productCode = pc.productCode WHERE pc.categoryCode = in_categoryCode;
   END $$
 DELIMITER ;
+
+
+#--------------------------------------------------------------------------------------------
+# Description: 	Retrieve a summary of Requests which were created between in_fromDate and
+#               in_toDate.  Requests will have neither notes nor products.
+# 						  The search is inclusive.  If in_fromDate is null, then the search
+#               will return starting from the oldest request.  If in_toDate is null, then the
+#               search will return up to the most recent request.  If both are null, then
+#               all requests will be returned.
+#
+# Called By:  	Coast Capital Requisitioning Application
+#
+# Parameters: 	in_fromDate DATETIME
+#               in_toDate   DATETIME
+#
+# Returns:    	request summary recordset
+#
+# Created By:  	Chris Semiao
+# Created On:  	2017-2-28
+#---------------------------------------------------------------------------------------------
+DELIMITER $$
+DROP PROCEDURE IF EXISTS req_request_lookUpByDateRange $$
+CREATE PROCEDURE req_request_lookUpByDateRange
+	(IN in_fromDate DATETIME,
+	 IN in_toDate DATETIME)
+	BEGIN
+		SELECT requestId, dateCreated, submittedBy, lastModified, lastModifiedBy, statusCode FROM request WHERE dateCreated BETWEEN COALESCE(in_fromDate, (SELECT min(dateCreated) FROM request)) AND COALESCE(in_toDate, (SELECT max(dateCreated) FROM request));
+	END $$
+DELIMITER ;

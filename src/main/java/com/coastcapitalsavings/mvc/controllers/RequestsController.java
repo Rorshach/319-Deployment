@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Handles all requests to the requests resource
@@ -26,14 +27,10 @@ public class RequestsController {
     @Autowired
     RequestService requestService;
 
-    @RequestMapping(value="/{requestId}", method=RequestMethod.GET)
-    public ResponseEntity<Request> getRequestById(@PathVariable long requestId) {
-        try {
-            Request r = requestService.getRequestById(requestId);
-            return new ResponseEntity(r, HttpStatus.OK);
-        } catch (DataRetrievalFailureException e) {
-            return new ResponseEntity(Responses.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND);
-        }
+    @RequestMapping(method=RequestMethod.GET)
+    public ResponseEntity<List<Request>> getRequestsByDateRange(@RequestParam String from, @RequestParam String to) {
+        requestService.getRequestsByDateRange(from, to);
+        return null;
     }
 
     @RequestMapping(method=RequestMethod.POST)
@@ -55,6 +52,16 @@ public class RequestsController {
         }
     }
 
+    @RequestMapping(value="/{requestId}", method=RequestMethod.GET)
+    public ResponseEntity<Request> getRequestById(@PathVariable long requestId) {
+        try {
+            Request r = requestService.getRequestById(requestId);
+            return new ResponseEntity(r, HttpStatus.OK);
+        } catch (DataRetrievalFailureException e) {
+            return new ResponseEntity(Responses.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(value="/{requestId}", method=RequestMethod.PUT)
     public ResponseEntity<Request> putNewRequestStatus(@PathVariable long requestId, @RequestBody PutIdBodyInput input) {
         if (input.getStatusCode() == null) {
@@ -70,6 +77,12 @@ public class RequestsController {
                 return new ResponseEntity(Responses.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
+    }
+
+    @Data
+    private static class GetBodyInput {
+        String from;
+        String to;
     }
 
 
