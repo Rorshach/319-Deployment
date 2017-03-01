@@ -91,7 +91,10 @@ public class RequestService {
 
     public List<Request> getRequestsByDateRange(String from, String to) throws ParseException, DateTimeException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+
         Calendar c = Calendar.getInstance();
+        c.setLenient(false);
 
         Date fromDate = null;
         Date toDate = null;

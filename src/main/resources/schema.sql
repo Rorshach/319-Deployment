@@ -474,6 +474,9 @@ CREATE PROCEDURE req_request_lookUpByDateRange
   (IN in_fromDate DATETIME,
    IN in_toDate DATETIME)
   BEGIN
-    SELECT requestId, dateCreated, submittedBy, lastModified, lastModifiedBy, statusCode FROM request WHERE dateCreated BETWEEN COALESCE(in_fromDate, (SELECT min(dateCreated) FROM request)) AND COALESCE(in_toDate, (SELECT max(dateCreated) FROM request));
+    SELECT requestId, dateCreated, submittedBy, lastModified, lastModifiedBy, statusCode FROM request
+    WHERE dateCreated BETWEEN
+    COALESCE(in_fromDate, (SELECT min(dateCreated) FROM request))
+    AND COALESCE(in_toDate, (SELECT max(dateCreated) FROM request));
   END ^;
 ^;
