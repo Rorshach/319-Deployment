@@ -6,10 +6,11 @@ export default class HistoryTable extends React.Component {
         super(props);
         this.state = {data : null}
     }
+    // TODO: Make this request dynamic and provide the data of interest.
     /*
     componentWillMount(){
         request
-            .get("/requests")
+            .get("this.props.request")
             .end(function(err, res){
                 // process the data.
                 this.setState({data : res});
@@ -17,33 +18,26 @@ export default class HistoryTable extends React.Component {
             });
     }
     */
-    // TODO: Need to have real data to work with in order to finalie how the column/rows will appear.
-    // TODO: Need to do styling.
-    // TODO: Need to handle opening the modal or the page on click.
-    // TODO: Need to handle having an appropriate cursor for clicking a link versus sorting. Might be better to have
-    // TODO: ... need to inject HTML into the input field for the placeholder..the stupid open source plugin doesnt have a config for that.
-
-
     render() {
         const data = [
             {
-                name: 'Tanner Linsley',
-                age: 26,
+                id: 22,
+                notes: "I am a note",
             },
             {
-                name: 'beep Linsley',
-                age: 26,
+                name: 23,
+                notes: "Hello i am a note",
             }
         ]
 
         const columns = [
                 {
-                    header: 'Name',
-                    accessor: 'name' // String-based value accessors!
+                    header: 'Request Number',
+                    accessor: 'id' // String-based value accessors!
                 },
                 {
-                    header: 'Age',
-                    accessor: 'age',
+                    header: 'Notes',
+                    accessor: 'notes',
                 }
             ]
 
@@ -52,7 +46,7 @@ export default class HistoryTable extends React.Component {
                 getTrProps={(state, rowInfo, column) => {
                     return {
                         onClick: e => {
-                            console.log("hi");
+                            console.log("hi we will load a page here");
                             return true;
                             }
                         }

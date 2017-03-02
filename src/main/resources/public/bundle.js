@@ -55410,27 +55410,28 @@
 	    _createClass(HistoryTable, [{
 	        key: 'render',
 	        value: function render() {
+	            // could just do the data construction in the container.
 	            var data = [{
-	                name: 'Tanner Linsley',
-	                age: 26
+	                id: 22,
+	                notes: "I am a note"
 	            }, {
-	                name: 'beep Linsley',
-	                age: 26
+	                name: 23,
+	                notes: "Hello i am a note"
 	            }];
 
 	            var columns = [{
-	                header: 'Name',
-	                accessor: 'name' // String-based value accessors!
+	                header: 'Request Number',
+	                accessor: 'id' // String-based value accessors!
 	            }, {
-	                header: 'Age',
-	                accessor: 'age'
+	                header: 'Notes',
+	                accessor: 'notes'
 	            }];
 
 	            return _react2.default.createElement(_reactTable2.default, {
 	                getTrProps: function getTrProps(state, rowInfo, column) {
 	                    return {
 	                        onClick: function onClick(e) {
-	                            console.log("hi");
+	                            console.log("hi we will load a page here");
 	                            return true;
 	                        }
 	                    };

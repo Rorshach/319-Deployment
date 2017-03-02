@@ -18,6 +18,8 @@ import CategoriesRequestForm from './categoriesrequestform.jsx';
 import ProfileRequestForm from './profilerequestform.jsx';
 import 'babel-polyfill';
 import HistoryTable from "./history_table.jsx";
+import HistoryContainer from "./history_container.jsx";
+
 import 'react-table/react-table.css'
 
 // CSS:
