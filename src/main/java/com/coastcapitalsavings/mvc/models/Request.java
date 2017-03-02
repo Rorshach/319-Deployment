@@ -1,6 +1,8 @@
 package com.coastcapitalsavings.mvc.models;
 
+import com.coastcapitalsavings.mvc.models.modelviews.ModelViews;
 import com.coastcapitalsavings.util.serializers.JsonTimeStampSerializer;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
@@ -12,13 +14,13 @@ import java.util.List;
  */
 @Data
 public class Request {
-    private long id;        // mysql BIGINT
+    @JsonView(ModelViews.Summary.class) private long id;        // mysql BIGINT
     private String notes;
-    private Timestamp dateCreated;
-    private String submittedBy;
-    private Timestamp dateModified;
-    private String lastModifiedBy;
-    private String statusCode;
+    @JsonView(ModelViews.Summary.class) private Timestamp dateCreated;
+    @JsonView(ModelViews.Summary.class) private String submittedBy;
+    @JsonView(ModelViews.Summary.class) private Timestamp dateModified;
+    @JsonView(ModelViews.Summary.class)private String lastModifiedBy;
+    @JsonView(ModelViews.Summary.class) private String statusCode;
     private List<RequestProduct> products;       // Storing as a list stops us from having to write a painful map serializer
 
 
@@ -26,7 +28,7 @@ public class Request {
     // to return a string instead of a millisecond count
 
     @JsonSerialize(using=JsonTimeStampSerializer.class)
-    public Timestamp getDateCreated() {
+    @JsonView(ModelViews.Summary.class) public Timestamp getDateCreated() {
         return dateCreated;
     }
 
