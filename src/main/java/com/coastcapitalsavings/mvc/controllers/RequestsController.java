@@ -1,6 +1,8 @@
 package com.coastcapitalsavings.mvc.controllers;
 
+import com.coastcapitalsavings.mvc.models.modelviews.ModelViews;
 import com.coastcapitalsavings.mvc.repositories.RequestRepository;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,7 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.time.DateTimeException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Handles all requests to the requests resource
@@ -26,13 +31,20 @@ public class RequestsController {
     @Autowired
     RequestService requestService;
 
-    @RequestMapping(value="/{requestId}", method=RequestMethod.GET)
-    public ResponseEntity<Request> getRequestById(@PathVariable long requestId) {
+    //TODO:  This endpoint will need to be locked down once authentication is resolved
+    @JsonView(ModelViews.Summary.class)
+    @RequestMapping(method=RequestMethod.GET)
+    public ResponseEntity<List<Request>> getRequestsByDateRange(@RequestParam(required = false) String from,
+                                                                @RequestParam(required = false) String to) {
         try {
-            Request r = requestService.getRequestById(requestId);
-            return new ResponseEntity(r, HttpStatus.OK);
-        } catch (DataRetrievalFailureException e) {
-            return new ResponseEntity(Responses.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND);
+            List<Request> requests = requestService.getRequestsByDateRange(from, to);
+            return new ResponseEntity(requests, HttpStatus.OK);
+        } catch (ParseException e) {
+            return new ResponseEntity(Responses.INVALID_PARAMETER_VALUE, HttpStatus.BAD_REQUEST);
+        } catch (DateTimeException e) {
+            return new ResponseEntity(Responses.INVALID_PARAMETER_VALUE, HttpStatus.PRECONDITION_FAILED);
+        } catch (DataAccessException e) {
+            return new ResponseEntity(Responses.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -55,6 +67,16 @@ public class RequestsController {
         }
     }
 
+    @RequestMapping(value="/{requestId}", method=RequestMethod.GET)
+    public ResponseEntity<Request> getRequestById(@PathVariable long requestId) {
+        try {
+            Request r = requestService.getRequestById(requestId);
+            return new ResponseEntity(r, HttpStatus.OK);
+        } catch (DataRetrievalFailureException e) {
+            return new ResponseEntity(Responses.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+    }
+
     @RequestMapping(value="/{requestId}", method=RequestMethod.PUT)
     public ResponseEntity<Request> putNewRequestStatus(@PathVariable long requestId, @RequestBody PutIdBodyInput input) {
         if (input.getStatusCode() == null) {
@@ -71,7 +93,6 @@ public class RequestsController {
             }
         }
     }
-
 
     /**
      *  Payload template for POST /requests
